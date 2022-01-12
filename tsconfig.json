@@ -1,25 +1,27 @@
 {
 	"compilerOptions": {
+    "jsx": "react",
 		"target": "es2017",
 		"module": "commonjs",
-		"outDir": "./build",
+		"outDir": "./bot-build",
     "rootDir": "./",
-		//"rootDir": "./src",
 		"declaration": false,
-		"strict": true,
+		"strict": false,
 		"sourceMap": true,
 		"noImplicitAny": true,
-		"alwaysStrict": true,
+		"alwaysStrict": false,
 		"resolveJsonModule": true,
+		"moduleResolution": "node",
 		"typeRoots": [
       "./node_modules/@types"
     ]
 	},
-	"exclude": [
-		"./build/*",
-		"./node_modules/*",
+	"include": [
+		//"./src/**/*"
+		"src/sequelize.ts"
 	],
-//	"include": [
-	//	"./src/**/*.ts"
-	//]
+	"exclude": [
+		"./src/web/**",
+		"./src/bot/deployCommands.ts",
+	]
 }

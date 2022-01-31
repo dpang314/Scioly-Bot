@@ -1,7 +1,7 @@
-import * as dayjs from 'dayjs';
-import * as utc from 'dayjs/plugin/utc';
-import * as timezone from 'dayjs/plugin/timezone';
-import { Test, TestInstance } from "../../models";
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import { Test } from "../../models";
 import { client } from '../index';
 import { MessageEmbed, User } from 'discord.js';
 import { SUBMISSION_LINK, TEST_LENGTH } from '../../configLoader';

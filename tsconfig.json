@@ -1,27 +1,30 @@
 {
-	"compilerOptions": {
-    "jsx": "react",
-		"target": "es2017",
-		"module": "commonjs",
-		"outDir": "./bot-build",
-    "rootDir": "./",
-		"declaration": false,
-		"strict": false,
-		"sourceMap": true,
-		"noImplicitAny": true,
-		"alwaysStrict": false,
-		"resolveJsonModule": true,
-		"moduleResolution": "node",
-		"typeRoots": [
-      "./node_modules/@types"
-    ]
-	},
-	"include": [
-		//"./src/**/*"
-		"src/sequelize.ts"
-	],
-	"exclude": [
-		"./src/web/**",
-		"./src/bot/deployCommands.ts",
-	]
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve"
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

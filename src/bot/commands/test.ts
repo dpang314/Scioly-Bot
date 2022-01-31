@@ -2,11 +2,10 @@ import { CommandInteraction, Message, MessageActionRow, MessageSelectMenu, Selec
 
 import { SlashCommandBuilder } from '@discordjs/builders';
 
-import * as dayjs from 'dayjs';
-import * as utc from 'dayjs/plugin/utc';
-import * as timezone from 'dayjs/plugin/timezone';
-import { TestModel, Test } from "../../db";
-import { SUBMISSION_LINK, TEST_OPTIONS } from "../../configLoader";
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+import { Test, TestCreationAttributes } from "../../models";
 dayjs.extend(utc);
 dayjs.extend(timezone);
 dayjs.tz.setDefault('America/New_York');
@@ -54,7 +53,7 @@ module.exports = {
       try {
         const i = await message.awaitMessageComponent({ filter, componentType: 'SELECT_MENU', time: 60000 });
        
-        const test: Test = {
+        const test: TestCreationAttributes = {
           user_id: interaction.user.id,
           test_name: i.values[0],
           time_started: dayjs().toDate(),
@@ -133,7 +132,7 @@ module.exports = {
             await buttonInteraction.reply({ content: `This isn't for you!`, ephemeral: true });
           }
           if (userConfirmed && (partner1 === null || partner1Confirmed) && (partner2 === null) || partner2Confirmed) {
-            const createdTest = await TestModel.create(test);
+            const createdTest = await Test.create(test);
 
             const sendTest = async(user: User, name: string) => {
               try {
@@ -145,7 +144,7 @@ module.exports = {
                   .setDescription(`Only one partner should submit the test\nYou have 25 minutes. Good luck!`)
                   .addFields(
                     { name: 'Test link', value: `[${foundTest?.link}](${foundTest?.link})`},
-                    { name: 'Private test ID', value: `${createdTest._id}` },
+                    { name: 'Private test ID', value: `${createdTest._attributes.id}` },
                     { name: 'Submission link', value: `[${SUBMISSION_LINK}](${SUBMISSION_LINK})`}
                   );
                 const DMChannel = await user.createDM();

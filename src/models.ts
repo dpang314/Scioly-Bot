@@ -110,4 +110,6 @@ Tournament.hasMany(Test, {
   as: "tests",
 });
 
-export { Test, TestInstance }
+
+export { Test };
+export type { TestCreationAttributes };

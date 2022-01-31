@@ -12,7 +12,7 @@ interface CommandClient extends Client {
 
 import * as fs from 'fs';
 import { CHANNEL_ID } from '../configLoader';
-import checkTests from "../../tasks/checkTests";
+import checkTests from "./tasks/checkTests";
 
 const client: CommandClient = new Client({ intents: [Intents.FLAGS.GUILDS] }) as CommandClient;
 client.commands = new Collection();
@@ -53,4 +53,5 @@ client.on('interactionCreate', async (interaction) => {
 
 client.login(DISCORD_TOKEN);
 
-export { client, CommandClient };
+export { client };
+export type { CommandClient };

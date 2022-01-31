@@ -1,5 +1,4 @@
 import * as dotenv from 'dotenv';
-import * as config from '../config.json';
 
 dotenv.config();
 
@@ -25,16 +24,6 @@ const DATABASE_USERNAME = getEnv('DATABASE_USERNAME');
 const DATABASE_PASSWORD = getEnv('DATABASE_PASSWORD');
 const DATABASE_HOST = getEnv('DATABASE_HOST');
 const DATABASE_PORT = parseInt(getEnv('DATABASE_PORT'));
-const TEST_OPTIONS = config.TEST_INFO.sort(( a, b ) => {
-  if ( a.label < b.label ){
-    return -1;
-  }
-  if ( a.label > b.label ){
-    return 1;
-  }
-  return 0;
-});
-const TEST_LENGTH = config.TEST_LENGTH;
 
 export {
   DISCORD_TOKEN,
@@ -44,8 +33,6 @@ export {
   MONGO_URI,
   SUBMISSION_LINK,
   GUIDELINES_LINK,
-  TEST_OPTIONS,
-  TEST_LENGTH,
   DATABASE_USERNAME,
   DATABASE_PASSWORD,
   DATABASE_HOST,

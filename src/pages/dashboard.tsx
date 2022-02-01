@@ -19,6 +19,7 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { FormControl } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import Navbar from './NavBar';
 
 type FormProps = {
   templates: Array<{
@@ -215,7 +216,9 @@ const Dashboard: NextPage = () => {
   
   if (session) {
     return (
-      <Container maxWidth="sm">
+      <>
+      <Navbar/>
+      <Container maxWidth="sm" sx={{paddingTop: "20px"}}>
         <TableContainer component={Paper}>
           <Table aria-label="simple table">
             <TableHead>
@@ -238,6 +241,7 @@ const Dashboard: NextPage = () => {
           </Table>
         </TableContainer>
       </Container>
+      </>
     )
   }
   return (

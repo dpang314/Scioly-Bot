@@ -19,7 +19,7 @@ import * as Yup from 'yup';
 import { Formik } from 'formik';
 import { FormControl } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import Navbar from './NavBar';
+import Navbar from './Navbar';
 
 type FormProps = {
   templates: Array<{
@@ -205,19 +205,17 @@ const TournamentRow: FunctionComponent<Props> = ({name, active}) => {
   )
 };
 
-const Dashboard: NextPage = () => {
+const Tournaments: NextPage = () => {
   const { data: session } = useSession();
 
   const tournaments = [
     {name: 'Test', active: false},
   ];
-
-  
   
   if (session) {
     return (
       <>
-      <Navbar/>
+      <Navbar loggedIn={session ? true : false} page={"index"}/>
       <Container maxWidth="sm" sx={{paddingTop: "20px"}}>
         <TableContainer component={Paper}>
           <Table aria-label="simple table">
@@ -252,4 +250,4 @@ const Dashboard: NextPage = () => {
   )
 }
 
-export default Dashboard
+export default Tournaments

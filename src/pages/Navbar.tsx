@@ -21,7 +21,7 @@ const Navbar: FunctionComponent<NavbarProps> = ({ loggedIn, page }) => {
           <Link href={'templates'}><Button color="inherit" >Templates</Button></Link>
           <div style={{flex: 1}}></div>
           {
-            loggedIn ? <Button color="error" variant="outlined" onClick={() => signOut()}>Log Out</Button>
+            loggedIn ? <Button color="error" variant="contained" onClick={() => signOut()}>Log Out</Button>
             : <Button color="success" variant="contained" onClick={() => signIn()}>Log In</Button>
           }
         </Toolbar>

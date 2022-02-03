@@ -20,16 +20,16 @@ import { Formik } from 'formik';
 import { FormControl } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import Navbar from './Navbar';
+import { SERVER, PORT } from '../configLoader';
+import { TemplateAttributes, TournamentAttributes, TournamentCreationAttributes } from '../models';
 
 type FormProps = {
-  templates: Array<{
-    id: string,
-    name: string,
-  }>,
+  templates: Array<TemplateAttributes>,
   setOpen: (open: boolean) => void,
+  addTournament: (tournament: TournamentCreationAttributes) => void, 
 }
 
-const TournamentForm: FunctionComponent<FormProps> = ({ templates, setOpen }) => {
+const TournamentForm: FunctionComponent<FormProps> = ({ templates, setOpen, addTournament }) => {
   const error = {
     color: "red"
   }
@@ -47,12 +47,21 @@ const TournamentForm: FunctionComponent<FormProps> = ({ templates, setOpen }) =>
           .required('Required')
       })
     }
-    onSubmit={(values, { setSubmitting }) => {
-      setTimeout(() => {
-        setOpen(false);
-        alert(JSON.stringify(values, null, 2));
+    onSubmit={async(values, { setSubmitting }) => {
+        const res = await fetch(
+          '/api/tournaments',
+          {
+            body: JSON.stringify(values),
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            method: 'POST'
+          }
+        )
+        const template = await res.json();
+        addTournament(template);
         setSubmitting(false);
-      }, 400)
+        setOpen(false);
     }}
     >
       {formik => (
@@ -95,11 +104,12 @@ const TournamentForm: FunctionComponent<FormProps> = ({ templates, setOpen }) =>
                 onChange={formik.handleChange}
                 fullWidth
                 select
-              >
-                {templates.map(template => (
-                  <MenuItem id={template.id} value={template.id}>{template.name}</MenuItem>
-                ))}
-              </TextField>
+                children={
+                  templates ? templates.map(template => (
+                    <MenuItem key={template.id} id={template.id} value={template.id}>{template.name}</MenuItem>
+                  )): null
+                }
+              />
               {formik.touched.template && formik.errors.template ? (
                 <Box sx={error}>{formik.errors.template}</Box>
               ) : null}
@@ -115,23 +125,16 @@ const TournamentForm: FunctionComponent<FormProps> = ({ templates, setOpen }) =>
   )
 }
 
-const TournamentCreationButton: FunctionComponent = () => {
+type TournamentCreationButtonProps = {
+  templates: Array<TemplateAttributes>
+  addTournament: (tournament: TournamentCreationAttributes) => void, 
+}
+
+const TournamentCreationButton: FunctionComponent<TournamentCreationButtonProps> = ({ templates, addTournament }) => {
   const [open, setOpen] = React.useState(false);
-  //const [templates, setTemplates] = React.useState(null);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const templates = [
-    {
-      id: 'old',
-      name: '2021',
-    },
-    {
-      id: 'new',
-      name: '2022'
-    }
-  ]
-
+  
   const style = {
     position: 'absolute' as const,
     top: '50%',
@@ -154,7 +157,7 @@ const TournamentCreationButton: FunctionComponent = () => {
         onClose={handleClose}
       >
         <Box sx={style}>
-          <TournamentForm templates={templates} setOpen={setOpen}/>
+          <TournamentForm templates={templates} setOpen={setOpen} addTournament={addTournament}/>
         </Box>
       </Modal>
     </>
@@ -205,12 +208,18 @@ const TournamentRow: FunctionComponent<Props> = ({name, active}) => {
   )
 };
 
-const Tournaments: NextPage = () => {
-  const { data: session } = useSession();
+type PageProps = {
+  templates: Array<TemplateAttributes>,
+  initialTournaments: Array<TournamentAttributes>,
+}
 
-  const tournaments = [
-    {name: 'Test', active: false},
-  ];
+const Tournaments: NextPage<PageProps> = ({ templates, initialTournaments }) => {
+  const { data: session } = useSession();
+  const [tournaments, setTournaments] = React.useState(initialTournaments);
+
+  const addTournament = (tournament) => {
+    setTournaments(tournaments.concat(tournament));
+  }
   
   if (session) {
     return (
@@ -222,7 +231,7 @@ const Tournaments: NextPage = () => {
             <TableHead>
               <TableRow>
                 <TableCell colSpan={3}>
-                  <TournamentCreationButton/>
+                  <TournamentCreationButton templates={templates} addTournament={addTournament}/>
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -232,9 +241,9 @@ const Tournaments: NextPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {tournaments.map((tournament) => (
-                <TournamentRow name={tournament.name} active={tournament.active}/>
-              ))}
+              {tournaments ? tournaments.map((tournament) => (
+                <TournamentRow key={tournament.id} name={tournament.name} active={tournament.active}/>
+              )): null}
             </TableBody>
           </Table>
         </TableContainer>
@@ -248,6 +257,14 @@ const Tournaments: NextPage = () => {
       <button onClick={() => signIn()}>Sign in</button>
     </>
   )
+}
+
+export async function getServerSideProps() {
+  const templatesRes = await fetch(`${SERVER}:${PORT}/api/templates`);
+  const tournamentsRes = await fetch(`${SERVER}:${PORT}/api/tournaments`);
+  const templates = await templatesRes.json();
+  const initialTournaments = await tournamentsRes.json();
+  return { props: { templates, initialTournaments } };
 }
 
 export default Tournaments

@@ -20,10 +20,10 @@ const CHANNEL_ID = getEnv('CHANNEL_ID');
 const MONGO_URI = getEnv('MONGO_URI');
 const SUBMISSION_LINK = getEnv('SUBMISSION_LINK');
 const GUIDELINES_LINK = getEnv('GUIDELINES_LINK');
-const DATABASE_USERNAME = getEnv('DATABASE_USERNAME');
-const DATABASE_PASSWORD = getEnv('DATABASE_PASSWORD');
-const DATABASE_HOST = getEnv('DATABASE_HOST');
-const DATABASE_PORT = parseInt(getEnv('DATABASE_PORT'));
+const DATABASE_CONNECTION = getEnv('DATABASE_CONNECTION');
+const DEV = process.env.NODE_ENV !== 'production'
+const SERVER = process.env.NODE_ENV !== 'production' ? 'http://localhost' : '';
+const PORT = 3000;
 
 export {
   DISCORD_TOKEN,
@@ -33,8 +33,8 @@ export {
   MONGO_URI,
   SUBMISSION_LINK,
   GUIDELINES_LINK,
-  DATABASE_USERNAME,
-  DATABASE_PASSWORD,
-  DATABASE_HOST,
-  DATABASE_PORT
+  DATABASE_CONNECTION,
+  DEV,
+  SERVER,
+  PORT,
 };

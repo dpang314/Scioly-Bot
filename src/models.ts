@@ -1,12 +1,13 @@
-import { DataTypes, Model, ModelDefined, Optional } from 'sequelize';
-import sequelize from './sequelize';
+import { Sequelize, DataTypes, Model, ModelDefined, Optional } from 'sequelize';
+import { DATABASE_CONNECTION } from './configLoader';
+
+const sequelize = new Sequelize(DATABASE_CONNECTION);
 
 interface TournamentAttributes {
   id: string,
   user_id: string,
-  started: boolean,
-  ended: boolean,
-  finished: boolean,
+  name: string,
+  active: boolean,
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -25,21 +26,20 @@ const Tournament: ModelDefined<
 > = sequelize.define('Tournament', {
   id: {
     allowNull: false,
-    autoIncrement: false,
     primaryKey: true,
     type: DataTypes.UUID,
     unique: true,
+    defaultValue: DataTypes.UUIDV4,
   },
   user_id: {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  started: {
-    type: DataTypes.BOOLEAN,
+  name: {
+    type: DataTypes.TEXT,
     allowNull: false,
-    defaultValue: false,
   },
-  ended: {
+  active: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
     defaultValue: false,
@@ -48,6 +48,94 @@ const Tournament: ModelDefined<
     timestamps: false,
     tableName: 'tournaments',
 });
+
+interface TemplateTestAttributes {
+  id: string,
+  name: string,
+  minutes: number,
+  link: string,
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface TemplateTestCreationAttributes extends Optional<TemplateTestAttributes, 'id'> {}
+
+interface TemplateTestInstance
+  extends Model<TemplateTestAttributes, TemplateTestCreationAttributes>,
+    TemplateTestAttributes {
+      createdAt?: Date;
+      updatedAt?: Date;
+    }
+  
+const TemplateTest: ModelDefined<
+TemplateTestAttributes,
+TemplateTestCreationAttributes
+> = sequelize.define('Test', {
+  id: {
+    allowNull: false,
+    primaryKey: true,
+    type: DataTypes.UUID,
+    unique: true,
+    defaultValue: DataTypes.UUIDV4,
+  },
+  name: {
+    allowNull: false,
+    type: DataTypes.STRING,
+  },
+  minutes: {
+    allowNull: false,
+    type: DataTypes.INTEGER,
+  },
+  link: {
+    allowNull: true,
+    type: DataTypes.STRING,
+  }
+}, {
+  timestamps: false,
+  tableName: 'tests',
+});
+
+
+interface TemplateAttributes {
+  id: string,
+  name: string,
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface TemplateCreationAttributes extends Optional<TemplateAttributes, 'id'> {}
+
+interface TemplateInstance
+  extends Model<TestAttributes, TemplateCreationAttributes>,
+    TestAttributes {
+      createdAt?: Date;
+      updatedAt?: Date;
+    }
+
+const Template: ModelDefined<
+TemplateAttributes,
+TemplateCreationAttributes
+> = sequelize.define('Template', {
+  id: {
+    allowNull: false,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true,
+    type: DataTypes.UUID,
+    unique: true,
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false
+  }
+}, {
+  timestamps: false,
+  tableName: 'templates',
+});
+
+Template.hasMany(TemplateTest, {
+  sourceKey: "id",
+  foreignKey: "template_id",
+  as: "template_tests",
+});
+
 
 interface TestAttributes {
   id: string,
@@ -68,14 +156,14 @@ interface TestInstance
       createdAt?: Date;
       updatedAt?: Date;
     }
-
+  
 const Test: ModelDefined<
 TestAttributes,
 TestCreationAttributes
-> = sequelize.define('Test', {
+> = sequelize.define('TemplateTest', {
   id: {
     allowNull: false,
-    autoIncrement: false,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
     type: DataTypes.UUID,
     unique: true,
@@ -101,7 +189,7 @@ TestCreationAttributes
   }
 }, {
   timestamps: false,
-  tableName: 'tests',
+  tableName: 'template_tests',
 });
 
 Tournament.hasMany(Test, {
@@ -110,6 +198,10 @@ Tournament.hasMany(Test, {
   as: "tests",
 });
 
+export { sequelize, Test, Template, Tournament };
+export type { TestCreationAttributes, TemplateCreationAttributes, TemplateAttributes, TournamentCreationAttributes, TournamentAttributes, TemplateTestAttributes };
 
-export { Test };
-export type { TestCreationAttributes };
+export const initDB = async () => {
+  await sequelize.authenticate();
+  await sequelize.sync({ force: true });
+}

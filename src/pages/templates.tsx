@@ -14,25 +14,25 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import * as Yup from 'yup';
-import { Field, FieldArray, Formik, getIn } from 'formik';
-import { FormControl, Typography } from '@mui/material';
+import { FieldArray, Formik, useField } from 'formik';
+import { FormControl } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import Navbar from './Navbar';
+import { TemplateAttributes, TemplateCreationAttributes } from '../models';
+import { SERVER, PORT } from '../configLoader';
 
 type FormProps = {
-  templates: Array<{
-    id: string,
-    name: string,
-  }>,
   setOpen: (open: boolean) => void,
+  addTemplate: (template: TemplateCreationAttributes) => void,
 }
 
-const TemplateForm: FunctionComponent<FormProps> = ({ setOpen }) => {
+const TemplateForm: FunctionComponent<FormProps> = ({ setOpen, addTemplate }) => {
   const error = {
     color: "red"
   }
+
   return(
   <Formik
     initialValues={{ name: '', events: [] }}
@@ -57,12 +57,21 @@ const TemplateForm: FunctionComponent<FormProps> = ({ setOpen }) => {
           .min(1, 'Must have at least 1 event'),
       })
     }
-    onSubmit={(values, { setSubmitting }) => {
-      setTimeout(() => {
-        setOpen(false);
-        alert(JSON.stringify(values, null, 2));
-        setSubmitting(false);
-      }, 400)
+    onSubmit={async(values, { setSubmitting }) => {
+      const res = await fetch(
+        '/api/templates',
+        {
+          body: JSON.stringify(values),
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          method: 'POST'
+        }
+      )
+      const template = await res.json();
+      addTemplate(template);
+      setSubmitting(false);
+      setOpen(false);
     }}
     >
       {formik => (
@@ -85,11 +94,8 @@ const TemplateForm: FunctionComponent<FormProps> = ({ setOpen }) => {
               name="events"
               render={arrayHelpers => {                
                 const ErrorMessage = ({ name }) => {
-                    const error = getIn(formik.errors, name);
-                    const touch = getIn(formik.touched, name);
-                    console.log(error);
-                    console.log(touch);
-                    return touch && error ? <Box sx={error}>{formik.errors.name}</Box> : null;
+                    const [field, meta, helpers] = useField(name);   
+                    return meta.touched && meta.error ? <Box sx={error}>{meta.error}</Box> : null;
                 };
 
                 return(
@@ -98,29 +104,32 @@ const TemplateForm: FunctionComponent<FormProps> = ({ setOpen }) => {
                       formik.values.events.map((event, index) => (
                         <div key={index} style={{ marginBottom: "10px", display: "flex", flexDirection: "row", alignContent: "center" }}>
                           <div style={{ flexGrow: 1, marginRight: "10px" }}>
-                            <TextField name={`events[${index}].name`} label='Name' fullWidth/>
+                            <TextField label='Name' {...formik.getFieldProps(`events[${index}].name`)} fullWidth/>
                             <ErrorMessage name={`events[${index}].name`} />
                           </div>
                           <div>
-                            <TextField name={`events[${index}].minutes`} label='Minutes'/>
+                            <TextField {...formik.getFieldProps(`events[${index}].minutes`)} label='Minutes'/>
                             <ErrorMessage name={`events[${index}].minutes`} />
                           </div>
                           <Button onClick={() => arrayHelpers.remove(index)}>
                             <RemoveCircleOutlineIcon/>
                           </Button>
-                          <Button onClick={() => arrayHelpers.insert(index, {name: '', time: ''})}>
+                          <Button onClick={() => arrayHelpers.insert(index+1, {name: '', minutes: ''})}>
                             <AddCircleIcon/>
                           </Button>
                         </div>
                       ))
                     ): (
-                      <Button fullWidth onClick={() => arrayHelpers.push('')} sx={{ marginBottom: "10px" }}>
+                      <Button variant="outlined" fullWidth onClick={() => arrayHelpers.push({ name: '', minutes: ''})} >
                         Add event
                       </Button>
                     )}
                   </div>
                 )}}
             />
+            { 
+              typeof formik.errors.events === 'string' ? <div style={{ ...error, marginBottom: "10px"}}>{formik.errors.events}</div> : <div style={{ ...error, marginBottom: "10px"}}/>
+            }
 
             <Button 
               type="submit"
@@ -132,7 +141,11 @@ const TemplateForm: FunctionComponent<FormProps> = ({ setOpen }) => {
   )
 }
 
-const TemplateCreationButton: FunctionComponent = () => {
+type TemplateCreationButtonProps = {
+  addTemplate: (template: TemplateCreationAttributes) => void,
+}
+
+const TemplateCreationButton: FunctionComponent<TemplateCreationButtonProps> = ({ addTemplate }) => {
   const [open, setOpen] = React.useState(false);
   //const [templates, setTemplates] = React.useState(null);
   const handleOpen = () => setOpen(true);
@@ -147,7 +160,9 @@ const TemplateCreationButton: FunctionComponent = () => {
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4,
-    borderRadius: 2
+    borderRadius: 2,
+    overflowY: 'scroll',
+    maxHeight: "90vh"
   };
 
   return (
@@ -160,7 +175,7 @@ const TemplateCreationButton: FunctionComponent = () => {
         onClose={handleClose}
       >
         <Box sx={style}>
-          <TemplateForm setOpen={setOpen}/>
+          <TemplateForm setOpen={setOpen} addTemplate={addTemplate}/>
         </Box>
       </Modal>
     </>
@@ -200,12 +215,17 @@ const TemplateRow: FunctionComponent<Props> = ({id, name}) => {
   )
 };
 
-const Templates: NextPage = () => {
-  const { data: session } = useSession();
+type PageProps = {
+  data: Array<TemplateAttributes>
+}
 
-  const templates = [
-    {id: 'test', name: 'Test'}
-  ];
+const Templates: NextPage<PageProps> = ({ data }) => {
+  const { data: session } = useSession();
+  const [templates, setTemplates] = React.useState(data);
+
+  const addTemplate = (template) => {
+    setTemplates(templates.concat(template));
+  }
   
   if (session) {
     return (
@@ -217,7 +237,7 @@ const Templates: NextPage = () => {
             <TableHead>
               <TableRow>
                 <TableCell colSpan={3}>
-                  <TemplateCreationButton/>
+                  <TemplateCreationButton addTemplate={addTemplate}/>
                 </TableCell>
               </TableRow>
               <TableRow>
@@ -226,9 +246,9 @@ const Templates: NextPage = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {templates.map((template) => (
-                <TemplateRow id={template.id} name={template.name}/>
-              ))}
+              {templates ? templates.map((template) => (
+                <TemplateRow key={template.id} id={template.id} name={template.name}/>
+              )) : null}
             </TableBody>
           </Table>
         </TableContainer>
@@ -242,6 +262,12 @@ const Templates: NextPage = () => {
       <button onClick={() => signIn()}>Sign in</button>
     </>
   )
+}
+
+export async function getServerSideProps() {
+  const res = await fetch(`${SERVER}:${PORT}/api/templates`);
+  const data = await res.json();
+  return { props: { data } };
 }
 
 export default Templates

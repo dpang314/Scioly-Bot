@@ -1,18 +1,19 @@
 import axios from 'axios';
 import NextAuth from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
+import { CLIENT_ID, DISCORD_SECRET, NEXT_SECRET } from '../../../configLoader';
 
 export default NextAuth({
   providers: [
     DiscordProvider({
-      clientId: process.env.DISCORD_ID,
-      clientSecret: process.env.DISCORD_SECRET,
+      clientId: CLIENT_ID,
+      clientSecret: DISCORD_SECRET,
       authorization: { params: { scope: 'identify guilds'} },
       token: "https://discord.com/api/oauth2/token",
       userinfo: "https://discord.com/api/users/@me",
     })
   ],
-  secret: process.env.NEXT_SECRET,
+  secret: NEXT_SECRET,
   callbacks: {
     async jwt({ token, user }) {
       if (user) {

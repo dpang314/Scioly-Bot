@@ -1,4 +1,4 @@
-import { Optional, HasManyCreateAssociationMixin, DataTypes, Model } from "sequelize/dist";
+import { Optional, HasManyCreateAssociationMixin, DataTypes, Model, Association } from "sequelize";
 import { TournamentEvent } from './TournamentEventModel';
 
 interface TournamentAttributes {
@@ -16,6 +16,13 @@ class Tournament extends Model<TournamentAttributes, TournamentCreationAttribute
   declare user_id: string;
   declare name: string;
   declare active: boolean;
+
+  declare readonly tournamentEvents?: TournamentEvent[];
+
+  declare static associations: {
+    templateEvents: Association<Tournament, TournamentEvent>;
+  }
+
   declare createTournamentEvent: HasManyCreateAssociationMixin<TournamentEvent>;
 }
 

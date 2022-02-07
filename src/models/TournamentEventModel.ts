@@ -1,4 +1,4 @@
-import { Optional, Association, DataTypes, Model } from "sequelize/dist";
+import { Optional, Association, DataTypes, Model } from "sequelize";
 import { Test } from './TestModel';
 
 interface TournamentEventAttributes {

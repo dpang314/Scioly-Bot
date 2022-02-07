@@ -1,4 +1,4 @@
-import { Optional, HasManyCreateAssociationMixin, Association, DataTypes, Model } from "sequelize/dist";
+import { Optional, HasManyCreateAssociationMixin, Association, DataTypes, Model } from "sequelize";
 import { TemplateEvent } from "./TemplateEventModel";
 import { TournamentEvent } from "./TournamentEventModel";
 

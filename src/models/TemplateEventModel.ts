@@ -1,4 +1,4 @@
-import { Optional, DataTypes, Model } from "sequelize/dist";
+import { Optional, DataTypes, Model } from "sequelize";
 
 interface TemplateEventAttributes {
   id: string,

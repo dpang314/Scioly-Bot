@@ -2,7 +2,6 @@ import { Modal, TableRow, TableCell, Switch, Button } from "@mui/material";
 import Box from "@mui/material/Box";
 import React from "react";
 import { FunctionComponent } from "react";
-import { EventAttributes } from "../../models";
 import TournamentEventsForm from "./TournamentEventsForm";
 
 type Props = {

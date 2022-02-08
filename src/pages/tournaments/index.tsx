@@ -1,49 +1,35 @@
 import type { NextPage } from 'next'
-import { signIn, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import React from 'react';
-import Navbar from '../Navbar';
+import Navbar from '../components/Navbar';
 import { SERVER, PORT } from '../../configLoader';
-import { TemplateAttributes } from '../../models/template';
-import { TournamentAttributes } from '../../models/tournament';
+import { TemplateAttributes } from '../../models/TemplateModel';
+import { Tournament, TournamentAttributes } from '../../models/TournamentModel';
 import TournamentTable from './TournamentTable';
-
-type PageProps = {
-  templates: Array<TemplateAttributes>,
-  initialTournaments: Array<TournamentAttributes>,
-}
+import Loading from '../components/Loading';
+import useSWR, { useSWRConfig } from 'swr';
+import { fetcher } from '../util';
 
 export type AddTournament = (tournament: TournamentAttributes) => void;
 
-const Tournaments: NextPage<PageProps> = ({ templates, initialTournaments }) => {
-  const { data: session } = useSession();
-  const [tournaments, setTournaments] = React.useState(initialTournaments);
-
-  const addTournament: AddTournament = (tournament) => {
-    setTournaments(tournaments.concat(tournament));
-  }
+const Tournaments: NextPage = () => {
+  const { mutate } = useSWRConfig()
+  const { data: session, status } = useSession({
+    required: true,
+  });
+  const { data: tournaments, error: tournamentsError } = useSWR<Array<TournamentAttributes>>('/api/tournaments/', fetcher);
+  const { data: templates, error: templatesError } = useSWR<Array<TemplateAttributes>>('/api/templates/', fetcher);
   
-  if (session) {
-    return (
-      <>
-        <Navbar loggedIn={session ? true : false} page={"index"}/>
-        <TournamentTable templates={templates} tournaments={tournaments} addTournament={addTournament}/>
-      </>
-    )
+  if (status === "loading" || !session || !tournaments || !templates) {
+    return <Loading/>
   }
+
   return (
     <>
-      Not signed in
-      <button onClick={() => signIn()}>Sign in</button>
+      <Navbar loggedIn={session ? true : false} page={"index"}/>
+      <TournamentTable templates={templates} tournaments={tournaments} addTournament={() => (mutate('/api/tournaments/'))}/>
     </>
   )
-}
-
-export async function getServerSideProps() {
-  const templatesRes = await fetch(`${SERVER}:${PORT}/api/templates`);
-  const tournamentsRes = await fetch(`${SERVER}:${PORT}/api/tournaments`);
-  const templates = await templatesRes.json();
-  const initialTournaments = await tournamentsRes.json();
-  return { props: { templates, initialTournaments } };
 }
 
 export default Tournaments

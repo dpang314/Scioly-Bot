@@ -1,43 +1,36 @@
 import type { NextPage } from 'next'
-import { signIn, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import React from 'react';
-import Navbar from '../Navbar';
-import { SERVER, PORT } from '../../configLoader';
+import Navbar from '../components/Navbar';
 import TemplateTable from './TemplateTable';
-import { TemplateEvent } from '../../models/TemplateEventModel';
+import { Session } from 'next-auth';
+import { Template, TemplateAttributes } from '../../models';
+import Loading from '../components/Loading';
+import useSWR, { useSWRConfig } from 'swr';
+import { fetcher } from '../util';
 
 type PageProps = {
-  data: Array<TemplateEvent>
+  initialTemplates: Array<Template>;
+  session: Session;
 }
 
-const Templates: NextPage<PageProps> = ({ data }) => {
-  const { data: session } = useSession();
-  const [templates, setTemplates] = React.useState(data);
+const Templates: NextPage<PageProps> = () => {
+  const { mutate } = useSWRConfig()
+  const { data: session, status } = useSession({
+    required: true
+  });
+  const { data: templates, error } = useSWR<Array<TemplateAttributes>>('/api/templates/', fetcher);
 
-  const addTemplate = (template) => {
-    setTemplates(templates.concat(template));
+  if (status === "loading" || !session || !templates) {
+    return <Loading/>
   }
-  
-  if (session) {
-    return (
-      <>
-        <Navbar loggedIn={session ? true : false} page={"index"}/>
-        <TemplateTable templates={templates} addTemplate={addTemplate}/>
-      </>
-    )
-  }
+
   return (
     <>
-      Not signed in
-      <button onClick={() => signIn()}>Sign in</button>
+      <Navbar loggedIn={true} page="templates"/>
+      <TemplateTable templates={templates} addTemplate={() => (mutate('/api/templates/'))}/>
     </>
   )
-}
-
-export async function getServerSideProps() {
-  const res = await fetch(`${SERVER}:${PORT}/api/templates`);
-  const data = await res.json();
-  return { props: { data } };
 }
 
 export default Templates

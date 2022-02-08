@@ -1,6 +1,5 @@
 import { Optional, HasManyCreateAssociationMixin, Association, DataTypes, Model } from "sequelize";
 import { TemplateEvent } from "./TemplateEventModel";
-import { TournamentEvent } from "./TournamentEventModel";
 
 interface TemplateAttributes {
   id: string,
@@ -14,7 +13,7 @@ class Template extends Model<TemplateAttributes, TemplateCreationAttributes>
     implements TemplateAttributes {
       declare id: string;
       declare name: string;
-      declare createTournamentEvent: HasManyCreateAssociationMixin<TournamentEvent>;
+      declare createTemplateEvent: HasManyCreateAssociationMixin<TemplateEvent>;
 
       declare readonly templateEvents?: TemplateEvent[];
 

@@ -1,23 +1,25 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { getSession } from "next-auth/react"
-import { Tournament, TournamentCreationAttributes } from '../../models';
+import { TournamentEvent, Tournament, Template, TemplateEvent } from '../../models';
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
-  if (req.method === 'POST') {
-    const session = await getSession({ req });
-    if (session) {
-      // TODO create test templates associated with tournament template
-      const tournamentValues: TournamentCreationAttributes = { user_id: session.id, ...req.body }
-      const tournament = await Tournament.create(tournamentValues);
+  const session = await getSession({ req });
+  if (session) {
+    if (req.method === 'POST') {
+      const tournament = await Tournament.create({user_id: session.id, ...req.body});
+      const template = await Template.findOne({ where: {id: req.body.template}, include: [{ model: TemplateEvent, as: "templateEvents" }] });
+      for (const templateEvent of template.templateEvents) {
+        await tournament.createTournamentEvent({ name: templateEvent.name, minutes: templateEvent.minutes, link: ''});
+      }
       res.status(200).json(tournament);
-    } else {
-      res.status(401).json({"error": "unauthorized"});
+    } else if (req.method === 'GET') {
+      const tournaments = await Tournament.findAll({ include: [{ model: TournamentEvent, as: "tournamentEvents" }] });
+      res.status(200).json(tournaments);
     }
-  } else if (req.method === 'GET') {
-    const tournaments = await Tournament.findAll({});
-    res.status(200).json(tournaments);
+  } else {
+    res.status(401).end();
   }
 }

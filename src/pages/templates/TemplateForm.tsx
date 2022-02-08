@@ -18,13 +18,13 @@ const TemplateForm: FunctionComponent<FormProps> = ({ setOpen, addTemplate }) =>
 
   return(
   <Formik
-    initialValues={{ name: '', template_events: [] }}
+    initialValues={{ name: '', templateEvents: [] }}
     validationSchema={
       Yup.object({
         name: Yup.string()
           .max(100, 'Must be 100 characters or less')
           .required('Required'),
-        template_events: Yup.array()
+        templateEvents: Yup.array()
           .of(
             Yup.object().shape({
               name: Yup.string()
@@ -74,7 +74,7 @@ const TemplateForm: FunctionComponent<FormProps> = ({ setOpen, addTemplate }) =>
               ) : null}
             </Box>
             <FieldArray
-              name="template_events"
+              name="templateEvents"
               render={arrayHelpers => {                
                 const ErrorMessage = ({ name }) => {
                     const [field, meta, helpers] = useField(name);   
@@ -83,16 +83,16 @@ const TemplateForm: FunctionComponent<FormProps> = ({ setOpen, addTemplate }) =>
 
                 return(
                   <div style={{width: "auto"}}>
-                    {formik.values.template_events && formik.values.template_events.length > 0 ? (
-                      formik.values.template_events.map((event, index) => (
+                    {formik.values.templateEvents && formik.values.templateEvents.length > 0 ? (
+                      formik.values.templateEvents.map((event, index) => (
                         <div key={index} style={{ marginBottom: "10px", display: "flex", flexDirection: "row", alignContent: "center" }}>
                           <div style={{ flexGrow: 1, marginRight: "10px" }}>
-                            <TextField label='Name' {...formik.getFieldProps(`template_events[${index}].name`)} fullWidth/>
-                            <ErrorMessage name={`template_events[${index}].name`} />
+                            <TextField label='Name' {...formik.getFieldProps(`templateEvents[${index}].name`)} fullWidth/>
+                            <ErrorMessage name={`templateEvents[${index}].name`} />
                           </div>
                           <div>
-                            <TextField {...formik.getFieldProps(`template_events[${index}].minutes`)} label='Minutes'/>
-                            <ErrorMessage name={`template_events[${index}].minutes`} />
+                            <TextField {...formik.getFieldProps(`templateEvents[${index}].minutes`)} label='Minutes'/>
+                            <ErrorMessage name={`templateEvents[${index}].minutes`} />
                           </div>
                           <Button onClick={() => arrayHelpers.remove(index)}>
                             <RemoveCircleOutlineIcon/>
@@ -111,7 +111,7 @@ const TemplateForm: FunctionComponent<FormProps> = ({ setOpen, addTemplate }) =>
                 )}}
             />
             { 
-              typeof formik.errors.template_events === 'string' ? <div style={{ ...error, marginBottom: "10px"}}>{formik.errors.template_events}</div> : <div style={{ ...error, marginBottom: "10px"}}/>
+              typeof formik.errors.templateEvents === 'string' ? <div style={{ ...error, marginBottom: "10px"}}>{formik.errors.templateEvents}</div> : <div style={{ ...error, marginBottom: "10px"}}/>
             }
 
             <Button 

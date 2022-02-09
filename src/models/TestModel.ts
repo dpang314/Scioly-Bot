@@ -1,12 +1,12 @@
-import { Optional, DataTypes, Model } from "sequelize";
+import { NOW, Optional, DataTypes, Model, Sequelize } from "sequelize";
+import { TournamentEvent } from ".";
 
 interface TestAttributes {
   id: string,
-  user_id: string,
-  partner1_id?: string,
-  partner2_id?: string,
-  time_started: Date,
-  test_name: string,
+  userId: string,
+  partner1Id?: string,
+  partner2Id?: string,
+  timeStarted?: Date,
   finished: boolean,
 }
 
@@ -15,12 +15,15 @@ interface TestCreationAttributes extends Optional<TestAttributes, 'id'> {}
 
 class Test extends Model<TestAttributes, TestCreationAttributes> implements TestAttributes {
   declare id: string;
-  declare user_id: string;
-  declare partner1_id: string | null;
-  declare partner2_id: string | null;
-  declare time_started: Date;
-  declare test_name: string;
+  declare userId: string;
+  declare partner1Id: string | null;
+  declare partner2Id: string | null;
+  declare timeStarted: Date;
   declare finished: boolean;
+  declare tournamentId: string;
+
+  declare readonly tournamentEvent: TournamentEvent;
+
   declare tournamentEventId: string;
 }
 
@@ -33,19 +36,16 @@ const TestModel = (sequelize) => {
       type: DataTypes.UUID,
       unique: true,
     },
-    user_id: {
+    userId: {
       type: DataTypes.TEXT,
       allowNull: false,
     },
-    partner1_id: DataTypes.TEXT,
-    partner2_id: DataTypes.TEXT,
-    test_name: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    time_started: {
+    partner1Id: DataTypes.TEXT,
+    partner2Id: DataTypes.TEXT,
+    timeStarted: {
       type: DataTypes.DATE,
       allowNull: false,
+      defaultValue: new Date(),
     },
     finished: {
       type: DataTypes.BOOLEAN,

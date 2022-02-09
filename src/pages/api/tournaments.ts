@@ -9,7 +9,7 @@ export default async function handler(
   const session = await getSession({ req });
   if (session) {
     if (req.method === 'POST') {
-      const tournament = await Tournament.create({user_id: session.id, ...req.body});
+      const tournament = await Tournament.create({userId: session.id, ...req.body});
       const template = await Template.findOne({ where: {id: req.body.template}, include: [{ model: TemplateEvent, as: "templateEvents" }] });
       for (const templateEvent of template.templateEvents) {
         await tournament.createTournamentEvent({ name: templateEvent.name, minutes: templateEvent.minutes, link: ''});

@@ -4,6 +4,7 @@ import { FunctionComponent } from "react"
 import { TemplateAttributes } from "../../models"
 import * as Yup from 'yup'
 import { AddTournament } from "."
+import { urlRegex } from "../util"
 
 type FormProps = {
   templates: Array<TemplateAttributes>,
@@ -26,6 +27,7 @@ const TournamentForm: FunctionComponent<FormProps> = ({ templates, setOpen, addT
         template: Yup.string().required('Required'),
         submission: Yup.string()
           .max(100, 'Must be 100 characters or less')
+          .matches(urlRegex, 'Must be a valid URL')
           .required('Required')
       })
     }

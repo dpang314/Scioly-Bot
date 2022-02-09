@@ -1,4 +1,4 @@
-import { Optional, Association, DataTypes, Model } from "sequelize";
+import { Optional, Association, DataTypes, Model, HasManyCreateAssociationMixin } from "sequelize";
 import { Test } from './TestModel';
 
 interface TournamentEventAttributes {
@@ -24,6 +24,8 @@ class TournamentEvent extends Model<TournamentEventAttributes, TournamentEventCr
     declare static associations: {
       tests: Association<TournamentEvent, Test>;
     }
+  
+    declare createTest: HasManyCreateAssociationMixin<Test>;
   }
 
 const TournamentEventModel = (sequelize) => {
@@ -45,8 +47,9 @@ const TournamentEventModel = (sequelize) => {
         type: DataTypes.INTEGER,
       },
       link: {
-        allowNull: true,
+        allowNull: false,
         type: DataTypes.STRING,
+        defaultValue: '',
       }
     }, 
     {

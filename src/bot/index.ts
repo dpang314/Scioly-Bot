@@ -1,5 +1,9 @@
 import { Client, Collection, CommandInteraction, Intents } from "discord.js";
 import { DISCORD_TOKEN } from '../configLoader';
+import * as fs from 'fs';
+import checkTests from "./tasks/checkTests";
+import { initDB } from "../models";
+import path from "path";
 
 interface SlashCommand {
   data: any,
@@ -10,14 +14,10 @@ interface CommandClient extends Client {
   commands: Collection<string, SlashCommand>
 }
 
-import * as fs from 'fs';
-import { CHANNEL_ID } from '../configLoader';
-import checkTests from "./tasks/checkTests";
-
 const client: CommandClient = new Client({ intents: [Intents.FLAGS.GUILDS] }) as CommandClient;
 client.commands = new Collection();
 
-const commandFiles = fs.readdirSync('./commands').filter((file: string) => file.endsWith('.ts'));
+const commandFiles = fs.readdirSync(path.resolve(__dirname, './commands')).filter((file: string) => file.endsWith('.ts'));
 
 for (const file of commandFiles) {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -25,9 +25,9 @@ for (const file of commandFiles) {
   client.commands.set(command.data.name, command);
 }
 
-client.once('ready', () => {
-  console.log('Ready!');
-  setInterval(checkTests, 60 * 1000);
+client.once('ready', async () => {
+  await initDB();
+  setInterval(checkTests, 10 * 1000);
 });
 
 client.on('interactionCreate', async (interaction) => {
@@ -36,18 +36,12 @@ client.on('interactionCreate', async (interaction) => {
   const command = client.commands.get(interaction.commandName);
   
   if (!command) return;
-  
-  if (interaction.channelId !== CHANNEL_ID) {
-    const channel = client.channels.cache.get(CHANNEL_ID)?.toString();
-    await interaction.reply({ content: `Run command in ${channel}`, ephemeral: true });
-  } else {
-    try {
-      await command.execute(interaction);
-    }
-    catch (error) {
-      console.error(error);
-      await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
-    }
+  try {
+    await command.execute(interaction);
+  }
+  catch (error) {
+    console.error(error);
+    await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
   }
 });
 

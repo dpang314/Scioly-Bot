@@ -1,5 +1,6 @@
 import { Modal, TableRow, TableCell, Switch, Button } from "@mui/material";
 import Box from "@mui/material/Box";
+import { useSession } from "next-auth/react";
 import React from "react";
 import { FunctionComponent } from "react";
 import TournamentEventsForm from "./TournamentEventsForm";
@@ -15,8 +16,23 @@ const TournamentRow: FunctionComponent<Props> = ({id, name, active}) => {
   const [status, setStatus] = React.useState(active);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const toggleStatus = () => {
-    setStatus(!status);
+  const { data: session } = useSession({
+    required: true
+  });
+  
+  const toggleStatus = async () => {
+    const res = await fetch(
+      `/api/tournaments/${id}/`,
+      {
+        body: JSON.stringify({ active: !status }),
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: 'PUT'
+      }
+    )
+    const tournament = await res.json();
+    setStatus(tournament.active);
   };
 
   const style = {

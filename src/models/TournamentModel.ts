@@ -1,11 +1,13 @@
-import { Optional, HasManyCreateAssociationMixin, DataTypes, Model, Association } from "sequelize";
+import { Optional, HasManyCreateAssociationMixin, HasManyAddAssociationMixin, DataTypes, Model, Association } from "sequelize";
+import { Test } from ".";
 import { TournamentEvent } from './TournamentEventModel';
 
 interface TournamentAttributes {
   id: string,
-  user_id: string,
+  userId: string,
   name: string,
   active: boolean,
+  submission: string,
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -13,17 +15,21 @@ interface TournamentCreationAttributes extends Optional<TournamentAttributes, 'i
 
 class Tournament extends Model<TournamentAttributes, TournamentCreationAttributes> implements TournamentAttributes {
   declare id: string;
-  declare user_id: string;
+  declare userId: string;
   declare name: string;
   declare active: boolean;
+  declare submission: string;
 
   declare readonly tournamentEvents?: TournamentEvent[];
+  declare readonly tests?: Test[];
 
   declare static associations: {
-    templateEvents: Association<Tournament, TournamentEvent>;
+    tournamentEvents: Association<Tournament, TournamentEvent>;
+    tests: Association<Tournament, Test>;
   }
 
   declare createTournamentEvent: HasManyCreateAssociationMixin<TournamentEvent>;
+  declare addTest: HasManyAddAssociationMixin<Test, number>;
 }
 
 const TournamentModel = (sequelize) => {
@@ -35,7 +41,7 @@ const TournamentModel = (sequelize) => {
       unique: true,
       defaultValue: DataTypes.UUIDV4,
     },
-    user_id: {
+    userId: {
       type: DataTypes.TEXT,
       allowNull: false,
     },
@@ -48,6 +54,10 @@ const TournamentModel = (sequelize) => {
       allowNull: false,
       defaultValue: false,
     },
+    submission: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    }
   }, 
   {
       sequelize,

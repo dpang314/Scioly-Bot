@@ -5,7 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "deploy": "ts-node deployCommands.ts",
-    "dev-bot": "cd ./src/bot && ts-node index.ts",
+    "dev-bot": "ts-node ./src/bot/index.ts",
     "watch": "tsc index.ts -w",
     "lint": "eslint . --ext .ts",
     "build": "tsc --project tsconfig.json",

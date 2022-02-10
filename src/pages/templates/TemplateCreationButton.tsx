@@ -1,16 +1,10 @@
 import { Button, Modal, Box } from '@mui/material';
 import React, { FunctionComponent } from 'react';
 import AddIcon from '@mui/icons-material/Add';
-import { TemplateCreationAttributes } from '../../models/TemplateModel';
 import TemplateForm from './TemplateForm';
 
-type TemplateCreationButtonProps = {
-  // eslint-disable-next-line no-unused-vars
-  addTemplate: (template: TemplateCreationAttributes) => void,
-}
-
 const TemplateCreationButton:
-FunctionComponent<TemplateCreationButtonProps> = ({ addTemplate }) => {
+FunctionComponent = () => {
   const [open, setOpen] = React.useState(false);
   // const [templates, setTemplates] = React.useState(null);
   const handleOpen = () => setOpen(true);
@@ -40,7 +34,7 @@ FunctionComponent<TemplateCreationButtonProps> = ({ addTemplate }) => {
         onClose={handleClose}
       >
         <Box sx={style}>
-          <TemplateForm setOpen={setOpen} addTemplate={addTemplate} />
+          <TemplateForm setOpen={setOpen} />
         </Box>
       </Modal>
     </>

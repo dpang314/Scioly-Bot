@@ -6,24 +6,38 @@ import React, { FunctionComponent } from 'react';
 import * as Yup from 'yup';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { TemplateCreationAttributes } from '../../models/TemplateModel';
+import { useSession } from 'next-auth/react';
+import useSWR, { useSWRConfig } from 'swr';
 import ErrorMessage from '../components/ErrorMessage';
+import { Template } from '../../models';
+import { fetcher } from '../util';
 
 type FormProps = {
   // eslint-disable-next-line no-unused-vars
   setOpen: (open: boolean) => void,
+  id?: string,
   // eslint-disable-next-line no-unused-vars
-  addTemplate: (template: TemplateCreationAttributes) => void,
+  setName?: (name: string) => void,
 }
 
-const TemplateForm: FunctionComponent<FormProps> = ({ setOpen, addTemplate }) => {
-  const error = {
-    color: 'red',
-  };
+const TemplateForm: FunctionComponent<FormProps> = ({ setOpen, setName, id }) => {
+  const { mutate } = useSWRConfig();
+  const { data: session, status } = useSession({
+    required: true,
+  });
+  const { data, error } = useSWR<Template>(id ? `/api/templates/${id}/` : null, fetcher);
+  if (id && error) return <div>Failed to load</div>;
+  if (id && (status === 'loading' || !session || !data)) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Formik
-      initialValues={{ name: '', templateEvents: [] }}
+      initialValues={{
+        name: id ? data.name : '',
+        templateEvents: id ? data.templateEvents : [],
+        removed: [],
+      }}
       validationSchema={
       Yup.object({
         name: Yup.string()
@@ -46,18 +60,33 @@ const TemplateForm: FunctionComponent<FormProps> = ({ setOpen, addTemplate }) =>
       })
     }
       onSubmit={async (values, { setSubmitting }) => {
-        const res = await fetch(
-          '/api/templates',
-          {
-            body: JSON.stringify(values),
-            headers: {
-              'Content-Type': 'application/json',
+        if (id) {
+          const res = await fetch(
+            `/api/templates/${id}/`,
+            {
+              body: JSON.stringify(values),
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              method: 'PUT',
             },
-            method: 'POST',
-          },
-        );
-        const template = await res.json();
-        addTemplate(template);
+          );
+          const template = await res.json();
+          setName(template.name);
+          mutate(`/api/templates/${id}/`);
+        } else {
+          await fetch(
+            '/api/templates',
+            {
+              body: JSON.stringify(values),
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              method: 'POST',
+            },
+          );
+          mutate('/api/templates/');
+        }
         setSubmitting(false);
         setOpen(false);
       }}
@@ -74,9 +103,7 @@ const TemplateForm: FunctionComponent<FormProps> = ({ setOpen, addTemplate }) =>
                 fullWidth
                 {...formik.getFieldProps('name')}
               />
-              {formik.touched.name && formik.errors.name ? (
-                <Box sx={error}>{formik.errors.name}</Box>
-              ) : null}
+              <ErrorMessage name="name" />
             </Box>
             <FieldArray
               name="templateEvents"
@@ -98,7 +125,13 @@ const TemplateForm: FunctionComponent<FormProps> = ({ setOpen, addTemplate }) =>
                           <TextField {...formik.getFieldProps(`templateEvents[${index}].minutes`)} label="Minutes" />
                           <ErrorMessage name={`templateEvents[${index}].minutes`} />
                         </div>
-                        <Button onClick={() => arrayHelpers.remove(index)}>
+                        <Button onClick={() => {
+                          arrayHelpers.remove(index);
+                          if (event.id) {
+                            formik.values.removed.push(event.id);
+                          }
+                        }}
+                        >
                           <RemoveCircleOutlineIcon />
                         </Button>
                         <Button onClick={() => arrayHelpers.insert(index + 1, { name: '', minutes: '' })}>
@@ -115,7 +148,9 @@ const TemplateForm: FunctionComponent<FormProps> = ({ setOpen, addTemplate }) =>
               )}
             />
             {
-              typeof formik.errors.templateEvents === 'string' ? <div style={{ ...error, marginBottom: '10px' }}>{formik.errors.templateEvents}</div> : <div style={{ ...error, marginBottom: '10px' }} />
+              typeof formik.errors.templateEvents === 'string'
+                ? <div style={{ color: 'red', marginBottom: '10px' }}>{formik.errors.templateEvents}</div>
+                : <div style={{ color: 'red', marginBottom: '10px' }} />
             }
 
             <Button
@@ -129,6 +164,11 @@ const TemplateForm: FunctionComponent<FormProps> = ({ setOpen, addTemplate }) =>
       )}
     </Formik>
   );
+};
+
+TemplateForm.defaultProps = {
+  id: null,
+  setName: null,
 };
 
 export default TemplateForm;

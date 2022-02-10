@@ -2,7 +2,7 @@ import type { NextPage } from 'next';
 import { useSession } from 'next-auth/react';
 import React from 'react';
 import { Session } from 'next-auth';
-import useSWR, { useSWRConfig } from 'swr';
+import useSWR from 'swr';
 import Navbar from '../components/Navbar';
 import TemplateTable from './TemplateTable';
 import { Template, TemplateAttributes } from '../../models';
@@ -15,7 +15,6 @@ type PageProps = {
 }
 
 const Templates: NextPage<PageProps> = () => {
-  const { mutate } = useSWRConfig();
   const { data: session, status } = useSession({
     required: true,
   });
@@ -28,7 +27,7 @@ const Templates: NextPage<PageProps> = () => {
   return (
     <>
       <Navbar loggedIn />
-      <TemplateTable templates={templates} addTemplate={() => (mutate('/api/templates/'))} />
+      <TemplateTable templates={templates} />
     </>
   );
 };

@@ -1,20 +1,20 @@
-import { Button, Modal, Box } from "@mui/material";
-import React, { FunctionComponent } from "react";
-import { TemplateAttributes } from "../../models";
-import TournamentForm from "./TournamentForm";
+import { Button, Modal, Box } from '@mui/material';
+import React, { FunctionComponent } from 'react';
 import AddIcon from '@mui/icons-material/Add';
-import { AddTournament } from ".";
+import { TemplateAttributes } from '../../models';
+import TournamentForm, { AddTournament } from './TournamentForm';
 
 type TournamentModalButtonProps = {
   templates: Array<TemplateAttributes>
   addTournament: AddTournament,
 }
 
-const TournamentModalButton: FunctionComponent<TournamentModalButtonProps> = ({ templates, addTournament }) => {
+const TournamentModalButton:
+FunctionComponent<TournamentModalButtonProps> = ({ templates, addTournament }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  
+
   const style = {
     position: 'absolute' as const,
     top: '50%',
@@ -24,24 +24,24 @@ const TournamentModalButton: FunctionComponent<TournamentModalButtonProps> = ({ 
     bgcolor: 'background.paper',
     boxShadow: 24,
     p: 4,
-    borderRadius: 2
+    borderRadius: 2,
   };
 
   return (
     <>
       <Button fullWidth onClick={handleOpen}>
-        <AddIcon/>
+        <AddIcon />
       </Button>
       <Modal
         open={open}
         onClose={handleClose}
       >
         <Box sx={style}>
-          <TournamentForm templates={templates} setOpen={setOpen} addTournament={addTournament}/>
+          <TournamentForm templates={templates} setOpen={setOpen} addTournament={addTournament} />
         </Box>
       </Modal>
     </>
-  )
-}
+  );
+};
 
 export default TournamentModalButton;

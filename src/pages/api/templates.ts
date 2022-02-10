@@ -1,4 +1,4 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
 import { Template, TemplateEvent } from '../../models';
 
@@ -12,12 +12,12 @@ export default async function handler(
       const template = await Template.create(req.body, {
         include: [{
           model: TemplateEvent,
-          as: "templateEvents",
-        }]
+          as: 'templateEvents',
+        }],
       });
       res.status(200).json(template);
     } else if (req.method === 'GET') {
-      const templates = await Template.findAll({ include: [{ model: TemplateEvent, as: "templateEvents" }] });
+      const templates = await Template.findAll({ include: [{ model: TemplateEvent, as: 'templateEvents' }] });
       res.status(200).json(templates);
     }
   } else {

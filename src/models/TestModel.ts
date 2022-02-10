@@ -1,5 +1,8 @@
-import { NOW, Optional, DataTypes, Model, Sequelize } from "sequelize";
-import { TournamentEvent } from ".";
+/* eslint-disable import/no-cycle */
+import {
+  Optional, DataTypes, Model,
+} from 'sequelize';
+import { TournamentEvent } from '.';
 
 interface TestAttributes {
   id: string,
@@ -15,11 +18,17 @@ interface TestCreationAttributes extends Optional<TestAttributes, 'id'> {}
 
 class Test extends Model<TestAttributes, TestCreationAttributes> implements TestAttributes {
   declare id: string;
+
   declare userId: string;
+
   declare partner1Id: string | null;
+
   declare partner2Id: string | null;
+
   declare timeStarted: Date;
+
   declare finished: boolean;
+
   declare tournamentId: string;
 
   declare readonly tournamentEvent: TournamentEvent;
@@ -51,14 +60,14 @@ const TestModel = (sequelize) => {
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false,
-    }
+    },
   }, {
     sequelize,
     tableName: 'tests',
   });
 
   return Test;
-}
-  
+};
+
 export { TestModel, Test };
 export type { TestAttributes, TestCreationAttributes };

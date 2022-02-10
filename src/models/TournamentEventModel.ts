@@ -1,4 +1,7 @@
-import { Optional, Association, DataTypes, Model, HasManyCreateAssociationMixin } from "sequelize";
+/* eslint-disable import/no-cycle */
+import {
+  Optional, Association, DataTypes, Model, HasManyCreateAssociationMixin,
+} from 'sequelize';
 import { Test } from './TestModel';
 
 interface TournamentEventAttributes {
@@ -13,20 +16,25 @@ interface TournamentEventCreationAttributes extends Optional<TournamentEventAttr
 
 class TournamentEvent extends Model<TournamentEventAttributes, TournamentEventCreationAttributes>
   implements TournamentEventAttributes {
-    declare id: string;
-    declare name: string;
-    declare minutes: number;
-    declare link: string;
-    declare tournamentId: string;
+  declare id: string;
 
-    declare readonly tests?: Test[];
+  declare name: string;
 
-    declare static associations: {
+  declare minutes: number;
+
+  declare link: string;
+
+  declare tournamentId: string;
+
+  declare readonly tests?: Test[];
+
+  declare static associations: {
+      // eslint-disable-next-line no-use-before-define
       tests: Association<TournamentEvent, Test>;
-    }
-  
-    declare createTest: HasManyCreateAssociationMixin<Test>;
-  }
+    };
+
+  declare createTest: HasManyCreateAssociationMixin<Test>;
+}
 
 const TournamentEventModel = (sequelize) => {
   TournamentEvent.init(
@@ -50,17 +58,16 @@ const TournamentEventModel = (sequelize) => {
         allowNull: false,
         type: DataTypes.STRING,
         defaultValue: '',
-      }
-    }, 
+      },
+    },
     {
       sequelize,
       tableName: 'tournament_events',
-    }
-  )
+    },
+  );
 
   return TournamentEvent;
-}
-
+};
 
 export { TournamentEventModel, TournamentEvent };
 export type { TournamentEventAttributes, TournamentEventCreationAttributes };

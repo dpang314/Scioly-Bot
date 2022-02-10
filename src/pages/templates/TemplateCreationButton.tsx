@@ -1,17 +1,18 @@
-import { Button, Modal, Box } from "@mui/material";
-import { FunctionComponent } from "react";
-import { TemplateCreationAttributes } from "../../models/TemplateModel";
-import TemplateForm from "./TemplateForm";
+import { Button, Modal, Box } from '@mui/material';
+import React, { FunctionComponent } from 'react';
 import AddIcon from '@mui/icons-material/Add';
-import React from "react";
+import { TemplateCreationAttributes } from '../../models/TemplateModel';
+import TemplateForm from './TemplateForm';
 
 type TemplateCreationButtonProps = {
+  // eslint-disable-next-line no-unused-vars
   addTemplate: (template: TemplateCreationAttributes) => void,
 }
 
-const TemplateCreationButton: FunctionComponent<TemplateCreationButtonProps> = ({ addTemplate }) => {
+const TemplateCreationButton:
+FunctionComponent<TemplateCreationButtonProps> = ({ addTemplate }) => {
   const [open, setOpen] = React.useState(false);
-  //const [templates, setTemplates] = React.useState(null);
+  // const [templates, setTemplates] = React.useState(null);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -26,24 +27,24 @@ const TemplateCreationButton: FunctionComponent<TemplateCreationButtonProps> = (
     p: 4,
     borderRadius: 2,
     overflowY: 'scroll',
-    maxHeight: "90vh"
+    maxHeight: '90vh',
   };
 
   return (
     <>
       <Button fullWidth onClick={handleOpen}>
-        <AddIcon/>
+        <AddIcon />
       </Button>
       <Modal
         open={open}
         onClose={handleClose}
       >
         <Box sx={style}>
-          <TemplateForm setOpen={setOpen} addTemplate={addTemplate}/>
+          <TemplateForm setOpen={setOpen} addTemplate={addTemplate} />
         </Box>
       </Modal>
     </>
-  )
-}
+  );
+};
 
 export default TemplateCreationButton;

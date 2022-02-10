@@ -1,25 +1,30 @@
-import { FormControl, Box, TextField, Button } from "@mui/material"
-import { Formik, FieldArray, useField } from "formik"
-import { FunctionComponent } from "react"
-import { TemplateCreationAttributes } from "../../models/TemplateModel";
-import * as Yup from 'yup'
+import {
+  FormControl, Box, TextField, Button,
+} from '@mui/material';
+import { Formik, FieldArray } from 'formik';
+import React, { FunctionComponent } from 'react';
+import * as Yup from 'yup';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import { TemplateCreationAttributes } from '../../models/TemplateModel';
+import ErrorMessage from '../components/ErrorMessage';
 
 type FormProps = {
+  // eslint-disable-next-line no-unused-vars
   setOpen: (open: boolean) => void,
+  // eslint-disable-next-line no-unused-vars
   addTemplate: (template: TemplateCreationAttributes) => void,
 }
 
 const TemplateForm: FunctionComponent<FormProps> = ({ setOpen, addTemplate }) => {
   const error = {
-    color: "red"
-  }
+    color: 'red',
+  };
 
-  return(
-  <Formik
-    initialValues={{ name: '', templateEvents: [] }}
-    validationSchema={
+  return (
+    <Formik
+      initialValues={{ name: '', templateEvents: [] }}
+      validationSchema={
       Yup.object({
         name: Yup.string()
           .max(100, 'Must be 100 characters or less')
@@ -33,39 +38,39 @@ const TemplateForm: FunctionComponent<FormProps> = ({ setOpen, addTemplate }) =>
               minutes: Yup.number()
                 .min(0, 'Test can\'t have a negative time limit')
                 .max(1440, 'Test must be under 1440 minutes long')
-                .required('Required')
-            })
+                .required('Required'),
+            }),
           )
           .required('Must have events')
           .min(1, 'Must have at least 1 event'),
       })
     }
-    onSubmit={async(values, { setSubmitting }) => {
-      const res = await fetch(
-        '/api/templates',
-        {
-          body: JSON.stringify(values),
-          headers: {
-            'Content-Type': 'application/json'
+      onSubmit={async (values, { setSubmitting }) => {
+        const res = await fetch(
+          '/api/templates',
+          {
+            body: JSON.stringify(values),
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            method: 'POST',
           },
-          method: 'POST'
-        }
-      )
-      const template = await res.json();
-      addTemplate(template);
-      setSubmitting(false);
-      setOpen(false);
-    }}
+        );
+        const template = await res.json();
+        addTemplate(template);
+        setSubmitting(false);
+        setOpen(false);
+      }}
     >
-      {formik => (
+      {(formik) => (
         <form onSubmit={formik.handleSubmit}>
-          <FormControl fullWidth margin='normal'>
-            <Box sx={{marginBottom: "10px"}}>
-              <TextField 
-                id = "name"
-                label ="Template Name" 
-                variant ="outlined" 
-                sx={{"display": "block"}}
+          <FormControl fullWidth margin="normal">
+            <Box sx={{ marginBottom: '10px' }}>
+              <TextField
+                id="name"
+                label="Template Name"
+                variant="outlined"
+                sx={{ display: 'block' }}
                 fullWidth
                 {...formik.getFieldProps('name')}
               />
@@ -75,53 +80,55 @@ const TemplateForm: FunctionComponent<FormProps> = ({ setOpen, addTemplate }) =>
             </Box>
             <FieldArray
               name="templateEvents"
-              render={arrayHelpers => {                
-                const ErrorMessage = ({ name }) => {
-                    const [field, meta, helpers] = useField(name);   
-                    return meta.touched && meta.error ? <Box sx={error}>{meta.error}</Box> : null;
-                };
-
-                return(
-                  <div style={{width: "auto"}}>
-                    {formik.values.templateEvents && formik.values.templateEvents.length > 0 ? (
-                      formik.values.templateEvents.map((event, index) => (
-                        <div key={index} style={{ marginBottom: "10px", display: "flex", flexDirection: "row", alignContent: "center" }}>
-                          <div style={{ flexGrow: 1, marginRight: "10px" }}>
-                            <TextField label='Name' {...formik.getFieldProps(`templateEvents[${index}].name`)} fullWidth/>
-                            <ErrorMessage name={`templateEvents[${index}].name`} />
-                          </div>
-                          <div>
-                            <TextField {...formik.getFieldProps(`templateEvents[${index}].minutes`)} label='Minutes'/>
-                            <ErrorMessage name={`templateEvents[${index}].minutes`} />
-                          </div>
-                          <Button onClick={() => arrayHelpers.remove(index)}>
-                            <RemoveCircleOutlineIcon/>
-                          </Button>
-                          <Button onClick={() => arrayHelpers.insert(index+1, {name: '', minutes: ''})}>
-                            <AddCircleIcon/>
-                          </Button>
+              render={(arrayHelpers) => (
+                <div style={{ width: 'auto' }}>
+                  {formik.values.templateEvents && formik.values.templateEvents.length > 0 ? (
+                    formik.values.templateEvents.map((event, index) => (
+                      <div
+                        key={event.id}
+                        style={{
+                          marginBottom: '10px', display: 'flex', flexDirection: 'row', alignContent: 'center',
+                        }}
+                      >
+                        <div style={{ flexGrow: 1, marginRight: '10px' }}>
+                          <TextField label="Name" {...formik.getFieldProps(`templateEvents[${index}].name`)} fullWidth />
+                          <ErrorMessage name={`templateEvents[${index}].name`} />
                         </div>
-                      ))
-                    ): (
-                      <Button variant="outlined" fullWidth onClick={() => arrayHelpers.push({ name: '', minutes: ''})} >
-                        Add event
-                      </Button>
-                    )}
-                  </div>
-                )}}
+                        <div>
+                          <TextField {...formik.getFieldProps(`templateEvents[${index}].minutes`)} label="Minutes" />
+                          <ErrorMessage name={`templateEvents[${index}].minutes`} />
+                        </div>
+                        <Button onClick={() => arrayHelpers.remove(index)}>
+                          <RemoveCircleOutlineIcon />
+                        </Button>
+                        <Button onClick={() => arrayHelpers.insert(index + 1, { name: '', minutes: '' })}>
+                          <AddCircleIcon />
+                        </Button>
+                      </div>
+                    ))
+                  ) : (
+                    <Button variant="outlined" fullWidth onClick={() => arrayHelpers.push({ name: '', minutes: '' })}>
+                      Add event
+                    </Button>
+                  )}
+                </div>
+              )}
             />
-            { 
-              typeof formik.errors.templateEvents === 'string' ? <div style={{ ...error, marginBottom: "10px"}}>{formik.errors.templateEvents}</div> : <div style={{ ...error, marginBottom: "10px"}}/>
+            {
+              typeof formik.errors.templateEvents === 'string' ? <div style={{ ...error, marginBottom: '10px' }}>{formik.errors.templateEvents}</div> : <div style={{ ...error, marginBottom: '10px' }} />
             }
 
-            <Button 
+            <Button
               type="submit"
-              variant="contained">Save</Button>
+              variant="contained"
+            >
+              Save
+            </Button>
           </FormControl>
         </form>
       )}
     </Formik>
-  )
-}
+  );
+};
 
 export default TemplateForm;

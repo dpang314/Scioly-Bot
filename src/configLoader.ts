@@ -10,8 +10,7 @@ const getEnv = (key: string): string => {
     throw new Error(`${key} environment variable is not set`);
   }
   return env;
-}
-
+};
 
 const DISCORD_TOKEN = getEnv('DISCORD_TOKEN');
 const CLIENT_ID = getEnv('CLIENT_ID');
@@ -22,7 +21,7 @@ const MONGO_URI = getEnv('MONGO_URI');
 const SUBMISSION_LINK = getEnv('SUBMISSION_LINK');
 const GUIDELINES_LINK = getEnv('GUIDELINES_LINK');
 const DATABASE_CONNECTION = getEnv('DATABASE_CONNECTION');
-const DEV = process.env.NODE_ENV !== 'production'
+const DEV = process.env.NODE_ENV !== 'production';
 const SERVER = process.env.NODE_ENV !== 'production' ? 'http://localhost' : '';
 const PORT = 3000;
 const NEXT_SECRET = getEnv('NEXT_SECRET');

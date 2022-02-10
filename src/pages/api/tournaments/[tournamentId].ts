@@ -1,6 +1,8 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import { getSession } from "next-auth/react"
-import { Template, TemplateEvent, Tournament, TournamentEvent } from '../../../models';
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { getSession } from 'next-auth/react';
+import {
+  Tournament, TournamentEvent,
+} from '../../../models';
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,28 +14,31 @@ export default async function handler(
     if (req.method === 'PUT') {
       const newEvents = [];
       if (req.body.tournamentEvents) {
-        for (const event of req.body.tournamentEvents) {
-          const [newEvent, created] = await TournamentEvent.upsert({ ...event, tournamentId });
+        req.body.tournamentEvents.forEach(async (event) => {
+          const [newEvent] = await TournamentEvent.upsert({ ...event, tournamentId });
           newEvents.push(newEvent);
-        }
+        });
       }
       if (req.body.removed) {
-        for (const remove of req.body.removed) {
+        req.body.removed.forEach(async (remove) => {
           await TournamentEvent.destroy({
             where: {
               id: remove,
-            }
-          })
-        }
+            },
+          });
+        });
       }
       if (req.body.active !== null) {
-        const tournament = await Tournament.update({ active: req.body.active }, { where: {id: tournamentId } })
+        await Tournament.update(
+          { active: req.body.active },
+          { where: { id: tournamentId } },
+        );
       }
       res.status(200).json({ tournamentEvents: newEvents, active: req.body.active });
     } else if (req.method === 'GET') {
-      const tournaments = await Tournament.findOne({ where: { id: tournamentId }, include: [{ model: TournamentEvent, as: "tournamentEvents" }] });
+      const tournaments = await Tournament.findOne({ where: { id: tournamentId }, include: [{ model: TournamentEvent, as: 'tournamentEvents' }] });
       res.status(200).json(tournaments);
-    }    
+    }
   } else {
     res.status(401).end();
   }

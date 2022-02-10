@@ -1,5 +1,7 @@
-import { Optional, HasManyCreateAssociationMixin, Association, DataTypes, Model } from "sequelize";
-import { TemplateEvent } from "./TemplateEventModel";
+import {
+  Optional, HasManyCreateAssociationMixin, Association, DataTypes, Model,
+} from 'sequelize';
+import { TemplateEvent } from './TemplateEventModel';
 
 interface TemplateAttributes {
   id: string,
@@ -10,40 +12,41 @@ interface TemplateAttributes {
 interface TemplateCreationAttributes extends Optional<TemplateAttributes, 'id'> {}
 
 class Template extends Model<TemplateAttributes, TemplateCreationAttributes>
-    implements TemplateAttributes {
-      declare id: string;
-      declare name: string;
-      declare createTemplateEvent: HasManyCreateAssociationMixin<TemplateEvent>;
+  implements TemplateAttributes {
+  declare id: string;
 
-      declare readonly templateEvents?: TemplateEvent[];
+  declare name: string;
 
-      declare static associations: {
+  declare createTemplateEvent: HasManyCreateAssociationMixin<TemplateEvent>;
+
+  declare readonly templateEvents?: TemplateEvent[];
+
+  declare static associations: {
+        // eslint-disable-next-line no-use-before-define
         templateEvents: Association<Template, TemplateEvent>;
-      }
-    }
+      };
+}
 
 const TemplateModel = (sequelize) => {
-  Template.init(
-    {
-      id: {
-        allowNull: false,
-        defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
-        type: DataTypes.UUID,
-        unique: true,
-      },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false
-      }
-    }, {
-      sequelize,
-      tableName: 'templates',
-    }
-  )
+  Template.init({
+    id: {
+      allowNull: false,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+      type: DataTypes.UUID,
+      unique: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  }, {
+    sequelize,
+    tableName: 'templates',
+  });
 
   return Template;
-}
+};
 
 export { TemplateModel, Template };
 export type { TemplateAttributes, TemplateCreationAttributes };

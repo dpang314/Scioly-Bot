@@ -1,7 +1,7 @@
-import { CommandInteraction } from "discord.js";
+import { CommandInteraction } from 'discord.js';
 
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { GUIDELINES_LINK } from "../../configLoader";
+import { GUIDELINES_LINK } from '../../configLoader';
 
 module.exports = {
   data: new SlashCommandBuilder()

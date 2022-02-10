@@ -2,12 +2,12 @@ import type { NextPage } from 'next';
 import { useSession } from 'next-auth/react';
 import React from 'react';
 import useSWR, { useSWRConfig } from 'swr';
-import Navbar from '../components/Navbar';
+import Navbar from '../../components/Navbar';
 import { TemplateAttributes } from '../../models/TemplateModel';
 import { TournamentAttributes } from '../../models/TournamentModel';
 import TournamentTable from './TournamentTable';
-import Loading from '../components/Loading';
-import { fetcher } from '../util';
+import Loading from '../../components/Loading';
+import { fetcher } from '../../util';
 
 const Tournaments: NextPage = () => {
   const { mutate } = useSWRConfig();

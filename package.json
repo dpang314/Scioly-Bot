@@ -12,8 +12,8 @@
     "start-build": "cd build && node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev-next": "ts-node ./src/index.ts",
-    "build-next": "next build ./src",
-    "start-next": "next start ./src",
+    "build-next": "next build",
+    "start-next": "next start",
     "dev": "concurrently --kill-others \"npm run dev-next\" \"npm run dev-bot\""
   },
   "author": "",

@@ -1,6 +1,6 @@
 /* eslint-disable import/no-cycle */
 import {
-  Optional, DataTypes, Model,
+  Optional, DataTypes, Model, NOW,
 } from 'sequelize';
 import { TournamentEvent } from '.';
 
@@ -54,7 +54,7 @@ const TestModel = (sequelize) => {
     timeStarted: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: new Date(),
+      defaultValue: NOW,
     },
     finished: {
       type: DataTypes.BOOLEAN,

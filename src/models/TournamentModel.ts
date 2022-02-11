@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import { Tournament } from './models';
 
 const TournamentModel = (sequelize) => {
-  Tournament.init(
+  const tournament = Tournament.init(
     {
       id: {
         allowNull: false,
@@ -35,7 +35,7 @@ const TournamentModel = (sequelize) => {
     },
   );
 
-  return Tournament;
+  return tournament;
 };
 
 export default TournamentModel;

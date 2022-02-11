@@ -4,7 +4,7 @@ import {
 import { Template } from './models';
 
 const TemplateModel = (sequelize) => {
-  Template.init({
+  const template = Template.init({
     id: {
       allowNull: false,
       defaultValue: DataTypes.UUIDV4,
@@ -21,7 +21,7 @@ const TemplateModel = (sequelize) => {
     tableName: 'templates',
   });
 
-  return Template;
+  return template;
 };
 
 export default TemplateModel;

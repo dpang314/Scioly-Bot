@@ -4,7 +4,7 @@ import {
 import { TournamentEvent } from './models';
 
 const TournamentEventModel = (sequelize) => {
-  TournamentEvent.init(
+  const tournamentEvent = TournamentEvent.init(
     {
       id: {
         allowNull: false,
@@ -33,7 +33,7 @@ const TournamentEventModel = (sequelize) => {
     },
   );
 
-  return TournamentEvent;
+  return tournamentEvent;
 };
 
 export default TournamentEventModel;

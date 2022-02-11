@@ -4,7 +4,7 @@ import {
 import { Test } from './models';
 
 const TestModel = (sequelize) => {
-  Test.init({
+  const test = Test.init({
     id: {
       allowNull: false,
       defaultValue: DataTypes.UUIDV4,
@@ -33,7 +33,7 @@ const TestModel = (sequelize) => {
     tableName: 'tests',
   });
 
-  return Test;
+  return test;
 };
 
 export default TestModel;

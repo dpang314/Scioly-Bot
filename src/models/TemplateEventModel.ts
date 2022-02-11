@@ -2,7 +2,7 @@ import { DataTypes } from 'sequelize';
 import { TemplateEvent } from './models';
 
 const TemplateEventModel = (sequelize) => {
-  TemplateEvent.init(
+  const templateEvent = TemplateEvent.init(
     {
       id: {
         allowNull: false,
@@ -26,7 +26,7 @@ const TemplateEventModel = (sequelize) => {
     },
   );
 
-  return TemplateEvent;
+  return templateEvent;
 };
 
 export default TemplateEventModel;

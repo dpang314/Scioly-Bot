@@ -1,9 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
-import {
-  Template,
-  TemplateEvent,
-} from '../../../models';
+import db from '../../../models';
 
 export default async function handler(
   req: NextApiRequest,
@@ -14,18 +11,18 @@ export default async function handler(
   if (session) {
     if (req.method === 'PUT') {
       if (req.body.name) {
-        await Template.update({ name: req.body.name }, { where: { id: templateId } });
+        await db.Template.update({ name: req.body.name }, { where: { id: templateId } });
       }
       const newEvents = [];
       if (req.body.templateEvents) {
         req.body.templateEvents.forEach(async (event) => {
-          const [newEvent] = await TemplateEvent.upsert({ ...event, templateId });
+          const [newEvent] = await db.TemplateEvent.upsert({ ...event, templateId });
           newEvents.push(newEvent);
         });
       }
       if (req.body.removed) {
         req.body.removed.forEach(async (remove) => {
-          await TemplateEvent.destroy({
+          await db.TemplateEvent.destroy({
             where: {
               id: remove,
             },
@@ -37,7 +34,7 @@ export default async function handler(
         templateEvents: newEvents,
       });
     } else if (req.method === 'GET') {
-      const tournaments = await Template.findOne({ where: { id: templateId }, include: [{ model: TemplateEvent, as: 'templateEvents' }] });
+      const tournaments = await db.Template.findOne({ where: { id: templateId }, include: [{ model: db.TemplateEvent, as: 'templateEvents' }] });
       res.status(200).json(tournaments);
     }
   } else {

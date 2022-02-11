@@ -9,7 +9,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { useSession } from 'next-auth/react';
 import useSWR, { useSWRConfig } from 'swr';
 import ErrorMessage from '../../components/ErrorMessage';
-import { Template } from '../../models';
+import { Template } from '../../models/TemplateModel';
 import { fetcher } from '../../util';
 
 type FormProps = {

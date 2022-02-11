@@ -1,8 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
-import {
-  Tournament, TournamentEvent,
-} from '../../../models';
+import db from '../../../models';
 
 export default async function handler(
   req: NextApiRequest,
@@ -15,13 +13,13 @@ export default async function handler(
       const newEvents = [];
       if (req.body.tournamentEvents) {
         req.body.tournamentEvents.forEach(async (event) => {
-          const [newEvent] = await TournamentEvent.upsert({ ...event, tournamentId });
+          const [newEvent] = await db.TournamentEvent.upsert({ ...event, tournamentId });
           newEvents.push(newEvent);
         });
       }
       if (req.body.removed) {
         req.body.removed.forEach(async (remove) => {
-          await TournamentEvent.destroy({
+          await db.TournamentEvent.destroy({
             where: {
               id: remove,
             },
@@ -29,14 +27,14 @@ export default async function handler(
         });
       }
       if (req.body.active !== null) {
-        await Tournament.update(
+        await db.Tournament.update(
           { active: req.body.active },
           { where: { id: tournamentId } },
         );
       }
       res.status(200).json({ tournamentEvents: newEvents, active: req.body.active });
     } else if (req.method === 'GET') {
-      const tournaments = await Tournament.findOne({ where: { id: tournamentId }, include: [{ model: TournamentEvent, as: 'tournamentEvents' }] });
+      const tournaments = await db.Tournament.findOne({ where: { id: tournamentId }, include: [{ model: db.TournamentEvent, as: 'tournamentEvents' }] });
       res.status(200).json(tournaments);
     }
   } else {

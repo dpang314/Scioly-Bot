@@ -3,7 +3,7 @@ import {
   Optional, HasManyCreateAssociationMixin,
   HasManyAddAssociationMixin, DataTypes, Model, Association,
 } from 'sequelize';
-import { Test } from '.';
+import { Test } from './TestModel';
 import { TournamentEvent } from './TournamentEventModel';
 
 interface TournamentAttributes {

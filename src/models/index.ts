@@ -1,47 +1,63 @@
-/* eslint-disable import/no-cycle */
-import sequelize from './sequelize';
-import { TemplateModel } from './TemplateModel';
-import { TemplateEventModel } from './TemplateEventModel';
-import { TournamentModel } from './TournamentModel';
-import { TestModel } from './TestModel';
-import { TournamentEventModel } from './TournamentEventModel';
+import { Sequelize } from 'sequelize';
+import { Template, TemplateModel } from './TemplateModel';
+import { TemplateEvent, TemplateEventModel } from './TemplateEventModel';
+import { Tournament, TournamentModel } from './TournamentModel';
+import { Test, TestModel } from './TestModel';
+import { TournamentEvent, TournamentEventModel } from './TournamentEventModel';
+import { DATABASE_CONNECTION } from '../configLoader';
 
-const Template = TemplateModel(sequelize);
-const TemplateEvent = TemplateEventModel(sequelize);
-const Test = TestModel(sequelize);
-const Tournament = TournamentModel(sequelize);
-const TournamentEvent = TournamentEventModel(sequelize);
+let sequelize: Sequelize;
 
-Template.hasMany(TemplateEvent, {
+if (process.env.NODE_ENV === 'production') {
+  sequelize = new Sequelize(DATABASE_CONNECTION);
+} else {
+  if (!global.sequelize) {
+    global.sequelize = new Sequelize(DATABASE_CONNECTION);
+  }
+  sequelize = global.sequelize;
+}
+
+const db: {
+  sequelize?: Sequelize,
+  Template?: typeof Template,
+  TemplateEvent?: typeof TemplateEvent,
+  Test?: typeof Test,
+  Tournament?: typeof Tournament,
+  TournamentEvent?: typeof TournamentEvent,
+} = {};
+db.sequelize = sequelize;
+db.Template = TemplateModel(sequelize);
+db.TemplateEvent = TemplateEventModel(sequelize);
+db.Test = TestModel(sequelize);
+db.Tournament = TournamentModel(sequelize);
+db.TournamentEvent = TournamentEventModel(sequelize);
+
+db.Template.hasMany(TemplateEvent, {
   sourceKey: 'id',
   foreignKey: 'templateId',
   as: 'templateEvents',
 });
 
-Tournament.hasMany(Test, {
-  sourceKey: 'id',
-  foreignKey: 'tournamentId',
-  as: 'tests',
+db.Test.belongsTo(TournamentEvent, {
+  as: 'tournamentEvent',
 });
 
-Tournament.hasMany(TournamentEvent, {
-  sourceKey: 'id',
-  foreignKey: 'tournamentId',
-  as: 'tournamentEvents',
-});
-
-TournamentEvent.hasMany(Test, {
+db.TournamentEvent.hasMany(Test, {
   sourceKey: 'id',
   foreignKey: 'tournamentEventId',
   as: 'tests',
 });
 
-Test.belongsTo(TournamentEvent, {
-  as: 'tournamentEvent',
+db.Tournament.hasMany(Test, {
+  sourceKey: 'id',
+  foreignKey: 'tournamentId',
+  as: 'tests',
 });
 
-export * from './TemplateModel';
-export * from './TemplateEventModel';
-export * from './TestModel';
-export * from './TournamentEventModel';
-export * from './TournamentModel';
+db.Tournament.hasMany(TournamentEvent, {
+  sourceKey: 'id',
+  foreignKey: 'tournamentId',
+  as: 'tournamentEvents',
+});
+
+export default db;

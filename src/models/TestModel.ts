@@ -2,7 +2,7 @@
 import {
   Optional, DataTypes, Model, NOW,
 } from 'sequelize';
-import { TournamentEvent } from '.';
+import { TournamentEvent } from './TournamentEventModel';
 
 interface TestAttributes {
   id: string,

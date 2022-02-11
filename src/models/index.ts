@@ -6,13 +6,7 @@ import { Test, TestModel } from './TestModel';
 import { TournamentEvent, TournamentEventModel } from './TournamentEventModel';
 import { DATABASE_CONNECTION } from '../configLoader';
 
-let sequelize: Sequelize;
-
-if (!global.sequelize) {
-  global.sequelize = new Sequelize(DATABASE_CONNECTION);
-}
-// eslint-disable-next-line prefer-const
-sequelize = global.sequelize;
+const sequelize: Sequelize = new Sequelize(DATABASE_CONNECTION);
 
 const db: {
   sequelize?: Sequelize,

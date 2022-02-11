@@ -6,12 +6,13 @@ import {
 
 import { SlashCommandBuilder } from '@discordjs/builders';
 
-import {
-  TestCreationAttributes, Tournament, TournamentEvent,
-} from '../../models';
+import db from '../../models';
+import { Tournament } from '../../models/TournamentModel';
+import { TestCreationAttributes } from '../../models/TestModel';
+import { TournamentEvent } from '../../models/TournamentEventModel';
 
 const getTournament = async (interaction: CommandInteraction) => {
-  const tournaments = await Tournament.findAll({ where: { active: true } });
+  const tournaments = await db.Tournament.findAll({ where: { active: true } });
   if (tournaments.length === 0) {
     await interaction.reply('No tournaments');
     return null;
@@ -42,7 +43,7 @@ const getTournament = async (interaction: CommandInteraction) => {
   const message = await interaction.fetchReply() as Message;
   try {
     const i = await message.awaitMessageComponent({ filter, componentType: 'SELECT_MENU', time: 60000 });
-    const tournament = await Tournament.findOne({ where: { id: i.values[0] }, include: [{ model: TournamentEvent, as: 'tournamentEvents' }] });
+    const tournament = await db.Tournament.findOne({ where: { id: i.values[0] }, include: [{ model: db.TournamentEvent, as: 'tournamentEvents' }] });
     return tournament;
   } catch (error) {
     await message.edit('Tournament select failed. Try running /test again.');

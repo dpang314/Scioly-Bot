@@ -6,7 +6,6 @@ import path from 'path';
 import { DISCORD_TOKEN } from '../configLoader';
 // eslint-disable-next-line import/no-cycle
 import checkTests from './tasks/checkTests';
-import { initDB } from '../models/sequelize';
 
 interface SlashCommand {
   data: any,
@@ -31,7 +30,6 @@ commandFiles.forEach((file) => {
 });
 
 client.once('ready', async () => {
-  await initDB();
   setInterval(checkTests, 10 * 1000);
 });
 

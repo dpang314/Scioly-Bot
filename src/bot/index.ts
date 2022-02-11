@@ -6,7 +6,7 @@ import path from 'path';
 import { DISCORD_TOKEN } from '../configLoader';
 // eslint-disable-next-line import/no-cycle
 import checkTests from './tasks/checkTests';
-import { initDB } from '../models';
+import { initDB } from '../models/sequelize';
 
 interface SlashCommand {
   data: any,

@@ -11,7 +11,7 @@
     "build": "tsc --project tsconfig.json",
     "start-build": "cd build && node index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev-next": "ts-node ./src/index.ts",
+    "dev-next": "next dev",
     "build-next": "next build",
     "start-next": "next start",
     "dev": "concurrently --kill-others \"npm run dev-next\" \"npm run dev-bot\""

@@ -8,14 +8,11 @@ import { DATABASE_CONNECTION } from '../configLoader';
 
 let sequelize: Sequelize;
 
-if (process.env.NODE_ENV === 'production') {
-  sequelize = new Sequelize(DATABASE_CONNECTION);
-} else {
-  if (!global.sequelize) {
-    global.sequelize = new Sequelize(DATABASE_CONNECTION);
-  }
-  sequelize = global.sequelize;
+if (!global.sequelize) {
+  global.sequelize = new Sequelize(DATABASE_CONNECTION);
 }
+// eslint-disable-next-line prefer-const
+sequelize = global.sequelize;
 
 const db: {
   sequelize?: Sequelize,

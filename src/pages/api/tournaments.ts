@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
+// eslint-disable-next-line no-unused-vars
+import sequelize from '../../models/sequelize';
 import {
   TournamentEvent, Tournament, Template, TemplateEvent,
 } from '../../models';

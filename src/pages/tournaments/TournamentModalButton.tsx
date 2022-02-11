@@ -1,7 +1,7 @@
 import { Button, Modal, Box } from '@mui/material';
 import React, { FunctionComponent } from 'react';
 import AddIcon from '@mui/icons-material/Add';
-import { TemplateAttributes } from '../../models/TemplateModel';
+import { TemplateAttributes } from '../../models/models';
 import TournamentForm, { AddTournament } from './TournamentForm';
 
 type TournamentModalButtonProps = {

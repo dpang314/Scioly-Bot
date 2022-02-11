@@ -1,9 +1,12 @@
 import { Sequelize } from 'sequelize';
-import { Template, TemplateModel } from './TemplateModel';
-import { TemplateEvent, TemplateEventModel } from './TemplateEventModel';
-import { Tournament, TournamentModel } from './TournamentModel';
-import { Test, TestModel } from './TestModel';
-import { TournamentEvent, TournamentEventModel } from './TournamentEventModel';
+import TemplateModel from './TemplateModel';
+import TemplateEventModel from './TemplateEventModel';
+import TournamentModel from './TournamentModel';
+import TestModel from './TestModel';
+import TournamentEventModel from './TournamentEventModel';
+import {
+  Template, TemplateEvent, Test, Tournament, TournamentEvent,
+} from './models';
 import { DATABASE_CONNECTION } from '../configLoader';
 
 const sequelize: Sequelize = new Sequelize(DATABASE_CONNECTION);

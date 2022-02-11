@@ -8,7 +8,7 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import useSWR, { useSWRConfig } from 'swr';
 import { useSession } from 'next-auth/react';
-import { Tournament } from '../../models/TournamentModel';
+import { Tournament } from '../../models/models';
 import ErrorMessage from '../../components/ErrorMessage';
 
 import { urlRegex } from '../../util';

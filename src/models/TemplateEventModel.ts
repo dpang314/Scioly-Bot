@@ -1,28 +1,5 @@
-import { Optional, DataTypes, Model } from 'sequelize';
-
-interface TemplateEventAttributes {
-  id: string,
-  name: string,
-  minutes: number,
-}
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface TemplateEventCreationAttributes extends Optional<TemplateEventAttributes, 'id'> {}
-
-class TemplateEvent extends Model<TemplateEventAttributes, TemplateEventCreationAttributes>
-  implements TemplateEventAttributes {
-  declare id: string;
-
-  declare name: string;
-
-  declare minutes: number;
-
-  declare templateId: string;
-
-  declare readonly createdAt: Date;
-
-  declare readonly updatedAt: Date;
-}
+import { DataTypes } from 'sequelize';
+import { TemplateEvent } from './models';
 
 const TemplateEventModel = (sequelize) => {
   TemplateEvent.init(
@@ -52,5 +29,4 @@ const TemplateEventModel = (sequelize) => {
   return TemplateEvent;
 };
 
-export { TemplateEventModel, TemplateEvent };
-export type { TemplateEventAttributes, TemplateEventCreationAttributes };
+export default TemplateEventModel;

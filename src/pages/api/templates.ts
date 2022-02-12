@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
-import db from '../../models';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const db = require('../../models');
 
 export default async function handler(
   req: NextApiRequest,

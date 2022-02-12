@@ -54,4 +54,4 @@ db.Tournament.hasMany(TournamentEvent, {
   as: 'tournamentEvents',
 });
 
-export default db;
+module.exports = db;

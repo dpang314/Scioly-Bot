@@ -1,7 +1,8 @@
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 
 import { SlashCommandBuilder } from '@discordjs/builders';
-import db from '../../models';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const db = require('../../models');
 
 module.exports = {
   data: new SlashCommandBuilder()

@@ -6,8 +6,9 @@ import {
 
 import { SlashCommandBuilder } from '@discordjs/builders';
 
-import db from '../../models';
 import { Tournament, TestCreationAttributes, TournamentEvent } from '../../models/models';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const db = require('../../models');
 
 const getTournament = async (interaction: CommandInteraction) => {
   const tournaments = await db.Tournament.findAll({ where: { active: true } });

@@ -1,3 +1,4 @@
+import 'pg';
 import { Sequelize } from 'sequelize';
 import TemplateModel from './TemplateModel';
 import TemplateEventModel from './TemplateEventModel';

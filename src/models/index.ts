@@ -31,29 +31,29 @@ db.Test = TestModel(sequelize);
 db.Tournament = TournamentModel(sequelize);
 db.TournamentEvent = TournamentEventModel(sequelize);
 
-db.Template.hasMany(TemplateEvent, {
+db.Template.hasMany(db.TemplateEvent, {
   sourceKey: 'id',
   foreignKey: 'templateId',
   as: 'templateEvents',
 });
 
-db.Test.belongsTo(TournamentEvent, {
+db.Test.belongsTo(db.TournamentEvent, {
   as: 'tournamentEvent',
 });
 
-db.TournamentEvent.hasMany(Test, {
+db.TournamentEvent.hasMany(db.Test, {
   sourceKey: 'id',
   foreignKey: 'tournamentEventId',
   as: 'tests',
 });
 
-db.Tournament.hasMany(Test, {
+db.Tournament.hasMany(db.Test, {
   sourceKey: 'id',
   foreignKey: 'tournamentId',
   as: 'tests',
 });
 
-db.Tournament.hasMany(TournamentEvent, {
+db.Tournament.hasMany(db.TournamentEvent, {
   sourceKey: 'id',
   foreignKey: 'tournamentId',
   as: 'tournamentEvents',

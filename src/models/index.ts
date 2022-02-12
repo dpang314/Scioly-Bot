@@ -1,14 +1,16 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import 'pg';
 import { Sequelize } from 'sequelize';
-import TemplateModel from './TemplateModel';
-import TemplateEventModel from './TemplateEventModel';
-import TournamentModel from './TournamentModel';
-import TestModel from './TestModel';
-import TournamentEventModel from './TournamentEventModel';
 import {
   Template, TemplateEvent, Test, Tournament, TournamentEvent,
 } from './models';
 import { DATABASE_CONNECTION } from '../configLoader';
+
+const TemplateModel = require('./TemplateModel');
+const TemplateEventModel = require('./TemplateEventModel');
+const TournamentModel = require('./TournamentModel');
+const TestModel = require('./TestModel');
+const TournamentEventModel = require('./TournamentEventModel');
 
 const sequelize: Sequelize = new Sequelize(DATABASE_CONNECTION);
 

@@ -29,4 +29,4 @@ const TemplateEventModel = (sequelize) => {
   return templateEvent;
 };
 
-export default TemplateEventModel;
+module.exports = TemplateEventModel;

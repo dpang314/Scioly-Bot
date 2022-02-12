@@ -36,4 +36,4 @@ const TournamentEventModel = (sequelize) => {
   return tournamentEvent;
 };
 
-export default TournamentEventModel;
+module.exports = TournamentEventModel;

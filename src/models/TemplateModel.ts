@@ -24,4 +24,4 @@ const TemplateModel = (sequelize) => {
   return template;
 };
 
-export default TemplateModel;
+module.exports = TemplateModel;

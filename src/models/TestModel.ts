@@ -36,4 +36,4 @@ const TestModel = (sequelize) => {
   return test;
 };
 
-export default TestModel;
+module.exports = TestModel;

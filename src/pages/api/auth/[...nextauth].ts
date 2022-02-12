@@ -28,27 +28,19 @@ export default NextAuth({
       return session;
     },
     async signIn({ account }) {
-      const isAllowedToSignIn = true;
-      if (isAllowedToSignIn) {
-        const headers = { Authorization: `Bearer ${account.access_token}` };
-        try {
-          const guilds = (await axios.get('https://discord.com/api/users/@me/guilds', { headers })).data;
-          for (let i = 0; i < guilds.length; i += 1) {
-            // Admin of server
-            // eslint-disable-next-line no-bitwise
-            if (guilds[i].id === process.env.GUILD_ID && (guilds[i].permissions & (1 << 3))) {
-              return true;
-            }
+      const headers = { Authorization: `Bearer ${account.access_token}` };
+      try {
+        const guilds = (await axios.get('https://discord.com/api/users/@me/guilds', { headers })).data;
+        for (let i = 0; i < guilds.length; i += 1) {
+          // Admin of server
+          // eslint-disable-next-line no-bitwise
+          if (guilds[i].id === process.env.GUILD_ID && (guilds[i].permissions & (1 << 3))) {
+            return true;
           }
-          return false;
-        } catch (error) {
-          return false;
         }
-      } else {
-        // Return false to display a default error message
-        return false;
-        // Or you can return a URL to redirect to:
-        // return '/unauthorized'
+        return '/unauthorized';
+      } catch (error) {
+        return '/unauthorized';
       }
     },
   },

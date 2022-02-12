@@ -1,5 +1,5 @@
 import { MessageEmbed, User } from 'discord.js';
-import { Test, TournamentEvent, Tournament } from '../../models/models';
+import { Test, TournamentEvent, Tournament } from '../../models';
 // eslint-disable-next-line import/no-cycle
 import { client } from '../index';
 // eslint-disable-next-line @typescript-eslint/no-var-requires

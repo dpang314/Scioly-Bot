@@ -6,7 +6,7 @@ import {
 
 import { SlashCommandBuilder } from '@discordjs/builders';
 
-import { Tournament, TestCreationAttributes, TournamentEvent } from '../../models/models';
+import { Tournament, TestCreationAttributes, TournamentEvent } from '../../models';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const db = require('../../models');
 

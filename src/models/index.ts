@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import 'pg';
 import { Sequelize } from 'sequelize';
-import {
-  Template, TemplateEvent, Test, Tournament, TournamentEvent,
-} from './models';
 import { DATABASE_CONNECTION } from '../configLoader';
+import { TemplateEvent } from './TemplateEventModel';
+import { Template } from './TemplateModel';
+import { Test } from './TestModel';
+import { TournamentEvent } from './TournamentEventModel';
+import { Tournament } from './TournamentModel';
 
 const TemplateModel = require('./TemplateModel');
 const TemplateEventModel = require('./TemplateEventModel');
@@ -58,3 +60,8 @@ db.Tournament.hasMany(TournamentEvent, {
 });
 
 module.exports = db;
+export * from './TemplateModel';
+export * from './TemplateEventModel';
+export * from './TestModel';
+export * from './TournamentEventModel';
+export * from './TournamentModel';

@@ -1,7 +1,41 @@
 import {
-  DataTypes, NOW,
+  DataTypes, NOW, Optional, Model,
 } from 'sequelize';
-import { Test } from './models';
+// eslint-disable-next-line import/no-cycle
+import { TournamentEvent } from './TournamentEventModel';
+
+interface TestAttributes {
+  id: string,
+  userId: string,
+  partner1Id?: string,
+  partner2Id?: string,
+  timeStarted?: Date,
+  finished: boolean,
+}
+
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface TestCreationAttributes extends Optional<TestAttributes, 'id'> {}
+
+class Test extends Model<TestAttributes, TestCreationAttributes> implements TestAttributes {
+  declare id: string;
+
+  declare userId: string;
+
+  declare partner1Id: string | null;
+
+  declare partner2Id: string | null;
+
+  declare timeStarted: Date;
+
+  declare finished: boolean;
+
+  declare tournamentId: string;
+
+  // eslint-disable-next-line no-use-before-define
+  declare readonly tournamentEvent: TournamentEvent;
+
+  declare tournamentEventId: string;
+}
 
 const TestModel = (sequelize) => {
   const test = Test.init({
@@ -37,3 +71,5 @@ const TestModel = (sequelize) => {
 };
 
 module.exports = TestModel;
+export { Test };
+export type { TestAttributes, TestCreationAttributes };

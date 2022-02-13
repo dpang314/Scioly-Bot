@@ -17,14 +17,15 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "types": ["cypress"]
   },
   "include": [
-    "src/next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "src/crypt.js"  ],
+    "**/*.tsx",
+  ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "test"
   ]
 }

@@ -13,7 +13,8 @@
 	},
 	"parser": "@typescript-eslint/parser",
 	"plugins":[
-		"@typescript-eslint"
+		"@typescript-eslint",
+		"cypress"
 	],
 	"rules": {
 		"import/no-import-module-exports": 0,
@@ -41,5 +42,24 @@
 			"exceptions": ["TextField"]
 		}],
 		"linebreak-style": ["off", "unix"]
-	}
+	},
+	"overrides": [
+    {
+      "files": [
+				"**/*.test.ts",
+        "**/*.test.tsx"
+      ],
+      "env": {
+        "jest": true
+      }
+    },
+		{
+			"files": [
+				"**/*.spec.js"
+			],
+			"env": {
+				"cypress/globals": true
+			}
+		}
+  ]
 }

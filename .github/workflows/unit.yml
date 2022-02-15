@@ -9,5 +9,6 @@ jobs:
     - uses: actions/setup-node@v2
       with:
         cache: 'npm'
+    - run: npm ci
     - name: Jest run
       run: npm run test

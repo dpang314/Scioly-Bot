@@ -7,4 +7,4 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Jest run
-      run: npm run test
+      run: ./node_modules/.bin/jest

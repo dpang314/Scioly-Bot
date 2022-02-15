@@ -7,6 +7,5 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Jest run
+      run: npm install -g jest
       run: npm run test
-      with:
-        install: npm install -g jest

@@ -1,5 +1,4 @@
 node_modules/
 .env
-bot-build/
-next-build/
+build/
 .next/

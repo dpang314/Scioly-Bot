@@ -4,7 +4,7 @@ import {
 import React, { FunctionComponent } from 'react';
 
 import { AddTournament } from './TournamentForm';
-import { TemplateAttributes, TournamentAttributes } from '../../models';
+import { TemplateAttributes, TournamentAttributes } from '../../../../models';
 import TournamentModalButton from './TournamentModalButton';
 import TournamentRow from './TournamentRow';
 

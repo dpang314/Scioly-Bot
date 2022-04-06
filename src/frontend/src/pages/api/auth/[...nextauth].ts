@@ -1,7 +1,7 @@
 import axios from 'axios';
 import NextAuth from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
-import { CLIENT_ID, DISCORD_SECRET, NEXT_SECRET } from '../../../configLoader';
+import { CLIENT_ID, DISCORD_SECRET, NEXT_SECRET } from '../../../../../configLoader';
 
 export default NextAuth({
   providers: [

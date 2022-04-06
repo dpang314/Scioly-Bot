@@ -3,10 +3,10 @@ import { useSession } from 'next-auth/react';
 import React from 'react';
 import useSWR, { useSWRConfig } from 'swr';
 import Navbar from '../../components/Navbar';
-import { TemplateAttributes, TournamentAttributes } from '../../models';
+import { TemplateAttributes, TournamentAttributes } from '../../../../models';
 import TournamentTable from './TournamentTable';
 import Loading from '../../components/Loading';
-import { fetcher } from '../../util';
+import { fetcher } from '../../../../util';
 
 const Tournaments: NextPage = () => {
   const { mutate } = useSWRConfig();

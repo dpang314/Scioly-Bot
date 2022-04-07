@@ -1,4 +1,6 @@
-import { DataTypes, Model, Optional } from 'sequelize';
+import {
+  DataTypes, Model, Optional, Sequelize,
+} from 'sequelize';
 
 interface TemplateEventAttributes {
   id: string,
@@ -22,35 +24,33 @@ class TemplateEvent extends Model<TemplateEventAttributes, TemplateEventCreation
   declare readonly createdAt: Date;
 
   declare readonly updatedAt: Date;
+
+  public static initialize(sequelize: Sequelize) {
+    this.init(
+      {
+        id: {
+          allowNull: false,
+          primaryKey: true,
+          type: DataTypes.UUID,
+          unique: true,
+          defaultValue: DataTypes.UUIDV4,
+        },
+        name: {
+          allowNull: false,
+          type: DataTypes.STRING,
+        },
+        minutes: {
+          allowNull: false,
+          type: DataTypes.INTEGER,
+        },
+      },
+      {
+        sequelize,
+        tableName: 'template_events',
+      },
+    );
+  }
 }
 
-const TemplateEventModel = (sequelize) => {
-  const templateEvent = TemplateEvent.init(
-    {
-      id: {
-        allowNull: false,
-        primaryKey: true,
-        type: DataTypes.UUID,
-        unique: true,
-        defaultValue: DataTypes.UUIDV4,
-      },
-      name: {
-        allowNull: false,
-        type: DataTypes.STRING,
-      },
-      minutes: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-      },
-    },
-    {
-      sequelize,
-      tableName: 'template_events',
-    },
-  );
-
-  return templateEvent;
-};
-
-export { TemplateEvent, TemplateEventModel };
+export default TemplateEvent;
 export type { TemplateEventAttributes, TemplateEventCreationAttributes };

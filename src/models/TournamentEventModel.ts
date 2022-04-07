@@ -1,9 +1,9 @@
 import {
   Association,
-  DataTypes, HasManyCreateAssociationMixin, Model, Optional,
+  DataTypes, HasManyCreateAssociationMixin, Model, Optional, Sequelize,
 } from 'sequelize';
 // eslint-disable-next-line import/no-cycle
-import { Test } from './TestModel';
+import Test from './TestModel';
 
 interface TournamentEventAttributes {
   id: string,
@@ -35,40 +35,38 @@ class TournamentEvent extends Model<TournamentEventAttributes, TournamentEventCr
     };
 
   declare createTest: HasManyCreateAssociationMixin<Test>;
+
+  public static initialize(sequelize: Sequelize) {
+    this.init(
+      {
+        id: {
+          allowNull: false,
+          primaryKey: true,
+          type: DataTypes.UUID,
+          unique: true,
+          defaultValue: DataTypes.UUIDV4,
+        },
+        name: {
+          allowNull: false,
+          type: DataTypes.STRING,
+        },
+        minutes: {
+          allowNull: false,
+          type: DataTypes.INTEGER,
+        },
+        link: {
+          allowNull: false,
+          type: DataTypes.STRING,
+          defaultValue: '',
+        },
+      },
+      {
+        sequelize,
+        tableName: 'tournament_events',
+      },
+    );
+  }
 }
 
-const TournamentEventModel = (sequelize) => {
-  const tournamentEvent = TournamentEvent.init(
-    {
-      id: {
-        allowNull: false,
-        primaryKey: true,
-        type: DataTypes.UUID,
-        unique: true,
-        defaultValue: DataTypes.UUIDV4,
-      },
-      name: {
-        allowNull: false,
-        type: DataTypes.STRING,
-      },
-      minutes: {
-        allowNull: false,
-        type: DataTypes.INTEGER,
-      },
-      link: {
-        allowNull: false,
-        type: DataTypes.STRING,
-        defaultValue: '',
-      },
-    },
-    {
-      sequelize,
-      tableName: 'tournament_events',
-    },
-  );
-
-  return tournamentEvent;
-};
-
-export { TournamentEvent, TournamentEventModel };
+export default TournamentEvent;
 export type { TournamentEventAttributes, TournamentEventCreationAttributes };

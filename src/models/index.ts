@@ -1,57 +1,49 @@
 import 'pg';
 import { Sequelize } from 'sequelize';
 import { DATABASE_CONNECTION } from '../configLoader';
-import { TemplateEventModel, TemplateEvent } from './TemplateEventModel';
-import { TemplateModel, Template } from './TemplateModel';
-import { TestModel, Test } from './TestModel';
-import { TournamentEventModel, TournamentEvent } from './TournamentEventModel';
-import { TournamentModel, Tournament } from './TournamentModel';
+import TemplateEvent from './TemplateEventModel';
+import Template from './TemplateModel';
+import Test from './TestModel';
+import TournamentEvent from './TournamentEventModel';
+import Tournament from './TournamentModel';
 
-const sequelize: Sequelize = new Sequelize(DATABASE_CONNECTION, {
-  logging: false,
-});
+const sequelize = new Sequelize(DATABASE_CONNECTION);
 
-const db: {
-  sequelize?: Sequelize,
-  Template?: typeof Template,
-  TemplateEvent?: typeof TemplateEvent,
-  Test?: typeof Test,
-  Tournament?: typeof Tournament,
-  TournamentEvent?: typeof TournamentEvent,
-} = {};
-db.sequelize = sequelize;
-db.Template = TemplateModel(sequelize);
-db.TemplateEvent = TemplateEventModel(sequelize);
-db.Test = TestModel(sequelize);
-db.Tournament = TournamentModel(sequelize);
-db.TournamentEvent = TournamentEventModel(sequelize);
+const models = [
+  TemplateEvent, Template, Test, TournamentEvent, Tournament,
+];
 
-db.Template.hasMany(db.TemplateEvent, {
+models.forEach((model) => model.initialize(sequelize));
+
+Template.hasMany(TemplateEvent, {
   sourceKey: 'id',
   foreignKey: 'templateId',
   as: 'templateEvents',
 });
 
-db.Test.belongsTo(db.TournamentEvent, {
+Test.belongsTo(TournamentEvent, {
   as: 'tournamentEvent',
 });
 
-db.TournamentEvent.hasMany(db.Test, {
+TournamentEvent.hasMany(Test, {
   sourceKey: 'id',
   foreignKey: 'tournamentEventId',
   as: 'tests',
 });
 
-db.Tournament.hasMany(db.Test, {
+Tournament.hasMany(Test, {
   sourceKey: 'id',
   foreignKey: 'tournamentId',
   as: 'tests',
 });
 
-db.Tournament.hasMany(db.TournamentEvent, {
+Tournament.hasMany(TournamentEvent, {
   sourceKey: 'id',
   foreignKey: 'tournamentId',
   as: 'tournamentEvents',
 });
 
-export default db;
+export {
+  sequelize as db,
+  TemplateEvent, Template, Test, TournamentEvent, Tournament,
+};

@@ -1,8 +1,8 @@
 import {
-  DataTypes, NOW, Optional, Model,
+  DataTypes, NOW, Optional, Model, Sequelize,
 } from 'sequelize';
 // eslint-disable-next-line import/no-cycle
-import { TournamentEvent } from './TournamentEventModel';
+import TournamentEvent from './TournamentEventModel';
 
 interface TestAttributes {
   id: string,
@@ -35,40 +35,38 @@ class Test extends Model<TestAttributes, TestCreationAttributes> implements Test
   declare readonly tournamentEvent: TournamentEvent;
 
   declare tournamentEventId: string;
+
+  public static initialize(sequelize: Sequelize) {
+    this.init({
+      id: {
+        allowNull: false,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+        type: DataTypes.UUID,
+        unique: true,
+      },
+      userId: {
+        type: DataTypes.TEXT,
+        allowNull: false,
+      },
+      partner1Id: DataTypes.TEXT,
+      partner2Id: DataTypes.TEXT,
+      timeStarted: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: NOW,
+      },
+      finished: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
+    }, {
+      sequelize,
+      tableName: 'tests',
+    });
+  }
 }
 
-const TestModel = (sequelize) => {
-  const test = Test.init({
-    id: {
-      allowNull: false,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-      type: DataTypes.UUID,
-      unique: true,
-    },
-    userId: {
-      type: DataTypes.TEXT,
-      allowNull: false,
-    },
-    partner1Id: DataTypes.TEXT,
-    partner2Id: DataTypes.TEXT,
-    timeStarted: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: NOW,
-    },
-    finished: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-  }, {
-    sequelize,
-    tableName: 'tests',
-  });
-
-  return test;
-};
-
-export { Test, TestModel };
+export default Test;
 export type { TestAttributes, TestCreationAttributes };

@@ -1,9 +1,9 @@
 import {
   Association, DataTypes, HasManyAddAssociationMixin,
-  HasManyCreateAssociationMixin, Model, Optional,
+  HasManyCreateAssociationMixin, Model, Optional, Sequelize,
 } from 'sequelize';
-import { Test } from './TestModel';
-import { TournamentEvent } from './TournamentEventModel';
+import Test from './TestModel';
+import TournamentEvent from './TournamentEventModel';
 
 interface TournamentAttributes {
   id: string,
@@ -42,44 +42,42 @@ class Tournament extends
   declare createTournamentEvent: HasManyCreateAssociationMixin<TournamentEvent>;
 
   declare addTest: HasManyAddAssociationMixin<Test, number>;
+
+  public static initialize(sequelize: Sequelize) {
+    this.init(
+      {
+        id: {
+          allowNull: false,
+          primaryKey: true,
+          type: DataTypes.UUID,
+          unique: true,
+          defaultValue: DataTypes.UUIDV4,
+        },
+        userId: {
+          type: DataTypes.TEXT,
+          allowNull: false,
+        },
+        name: {
+          type: DataTypes.TEXT,
+          allowNull: false,
+        },
+        active: {
+          type: DataTypes.BOOLEAN,
+          allowNull: false,
+          defaultValue: false,
+        },
+        submission: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+      },
+      {
+        sequelize,
+        tableName: 'tournaments',
+      },
+    );
+  }
 }
 
-const TournamentModel = (sequelize) => {
-  const tournament = Tournament.init(
-    {
-      id: {
-        allowNull: false,
-        primaryKey: true,
-        type: DataTypes.UUID,
-        unique: true,
-        defaultValue: DataTypes.UUIDV4,
-      },
-      userId: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-      },
-      name: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-      },
-      active: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      },
-      submission: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-    },
-    {
-      sequelize,
-      tableName: 'tournaments',
-    },
-  );
-
-  return tournament;
-};
-
-export { Tournament, TournamentModel };
+export default Tournament;
 export type { TournamentAttributes, TournamentCreationAttributes };

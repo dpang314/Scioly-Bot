@@ -1,8 +1,8 @@
 import {
   Association,
-  DataTypes, HasManyCreateAssociationMixin, Model, Optional,
+  DataTypes, HasManyCreateAssociationMixin, Model, Optional, Sequelize,
 } from 'sequelize';
-import { TemplateEvent } from './TemplateEventModel';
+import TemplateEvent from './TemplateEventModel';
 
 interface TemplateAttributes {
   id: string,
@@ -26,28 +26,26 @@ class Template extends Model<TemplateAttributes, TemplateCreationAttributes>
         // eslint-disable-next-line no-use-before-define
         templateEvents: Association<Template, TemplateEvent>;
       };
+
+  public static initialize(sequelize: Sequelize) {
+    this.init({
+      id: {
+        allowNull: false,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+        type: DataTypes.UUID,
+        unique: true,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+    }, {
+      sequelize,
+      tableName: 'templates',
+    });
+  }
 }
 
-const TemplateModel = (sequelize) => {
-  const template = Template.init({
-    id: {
-      allowNull: false,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-      type: DataTypes.UUID,
-      unique: true,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-  }, {
-    sequelize,
-    tableName: 'templates',
-  });
-
-  return template;
-};
-
-export { Template, TemplateModel };
+export default Template;
 export type { TemplateAttributes, TemplateCreationAttributes };

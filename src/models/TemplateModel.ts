@@ -49,6 +49,5 @@ const TemplateModel = (sequelize) => {
   return template;
 };
 
-module.exports = TemplateModel;
-export { Template };
+export { Template, TemplateModel };
 export type { TemplateAttributes, TemplateCreationAttributes };

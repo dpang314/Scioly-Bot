@@ -70,6 +70,5 @@ const TestModel = (sequelize) => {
   return test;
 };
 
-module.exports = TestModel;
-export { Test };
+export { Test, TestModel };
 export type { TestAttributes, TestCreationAttributes };

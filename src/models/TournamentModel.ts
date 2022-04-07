@@ -81,6 +81,5 @@ const TournamentModel = (sequelize) => {
   return tournament;
 };
 
-module.exports = TournamentModel;
-export { Tournament };
+export { Tournament, TournamentModel };
 export type { TournamentAttributes, TournamentCreationAttributes };

@@ -1,20 +1,15 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import 'pg';
 import { Sequelize } from 'sequelize';
 import { DATABASE_CONNECTION } from '../configLoader';
-import { TemplateEvent } from './TemplateEventModel';
-import { Template } from './TemplateModel';
-import { Test } from './TestModel';
-import { TournamentEvent } from './TournamentEventModel';
-import { Tournament } from './TournamentModel';
+import { TemplateEventModel, TemplateEvent } from './TemplateEventModel';
+import { TemplateModel, Template } from './TemplateModel';
+import { TestModel, Test } from './TestModel';
+import { TournamentEventModel, TournamentEvent } from './TournamentEventModel';
+import { TournamentModel, Tournament } from './TournamentModel';
 
-const TemplateModel = require('./TemplateModel');
-const TemplateEventModel = require('./TemplateEventModel');
-const TournamentModel = require('./TournamentModel');
-const TestModel = require('./TestModel');
-const TournamentEventModel = require('./TournamentEventModel');
-
-const sequelize: Sequelize = new Sequelize(DATABASE_CONNECTION);
+const sequelize: Sequelize = new Sequelize(DATABASE_CONNECTION, {
+  logging: false,
+});
 
 const db: {
   sequelize?: Sequelize,
@@ -59,9 +54,4 @@ db.Tournament.hasMany(db.TournamentEvent, {
   as: 'tournamentEvents',
 });
 
-module.exports = db;
-export * from './TemplateModel';
-export * from './TemplateEventModel';
-export * from './TestModel';
-export * from './TournamentEventModel';
-export * from './TournamentModel';
+export default db;

@@ -2,8 +2,6 @@ import { MessageEmbed, User } from 'discord.js';
 import { Test, TournamentEvent, Tournament } from '../../common/models';
 // eslint-disable-next-line import/no-cycle
 import { client } from '../index';
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const db = require('../../models');
 
 const checkTests = async () => {
   const sendReminder = async (
@@ -34,7 +32,7 @@ const checkTests = async () => {
     }
   };
 
-  const tournaments = await db.Tournament.findAll({ include: [{ model: db.TournamentEvent, as: 'tournamentEvents', include: [{ model: Test, as: 'tests' }] }] });
+  const tournaments = await Tournament.findAll({ include: [{ model: TournamentEvent, as: 'tournamentEvents', include: [{ model: Test, as: 'tests' }] }] });
   const notArray = (array: Array<unknown>) => !Array.isArray(array) || !array.length;
   if (notArray(tournaments)) return;
   tournaments.forEach(async (tournament) => {

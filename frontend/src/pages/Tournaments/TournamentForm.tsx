@@ -6,7 +6,7 @@ import React, { FunctionComponent } from 'react';
 import * as Yup from 'yup';
 import { TemplateAttributes } from '../../../../common/models/TemplateModel';
 import { TournamentAttributes } from '../../../../common/models/TournamentModel';
-import { urlRegex } from '../../../../common/util';
+import { urlRegex } from '../../util';
 
 // eslint-disable-next-line no-unused-vars
 export type AddTournament = (tournament: TournamentAttributes) => void;

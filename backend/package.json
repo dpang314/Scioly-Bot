@@ -1,0 +1,31 @@
+{
+  "name": "scioly-bot-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.ts",
+  "scripts": {
+    "bot:commands": "ts-node deployCommands.ts",
+    "bot:dev": "ts-node ./src/bot/index.ts",
+    "bot:build": "tsc --project tsconfig.bot.json",
+    "bot:start": "node ./build/src/bot/index.js",
+    "express:dev": "ts-node server.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@discordjs/rest": "^0.3.0",
+    "cors": "^2.8.5",
+    "discord.js": "^13.6.0",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.3",
+    "pg": "^8.7.3",
+    "sequelize": "^6.18.0",
+    "tslib": "^2.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^17.0.23",
+    "ts-node": "^10.7.0",
+    "typescript": "^4.6.3"
+  }
+}

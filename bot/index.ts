@@ -3,7 +3,7 @@ import {
 } from 'discord.js';
 import * as fs from 'fs';
 import path from 'path';
-import { DISCORD_TOKEN } from '../common/configLoader';
+import { DISCORD_TOKEN } from '../backend/configLoader';
 // eslint-disable-next-line import/no-cycle
 import checkTests from './tasks/checkTests';
 

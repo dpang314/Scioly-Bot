@@ -8,9 +8,7 @@ import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ErrorMessage from '../../components/ErrorMessage';
 import { Template } from '../../../../common/models';
-import { fetcher } from '../../../../common/util';
 import axios from 'axios';
-import { data } from 'cypress/types/jquery';
 
 type FormProps = {
   // eslint-disable-next-line no-unused-vars

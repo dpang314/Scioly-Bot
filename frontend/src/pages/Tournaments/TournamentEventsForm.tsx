@@ -9,16 +9,13 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import { Tournament } from '../../../../common/models';
 import ErrorMessage from '../../components/ErrorMessage';
 
-import { urlRegex } from '../../../../common/util';
+import { urlRegex } from '../../util';
 import axios from 'axios';
-import { error, data } from 'cypress/types/jquery';
 
 type FormProps = {
   id: string,
   tournamentName: string,
 }
-
-const fetcher = (...args: Parameters<typeof fetch>) => fetch(...args).then((res) => res.json());
 
 const TournamentEventsForm: FunctionComponent<FormProps> = ({ id, tournamentName }) => {
   const errorStyle = {
@@ -26,7 +23,7 @@ const TournamentEventsForm: FunctionComponent<FormProps> = ({ id, tournamentName
   };
 
   const [tournament, setTournament] = useState<Tournament | null>(null);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<null | unknown>(null);
 
   useEffect(() => {
     (async() => {
@@ -53,7 +50,17 @@ const TournamentEventsForm: FunctionComponent<FormProps> = ({ id, tournamentName
         Events
       </Typography>
       <Formik
-        initialValues={{ tournamentEvents: tournament.tournamentEvents, removed: [] }}
+        initialValues={
+          (() => {
+            let obj: {
+              tournamentEvents: Array<any> | undefined;
+              removed: Array<any>;
+            } ={
+              tournamentEvents: tournament.tournamentEvents,
+              removed: [],
+            };
+            return obj;
+        })()}
         validationSchema={
           Yup.object({
             tournamentEvents: Yup.array()

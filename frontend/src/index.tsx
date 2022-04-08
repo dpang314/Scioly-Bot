@@ -1,17 +1,12 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
+import { createRoot } from 'react-dom/client';
 import App from './App';
-import { BrowserRouter as Router } from 'react-router-dom';
 
-
-ReactDOM.render(
+const container = document.getElementById('root');
+if (!container) throw new Error('Failed to find root element');
+const root = createRoot(container);
+root.render(
   <React.StrictMode>
-    <div className="content">
-      <Router>
-        <App />
-      </Router>
-    </div>
-  </React.StrictMode>,
-  document.getElementById('root')
+    <App />
+  </React.StrictMode>
 );

@@ -5,6 +5,8 @@
   "main": "server.ts",
   "scripts": {
     "express:dev": "ts-node server.ts",
+    "express:build": "tsc --project .",
+    "express:start": "node ./build/backend/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

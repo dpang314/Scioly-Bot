@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "bot:commands": "ts-node deployCommands.ts",
     "bot:dev": "ts-node ./index.ts",
-    "bot:build": "tsc --project tsconfig.bot.json",
-    "bot:start": "node ./build/src/bot/index.js"
+    "bot:build": "tsc --project .",
+    "bot:start": "node ./build/bot/index.js"
   },
   "author": "",
   "license": "ISC",

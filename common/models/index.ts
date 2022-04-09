@@ -1,6 +1,6 @@
 import 'pg';
 import { Sequelize } from 'sequelize';
-import { DATABASE_CONNECTION } from '../../backend/configLoader';
+import { DATABASE_CONNECTION } from '../configLoader';
 import TemplateEvent from './TemplateEventModel';
 import Template from './TemplateModel';
 import Test from './TestModel';

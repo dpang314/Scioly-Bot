@@ -1,4 +1,3 @@
-/* eslint-disable import/no-import-module-exports */
 import {
   CommandInteraction, Message, MessageActionRow, MessageSelectMenu,
   SelectMenuInteraction, User, MessageButton, MessageEmbed,

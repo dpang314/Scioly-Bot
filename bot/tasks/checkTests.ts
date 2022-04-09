@@ -1,6 +1,5 @@
 import { MessageEmbed, User } from 'discord.js';
 import { Test, TournamentEvent, Tournament } from '../../common/models';
-// eslint-disable-next-line import/no-cycle
 import { client } from '../index';
 
 const checkTests = async () => {

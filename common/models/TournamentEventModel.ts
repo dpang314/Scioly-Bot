@@ -2,7 +2,6 @@ import {
   Association,
   DataTypes, HasManyCreateAssociationMixin, Model, Optional, Sequelize,
 } from 'sequelize';
-// eslint-disable-next-line import/no-cycle
 import Test from './TestModel';
 
 interface TournamentEventAttributes {

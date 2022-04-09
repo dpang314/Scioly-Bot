@@ -4,7 +4,6 @@ import {
 import * as fs from 'fs';
 import path from 'path';
 import { DISCORD_TOKEN } from '../common/configLoader';
-// eslint-disable-next-line import/no-cycle
 import checkTests from './tasks/checkTests';
 
 interface SlashCommand {
@@ -24,7 +23,7 @@ const commandFiles = fs.readdirSync(path.resolve(__dirname, './commands')).filte
 
 commandFiles.forEach((file) => {
   // eslint-disable-next-line max-len
-  // eslint-disable-next-line @typescript-eslint/no-var-requires, import/no-dynamic-require, global-require
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
   const command = require(`./commands/${file}`);
   client.commands.set(command.data.name, command);
 });

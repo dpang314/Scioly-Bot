@@ -1,7 +1,6 @@
 import {
   DataTypes, NOW, Optional, Model, Sequelize,
 } from 'sequelize';
-// eslint-disable-next-line import/no-cycle
 import TournamentEvent from './TournamentEventModel';
 
 interface TestAttributes {

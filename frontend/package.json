@@ -24,10 +24,10 @@
     "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "frontend:start": "react-scripts start",
+    "frontend:build": "react-scripts build",
+    "frontend:test": "react-scripts test",
+    "frontend:eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [

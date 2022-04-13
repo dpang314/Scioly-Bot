@@ -19,9 +19,8 @@ import {
       this.init({
         id: {
           allowNull: false,
-          defaultValue: DataTypes.UUIDV4,
           primaryKey: true,
-          type: DataTypes.UUID,
+          type: DataTypes.TEXT,
           unique: true,
         },
         discordName: {

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { Template, TemplateEvent } from '../../common/models';
+import { Template, TemplateEvent } from 'common/models';
 
 const templatesRouter = Router();
 

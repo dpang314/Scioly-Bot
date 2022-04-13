@@ -20,7 +20,7 @@ const DATABASE_CONNECTION = getEnv('DATABASE_CONNECTION');
 const DEV = process.env.NODE_ENV !== 'production';
 const SERVER = process.env.NODE_ENV !== 'production' ? 'http://localhost' : '';
 const PORT = 3000;
-const NEXT_SECRET = getEnv('NEXT_SECRET');
+const SESSION_SECRET = getEnv('SESSION_SECRET');
 
 export {
   DISCORD_TOKEN,
@@ -31,5 +31,5 @@ export {
   DEV,
   SERVER,
   PORT,
-  NEXT_SECRET,
+  SESSION_SECRET,
 };

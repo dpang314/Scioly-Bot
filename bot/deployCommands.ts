@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
-import { DISCORD_TOKEN, CLIENT_ID, GUILD_ID } from '../common/configLoader';
+import { DISCORD_TOKEN, CLIENT_ID, GUILD_ID } from '../backend/configLoader';
 
 const commands = [];
 const commandFiles = fs.readdirSync('./commands').filter((file: string) => file.endsWith('.ts'));

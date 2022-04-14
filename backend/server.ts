@@ -8,6 +8,7 @@ const Store = SequelizeStore(session.Store);
 import { db } from './models';
 import passport from 'passport';
 import './strategies/discord';
+import path from 'path';
 
 const app = express();
 app.use(express.json());
@@ -30,7 +31,13 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use(express.static(path.resolve(__dirname, '../frontend/build')));
+
 app.use('/api', router);
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
+});
 
 const port = process.env.PORT || 5000;
 

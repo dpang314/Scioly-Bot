@@ -18,7 +18,9 @@
     "express": "^4.17.3",
     "express-session": "^1.17.2",
     "passport": "^0.5.2",
-    "passport-discord": "^0.1.4"
+    "passport-discord": "^0.1.4",
+    "pg": "^8.7.3",
+    "sequelize": "^6.19.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",

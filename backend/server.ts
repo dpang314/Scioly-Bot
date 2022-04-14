@@ -3,9 +3,9 @@ import cors from 'cors';
 import router from './routes';
 import session from 'express-session';
 import SequelizeStore from 'connect-session-sequelize';
-import { SESSION_SECRET } from 'backend/configLoader';
+import { SESSION_SECRET } from './configLoader';
 const Store = SequelizeStore(session.Store);
-import { db } from 'backend/models';
+import { db } from './models';
 import passport from 'passport';
 import './strategies/discord';
 

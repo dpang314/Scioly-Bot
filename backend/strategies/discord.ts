@@ -1,7 +1,7 @@
-import { CLIENT_ID, DISCORD_SECRET } from 'backend/configLoader';
+import { CLIENT_ID, DISCORD_SECRET } from '../configLoader';
 import passport from 'passport';
 import { Strategy as DiscordStrategy } from 'passport-discord';
-import { User } from 'backend/models';
+import { User } from '../models';
 
 passport.serializeUser((user, done) => {
     if (user instanceof User) {

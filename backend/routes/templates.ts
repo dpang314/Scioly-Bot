@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { Template, TemplateEvent } from 'backend/models';
+import { Template, TemplateEvent } from '../models';
 
 const templatesRouter = Router();
 

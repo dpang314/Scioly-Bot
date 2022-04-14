@@ -6,7 +6,7 @@
   "scripts": {
     "backend:dev": "ts-node server.ts",
     "backend:build": "tsc --project .",
-    "backend:start": "node ./build/backend/server.js",
+    "backend:start": "node ./build/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

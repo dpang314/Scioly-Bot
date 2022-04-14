@@ -4,8 +4,8 @@ import {
 import { Formik } from 'formik';
 import React, { FunctionComponent } from 'react';
 import * as Yup from 'yup';
-import { TemplateAttributes } from '../../../../common/models/TemplateModel';
-import { TournamentAttributes } from '../../../../common/models/TournamentModel';
+import { TemplateAttributes } from '../../../../backend/models/TemplateModel';
+import { TournamentAttributes } from '../../../../backend/models/TournamentModel';
 import { urlRegex } from '../../util';
 
 // eslint-disable-next-line no-unused-vars

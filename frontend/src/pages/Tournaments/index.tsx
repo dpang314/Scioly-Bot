@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../../components/Navbar';
-import { TemplateAttributes } from '../../../../common/models/TemplateModel';
-import { TournamentAttributes } from '../../../../common/models/TournamentModel';
+import { TemplateAttributes } from '../../../../backend/models/TemplateModel';
+import { TournamentAttributes } from '../../../../backend/models/TournamentModel';
 import TournamentTable from './TournamentTable';
 import Loading from '../../components/Loading';
 import axios from 'axios';

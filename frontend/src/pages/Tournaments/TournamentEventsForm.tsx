@@ -6,7 +6,7 @@ import React, { FunctionComponent, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import { Tournament } from '../../../../common/models';
+import { Tournament } from '../../../../backend/models';
 import ErrorMessage from '../../components/ErrorMessage';
 
 import { urlRegex } from '../../util';

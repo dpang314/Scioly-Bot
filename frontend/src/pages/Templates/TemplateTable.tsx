@@ -2,7 +2,7 @@ import {
   Container, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody,
 } from '@mui/material';
 import React, { FunctionComponent } from 'react';
-import { TemplateAttributes } from '../../../../common/models/TemplateModel';
+import { TemplateAttributes } from '../../../../backend/models/TemplateModel';
 
 import TemplateCreationButton from './TemplateCreationButton';
 import TemplateRow from './TemplateRow';

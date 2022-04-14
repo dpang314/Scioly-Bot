@@ -6,8 +6,9 @@
   "scripts": {
     "postinstall": "concurrently \"cd frontend && npm install\" \"cd backend && npm install\" \"cd bot && npm install\"",
     "all:lint": "eslint .",
+    "start": "cd backend && npm run backend:start",
     "all:build": "concurrently \"cd frontend && npm run frontend:build\" \"cd backend && npm run backend:build\" \"cd bot && npm run bot:build\"",
-    "e2e": "cd backend && concurrently \"npm run backend:start\"  \"cd.. && cypress open\"",
+    "e2e": "start-server-and-test http://localhost:5000 'cypress open'",
     "e2e:headless": "start-server-and-test next:start http://localhost:3000 cypress:headless"
   },
   "author": "",
@@ -22,6 +23,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.18.0",
     "eslint": "^8.13.0",
-    "eslint-config-airbnb-base": "^15.0.0"
+    "eslint-config-airbnb-base": "^15.0.0",
+    "start-server-and-test": "^1.14.0"
   }
 }

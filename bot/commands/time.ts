@@ -1,7 +1,7 @@
 import { CommandInteraction, MessageEmbed } from 'discord.js';
 
 import { SlashCommandBuilder } from '@discordjs/builders';
-import { Test, TournamentEvent } from '../../common/models';
+import { Test, TournamentEvent } from '../../backend/models';
 
 module.exports = {
   data: new SlashCommandBuilder()

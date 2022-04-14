@@ -5,8 +5,8 @@ import {
 
 import { SlashCommandBuilder } from '@discordjs/builders';
 
-import { TestCreationAttributes } from '../../common/models/TestModel';
-import { Tournament, TournamentEvent } from '../../common/models';
+import { TestCreationAttributes } from '../../backend/models/TestModel';
+import { Tournament, TournamentEvent } from '../../backend/models';
 
 const getTournament = async (interaction: CommandInteraction) => {
   const tournaments = await Tournament.findAll({ where: { active: true } });

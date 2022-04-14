@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import {
   Tournament, TournamentEvent,
-} from 'common/models';
+} from 'backend/models';
 
 const tournamentsRouter = Router();
 

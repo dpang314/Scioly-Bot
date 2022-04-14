@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ErrorMessage from '../../components/ErrorMessage';
-import { Template } from '../../../../common/models';
+import { Template } from '../../../../backend/models';
 import axios from 'axios';
 
 type FormProps = {

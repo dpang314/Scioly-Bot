@@ -1,5 +1,5 @@
 import { MessageEmbed, User } from 'discord.js';
-import { Test, TournamentEvent, Tournament } from '../../common/models';
+import { Test, TournamentEvent, Tournament } from '../../backend/models';
 import { client } from '../index';
 
 const checkTests = async () => {

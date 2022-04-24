@@ -4,12 +4,16 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
 import { FunctionComponent } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { login } from '../api/auth';
 
 type NavbarProps = {
   loggedIn: boolean,
 }
 
-const Navbar: FunctionComponent<NavbarProps> = ({ loggedIn }) => (
+const Navbar: FunctionComponent<NavbarProps> = ({ loggedIn }) => {
+  
+  return(
   <Box>
     <AppBar position="static">
       <Toolbar>
@@ -18,11 +22,11 @@ const Navbar: FunctionComponent<NavbarProps> = ({ loggedIn }) => (
         <div style={{ flex: 1 }} />
         {
             loggedIn ? <Button color="error" variant="contained" onClick={() => {}}>Log Out</Button>
-              : <Button color="success" variant="contained" onClick={() => {}}>Log In</Button>
+              : <Button color="success" variant="contained" onClick={login}>Log In</Button>
           }
       </Toolbar>
     </AppBar>
   </Box>
-);
+)};
 
 export default Navbar;

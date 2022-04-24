@@ -7,5 +7,4 @@ const apiRouter = Router();
 apiRouter.use('/templates', templatesRouter);
 apiRouter.use('/tournaments', tournamentsRouter);
 
-
 export default apiRouter;

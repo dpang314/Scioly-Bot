@@ -21,6 +21,7 @@ const DEV = process.env.NODE_ENV !== 'production';
 const SERVER = process.env.NODE_ENV !== 'production' ? 'http://localhost' : '';
 const PORT = 3000;
 const SESSION_SECRET = getEnv('SESSION_SECRET');
+const NODE_ENV = getEnv('NODE_ENV');
 
 export {
   DISCORD_TOKEN,
@@ -32,4 +33,5 @@ export {
   SERVER,
   PORT,
   SESSION_SECRET,
+  NODE_ENV,
 };

@@ -11,11 +11,11 @@ import './strategies/discord';
 import path from 'path';
 
 const app = express();
-app.use(express.json());
 app.use(cors({
-  origin: ['http://localhost:3000'],
+  origin: 'http://localhost:3000',
   credentials: true,
 }));
+app.use(express.json());
 
 app.use(session({
   secret: SESSION_SECRET,

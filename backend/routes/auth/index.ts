@@ -12,4 +12,8 @@ authRouter.get('/discord/callback', passport.authenticate('discord', {
     failureMessage: true
 }));
 
+authRouter.get('/discord/user', async (req, res) => {
+    res.json(req.user);
+})
+
 export default authRouter;

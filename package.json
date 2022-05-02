@@ -10,7 +10,7 @@
     "cypress:headless": "cypress run",
     "e2e": "start-server-and-test next:start http://localhost:3000 cypress",
     "e2e:headless": "start-server-and-test next:start http://localhost:3000 cypress:headless",
-    "bot:commands": "ts-node deployCommands.ts",
+    "bot:commands": "ts-node ./src/bot/deployCommands.ts",
     "bot:dev": "ts-node ./src/bot/index.ts",
     "bot:build": "tsc --project tsconfig.bot.json",
     "bot:start": "node ./build/src/bot/index.js",

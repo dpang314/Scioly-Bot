@@ -17,9 +17,6 @@ const CLIENT_ID = getEnv('CLIENT_ID');
 const DISCORD_SECRET = getEnv('DISCORD_SECRET');
 const GUILD_ID = getEnv('GUILD_ID');
 const DATABASE_CONNECTION = getEnv('DATABASE_CONNECTION');
-const DEV = process.env.NODE_ENV !== 'production';
-const SERVER = process.env.NODE_ENV !== 'production' ? 'http://localhost' : '';
-const PORT = 3000;
 const NEXT_SECRET = getEnv('NEXT_SECRET');
 
 export {
@@ -28,8 +25,5 @@ export {
   DISCORD_SECRET,
   GUILD_ID,
   DATABASE_CONNECTION,
-  DEV,
-  SERVER,
-  PORT,
   NEXT_SECRET,
 };

@@ -3,13 +3,25 @@
 import '../styles/globals.css';
 import * as React from 'react';
 import { SessionProvider } from 'next-auth/react';
+import { ThemeProvider } from '@emotion/react';
+import { createTheme } from '@mui/material/styles';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#333333',
+    },
+  },
+});
 
 const App = ({
   Component,
   pageProps: { session, ...pageProps },
 }) => (
   <SessionProvider session={session}>
-    <Component {...pageProps} />
+    <ThemeProvider theme={theme}>
+      <Component {...pageProps} />
+    </ThemeProvider>
   </SessionProvider>
 );
 

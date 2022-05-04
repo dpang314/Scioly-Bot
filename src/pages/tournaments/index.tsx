@@ -21,10 +21,10 @@ const Tournaments: NextPage = () => {
   }
 
   return (
-    <>
+    <div style={{ backgroundColor: '#DDDDDD', height: '100vh' }}>
       <Navbar loggedIn={!!session} />
       <TournamentTable templates={templates} tournaments={tournaments} addTournament={() => (mutate('/api/tournaments/'))} />
-    </>
+    </div>
   );
 };
 

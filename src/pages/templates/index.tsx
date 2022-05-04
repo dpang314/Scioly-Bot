@@ -25,10 +25,10 @@ const Templates: NextPage<PageProps> = () => {
   }
 
   return (
-    <>
+    <div style={{ backgroundColor: '#DDDDDD', height: '100vh' }}>
       <Navbar loggedIn />
       <TemplateTable templates={templates} />
-    </>
+    </div>
   );
 };
 

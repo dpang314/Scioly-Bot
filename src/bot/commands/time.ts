@@ -14,14 +14,16 @@ module.exports = {
     tests.concat(await db.Test.findAll({ where: { partner2Id: interaction.user.id, finished: false }, include: [{ model: db.TournamentEvent, as: 'tournamentEvent' }] }));
     const testsEmbed = new MessageEmbed()
       .setColor('RANDOM')
-      .setTitle('Current tests');
+      .setTitle('Remaining Time');
     for (let i = 0; i < tests.length; i += 1) {
       const test = tests[i];
       if (test) {
         const currentTime = new Date().getTime();
         const testStart = test.timeStarted.getTime();
-        const minuteDifference = (currentTime - testStart) / 1000.0 / 60;
-        testsEmbed.addField(test.tournamentEvent.name, `${(test.tournamentEvent.minutes - minuteDifference).toFixed(2)} minutes`);
+        let secondDifference = (currentTime - testStart) / 1000.0;
+        const minuteDifference = Math.floor(secondDifference / 60.0);
+        secondDifference -= minuteDifference * 60;
+        testsEmbed.addField(test.tournamentEvent.name, `${test.tournamentEvent.minutes - minuteDifference - 1} minutes ${Math.floor(60 - secondDifference)} seconds`);
       }
     }
     await interaction.reply({ embeds: [testsEmbed] });

@@ -157,9 +157,9 @@ To get a local copy up and running follow these steps.
 
 
 <!-- USAGE EXAMPLES -->
-<!-- TODO add demo video ## Usage 
+## Usage
 
-<p align="right">(<a href="#top">back to top</a>)</p> -->
+<p align="right">(<a href="#top">back to top</a>)</p>
 
 <!-- ROADMAP -->
 ## Roadmap

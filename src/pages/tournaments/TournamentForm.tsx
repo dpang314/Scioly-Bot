@@ -4,11 +4,13 @@ import {
 import { Formik } from 'formik';
 import React, { FunctionComponent } from 'react';
 import * as Yup from 'yup';
-import { TemplateAttributes, TournamentAttributes } from '../../models';
+import { TemplateAttributes } from '../../models';
 import { urlRegex } from '../../util';
 
+export type TournamentFormData = { name: string, template: string, submission: string };
+
 // eslint-disable-next-line no-unused-vars
-export type AddTournament = (tournament: TournamentAttributes) => void;
+export type AddTournament = (tournament: TournamentFormData) => Promise<void>;
 
 type FormProps = {
   templates: Array<TemplateAttributes>,
@@ -37,18 +39,7 @@ const TournamentForm: FunctionComponent<FormProps> = ({ templates, setOpen, addT
       })
     }
       onSubmit={async (values, { setSubmitting }) => {
-        const res = await fetch(
-          '/api/tournaments',
-          {
-            body: JSON.stringify(values),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            method: 'POST',
-          },
-        );
-        const template = await res.json();
-        addTournament(template);
+        addTournament(values);
         setSubmitting(false);
         setOpen(false);
       }}

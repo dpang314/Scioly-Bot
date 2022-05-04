@@ -19,8 +19,8 @@
   <p align="center">
     Automate Science Olympiad tournaments through Discord!
     <br />
-    <!--<a href="https://github.com/dpang314/Scioly-Bot">View Demo</a>
-    ·-->
+    <a href="#usage">View Demo</a>
+    ·
     <a href="https://github.com/dpang314/Scioly-Bot/issues">Report Bug</a>
     ·
     <a href="https://github.com/dpang314/Scioly-Bot/issues">Request Feature</a>
@@ -158,6 +158,8 @@ To get a local copy up and running follow these steps.
 
 <!-- USAGE EXAMPLES -->
 ## Usage
+
+https://user-images.githubusercontent.com/19295389/166827333-74b715b2-51ac-4ebf-9fdb-9e58f6fab8ca.mp4
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

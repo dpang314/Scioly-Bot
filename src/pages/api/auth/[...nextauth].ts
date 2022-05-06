@@ -1,7 +1,9 @@
 import axios from 'axios';
 import NextAuth from 'next-auth';
 import DiscordProvider from 'next-auth/providers/discord';
-import { CLIENT_ID, DISCORD_SECRET, NEXT_SECRET } from '../../../configLoader';
+import {
+  CLIENT_ID, DISCORD_SECRET, GUILD_ID, NEXT_SECRET,
+} from '../../../configLoader';
 
 export default NextAuth({
   providers: [
@@ -34,7 +36,7 @@ export default NextAuth({
         for (let i = 0; i < guilds.length; i += 1) {
           // Admin of server
           // eslint-disable-next-line no-bitwise
-          if (guilds[i].id === process.env.GUILD_ID && (guilds[i].permissions & (1 << 3))) {
+          if (guilds[i].id === GUILD_ID && (guilds[i].permissions & (1 << 3))) {
             return true;
           }
         }

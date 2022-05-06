@@ -1,7 +1,6 @@
 name: End-to-end tests
 on: [push]
-jobs:
-  env:
+env:
     DISCORD_TOKEN: ${{ env.DISCORD_TOKEN }}
     CLIENT_ID: ${{ env.CLIENT_ID }}
     DISCORD_SECRET: ${{ env.DISCORD_SECRET }}
@@ -9,6 +8,7 @@ jobs:
     DATABASE_CONNECTION: ${{ env.DATABASE_CONNECTION }}
     NEXT_SECRET: ${{ env.NEXT_SECRET }}
     NEXTAUTH_URL: ${{ env.NEXTAUTH_URL }}
+jobs:
   cypress-run:
     runs-on: ubuntu-20.04
     steps:

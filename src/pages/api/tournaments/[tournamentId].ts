@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
+import { TEST } from '../../../util';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const db = require('../../../models');
 
@@ -9,7 +10,7 @@ export default async function handler(
 ) {
   const session = await getSession({ req });
   const { tournamentId } = req.query;
-  if (session) {
+  if (session || TEST) {
     if (req.method === 'PUT') {
       const newEvents = [];
       if (req.body.tournamentEvents) {

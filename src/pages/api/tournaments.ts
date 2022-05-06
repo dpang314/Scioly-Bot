@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getSession } from 'next-auth/react';
+import { TEST } from '../../util';
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const db = require('../../models');
 
@@ -8,7 +9,7 @@ export default async function handler(
   res: NextApiResponse,
 ) {
   const session = await getSession({ req });
-  if (session) {
+  if (session || TEST) {
     if (req.method === 'POST') {
       const tournament = await db.Tournament.create({ userId: session.id, ...req.body });
       const template = await db.Template.findOne({ where: { id: req.body.template }, include: [{ model: db.TemplateEvent, as: 'templateEvents' }] });

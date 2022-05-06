@@ -7,7 +7,7 @@ import Navbar from '../../components/Navbar';
 import TemplateTable from './TemplateTable';
 import { Template, TemplateAttributes } from '../../models';
 import Loading from '../../components/Loading';
-import { fetcher } from '../../util';
+import { fetcher, TEST } from '../../util';
 
 type PageProps = {
   initialTemplates: Array<Template>;
@@ -16,11 +16,11 @@ type PageProps = {
 
 const Templates: NextPage<PageProps> = () => {
   const { data: session, status } = useSession({
-    required: true,
+    required: !TEST,
   });
   const { data: templates } = useSWR<Array<TemplateAttributes>>('/api/templates/', fetcher);
 
-  if (status === 'loading' || !session || !templates) {
+  if ((!TEST && (status === 'loading' || !session)) || !templates) {
     return <Loading />;
   }
 

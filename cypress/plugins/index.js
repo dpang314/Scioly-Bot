@@ -16,7 +16,10 @@
  * @type {Cypress.PluginConfig}
  */
 // eslint-disable-next-line no-unused-vars
-module.exports = (on, config) => {
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
-};
+module.exports = (on, config) => ({
+  ...config,
+  env: {
+    ...config.env,
+    APP_ENV: process.env.APP_ENV,
+  },
+});

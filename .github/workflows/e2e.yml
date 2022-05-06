@@ -4,13 +4,13 @@ jobs:
   cypress-run:
     runs-on: ubuntu-20.04
     env:
-      DISCORD_TOKEN: ${{ env.DISCORD_TOKEN }}
-      CLIENT_ID: ${{ env.CLIENT_ID }}
-      DISCORD_SECRET: ${{ env.DISCORD_SECRET }}
-      GUILD_ID: ${{ env.GUILD_ID }}
-      DATABASE_CONNECTION: ${{ env.DATABASE_CONNECTION }}
-      NEXT_SECRET: ${{ env.NEXT_SECRET }}
-      NEXTAUTH_URL: ${{ env.NEXTAUTH_URL }}
+      DISCORD_TOKEN: ${{ SECRETS.DISCORD_TOKEN }}
+      CLIENT_ID: ${{ SECRETS.CLIENT_ID }}
+      DISCORD_SECRET: ${{ SECRETS.DISCORD_SECRET }}
+      GUILD_ID: ${{ SECRETS.GUILD_ID }}
+      DATABASE_CONNECTION: ${{ SECRETS.DATABASE_CONNECTION }}
+      NEXT_SECRET: ${{ SECRETS.NEXT_SECRET }}
+      NEXTAUTH_URL: ${{ SECRETS.NEXTAUTH_URL }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -26,13 +26,13 @@ jobs:
   cypress-run-no-auth:
     runs-on: ubuntu-20.04
     env:
-      DISCORD_TOKEN: ${{ env.DISCORD_TOKEN }}
-      CLIENT_ID: ${{ env.CLIENT_ID }}
-      DISCORD_SECRET: ${{ env.DISCORD_SECRET }}
-      GUILD_ID: ${{ env.GUILD_ID }}
-      DATABASE_CONNECTION: ${{ env.DATABASE_CONNECTION }}
-      NEXT_SECRET: ${{ env.NEXT_SECRET }}
-      NEXTAUTH_URL: ${{ env.NEXTAUTH_URL }}
+      DISCORD_TOKEN: ${{ SECRETS.DISCORD_TOKEN }}
+      CLIENT_ID: ${{ SECRETS.CLIENT_ID }}
+      DISCORD_SECRET: ${{ SECRETS.DISCORD_SECRET }}
+      GUILD_ID: ${{ SECRETS.GUILD_ID }}
+      DATABASE_CONNECTION: ${{ SECRETS.DATABASE_CONNECTION }}
+      NEXT_SECRET: ${{ SECRETS.NEXT_SECRET }}
+      NEXTAUTH_URL: ${{ SECRETS.NEXTAUTH_URL }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2

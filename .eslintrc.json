@@ -4,8 +4,8 @@
 		"plugin:@typescript-eslint/recommended",
 		"next/core-web-vitals",
 		"airbnb", 
-		"airbnb/hooks"
-		//"airbnb-typescript"
+		"airbnb/hooks",
+		"plugin:cypress/recommended"
 	],
 	"env": {
 		"node": true,

@@ -31,13 +31,9 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/', router);
-
 app.use(express.static(path.resolve(__dirname, '../frontend/build')));
 
-app.get('*', (req, res) => {
-  res.sendFile(path.resolve(__dirname, '../frontend/build', 'index.html'));
-});
+app.use('/', router);
 
 const port = process.env.PORT || 5000;
 

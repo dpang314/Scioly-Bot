@@ -28,7 +28,6 @@ passport.use(new DiscordStrategy({
 }, async (accessToken, refreshToken, profile, done) => {
     try {
         const { id, username } = profile;
-        console.log(id);
         let user = await User.findByPk(id);
         if (!user) {
             user = await User.create({

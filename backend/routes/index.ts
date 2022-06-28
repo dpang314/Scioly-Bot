@@ -9,9 +9,10 @@ router.use('/auth', authRouter);
 
 router.use((req, res, next) => {
     if (!req.user) {
-        return res.status(401);
+        res.status(401).send('Unauthorized');
+    } else {
+        next();
     }
-    return next();
 })
 
 router.use('/api', apiRouter);

@@ -17,8 +17,8 @@ const Navbar: FunctionComponent<NavbarProps> = ({ loggedIn }) => {
   <Box>
     <AppBar position="static">
       <Toolbar>
-        <a href="tournaments"><Button color="inherit">Tournaments</Button></a>
-        <a href="templates"><Button color="inherit">Templates</Button></a>
+        <Button href="/tournaments" color="inherit">Tournaments</Button>
+        <Button href="/templates" color="inherit">Templates</Button>
         <div style={{ flex: 1 }} />
         {
             loggedIn ? <Button color="error" variant="contained" onClick={() => {}}>Log Out</Button>

@@ -1,5 +1,8 @@
 {
     "extends": "../tsconfig.json",
+    "ts-node": {
+        "files": true
+    },
     "compilerOptions": {
         "noEmit": false,
         "rootDir": "src",

@@ -7,7 +7,6 @@ import { SESSION_SECRET } from './configLoader';
 const Store = SequelizeStore(session.Store);
 import { db } from './models';
 import passport from 'passport';
-import './strategies/discord';
 import path from 'path';
 
 const app = express();

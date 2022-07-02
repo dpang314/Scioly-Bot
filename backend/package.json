@@ -2,10 +2,10 @@
   "name": "scioly-bot-backend",
   "version": "1.0.0",
   "description": "",
-  "main": "server.ts",
+  "main": "build/server.ts",
   "scripts": {
-    "backend:dev": "ts-node server.ts",
-    "backend:build": "tsc --project .",
+    "backend:dev": "ts-node src/server.ts",
+    "backend:build": "tsc --build",
     "backend:start": "node ./build/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -1,4 +1,9 @@
 {
-    "extends": "../tsconfig.json",  
-    "files": ["backend.d.ts"]
+    "extends": "../tsconfig.json",
+    "compilerOptions": {
+        "noEmit": false,
+        "rootDir": "src",
+        "outDir": "build"
+    },
+    "include": ["src", "src/*.d.ts"]
 }

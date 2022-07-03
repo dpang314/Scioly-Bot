@@ -8,6 +8,7 @@ const Store = SequelizeStore(session.Store);
 import { db } from './models';
 import passport from 'passport';
 import path from 'path';
+import './strategies/discord';
 
 const app = express();
 app.use(cors({
@@ -27,6 +28,7 @@ app.use(session({
     db,
   })
 }))
+
 app.use(passport.initialize());
 app.use(passport.session());
 

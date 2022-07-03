@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 
-dotenv.config({path:'../.env'});
+dotenv.config({path: '../.env'});
 
 const getEnv = (key: string): string => {
   let env: string;

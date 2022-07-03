@@ -1,32 +1,42 @@
 import {
-  Association, DataTypes, HasManyAddAssociationMixin,
-  HasManyCreateAssociationMixin, Model, Optional, Sequelize,
+  Association,
+  DataTypes,
+  HasManyAddAssociationMixin,
+  HasManyCreateAssociationMixin,
+  Model,
+  Optional,
+  Sequelize,
 } from 'sequelize';
 import Test from './TestModel';
 import TournamentEvent from './TournamentEventModel';
 import yup from 'yup';
 
 interface TournamentAttributes {
-  id: string,
-  userId: string,
-  name: string,
-  active: boolean,
-  submission: string,
+  id: string;
+  userId: string;
+  name: string;
+  active: boolean;
+  submission: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface TournamentCreationAttributes extends Optional<TournamentAttributes, 'id'> {}
+interface TournamentCreationAttributes
+  extends Optional<TournamentAttributes, 'id'> {}
 
-const tournamentSchema: yup.SchemaOf<TournamentCreationAttributes> = yup.object({
-  id: yup.string().optional(),
-  userId: yup.string().required(),
-  name: yup.string().required(),
-  active: yup.boolean().required(),
-  submission: yup.string().required(),
-})
+const tournamentSchema: yup.SchemaOf<TournamentCreationAttributes> = yup.object(
+  {
+    id: yup.string().optional(),
+    userId: yup.string().required(),
+    name: yup.string().required(),
+    active: yup.boolean().required(),
+    submission: yup.string().required(),
+  },
+);
 
-class Tournament extends
-  Model<TournamentAttributes, TournamentCreationAttributes> implements TournamentAttributes {
+class Tournament
+  extends Model<TournamentAttributes, TournamentCreationAttributes>
+  implements TournamentAttributes
+{
   declare id: string;
 
   declare userId: string;
@@ -89,5 +99,5 @@ class Tournament extends
 }
 
 export default Tournament;
-export { tournamentSchema };
-export type { TournamentAttributes, TournamentCreationAttributes };
+export {tournamentSchema};
+export type {TournamentAttributes, TournamentCreationAttributes};

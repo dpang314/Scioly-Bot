@@ -1,12 +1,12 @@
 {
-    "extends": "../tsconfig.json",
-    "ts-node": {
-        "files": true
-    },
-    "compilerOptions": {
-        "noEmit": false,
-        "rootDir": "src",
-        "outDir": "build"
-    },
-    "include": ["src", "src/*.d.ts"]
+  "extends": "../tsconfig.json",
+  "ts-node": {
+    "files": true
+  },
+  "compilerOptions": {
+    "noEmit": false,
+    "rootDir": "src",
+    "outDir": "build"
+  },
+  "include": ["src", "src/*.d.ts"]
 }

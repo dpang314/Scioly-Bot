@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import {Router} from 'express';
 import templatesRouter from './templates';
 import tournamentsRouter from './tournaments';
 

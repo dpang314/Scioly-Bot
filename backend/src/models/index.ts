@@ -1,6 +1,6 @@
 import 'pg';
-import { Sequelize } from 'sequelize';
-import { DATABASE_CONNECTION } from '../configLoader';
+import {Sequelize} from 'sequelize';
+import {DATABASE_CONNECTION} from '../configLoader';
 import TemplateEvent from './TemplateEventModel';
 import Template from './TemplateModel';
 import Test from './TestModel';
@@ -11,7 +11,12 @@ import User from './User';
 const sequelize = new Sequelize(DATABASE_CONNECTION);
 
 const models = [
-  TemplateEvent, Template, Test, TournamentEvent, Tournament, User
+  TemplateEvent,
+  Template,
+  Test,
+  TournamentEvent,
+  Tournament,
+  User,
 ];
 
 models.forEach((model) => model.initialize(sequelize));
@@ -46,5 +51,10 @@ Tournament.hasMany(TournamentEvent, {
 
 export {
   sequelize as db,
-  TemplateEvent, Template, Test, TournamentEvent, Tournament, User
+  TemplateEvent,
+  Template,
+  Test,
+  TournamentEvent,
+  Tournament,
+  User,
 };

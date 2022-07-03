@@ -1,16 +1,14 @@
-import {
-  DataTypes, NOW, Optional, Model, Sequelize,
-} from 'sequelize';
+import {DataTypes, NOW, Optional, Model, Sequelize} from 'sequelize';
 import TournamentEvent from './TournamentEventModel';
 import yup from 'yup';
 
 interface TestAttributes {
-  id: string,
-  userId: string,
-  partner1Id?: string,
-  partner2Id?: string,
-  timeStarted?: Date,
-  finished: boolean,
+  id: string;
+  userId: string;
+  partner1Id?: string;
+  partner2Id?: string;
+  timeStarted?: Date;
+  finished: boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -23,16 +21,19 @@ const testSchema: yup.SchemaOf<TestCreationAttributes> = yup.object({
   partner2Id: yup.string().optional(),
   timeStarted: yup.date().optional(),
   finished: yup.boolean().required(),
-})
+});
 
-class Test extends Model<TestAttributes, TestCreationAttributes> implements TestAttributes {
+class Test
+  extends Model<TestAttributes, TestCreationAttributes>
+  implements TestAttributes
+{
   declare id: string;
 
   declare userId: string;
 
-  declare partner1Id: string | null;
+  declare partner1Id: string;
 
-  declare partner2Id: string | null;
+  declare partner2Id: string;
 
   declare timeStarted: Date;
 
@@ -46,37 +47,40 @@ class Test extends Model<TestAttributes, TestCreationAttributes> implements Test
   declare tournamentEventId: string;
 
   public static initialize(sequelize: Sequelize) {
-    this.init({
-      id: {
-        allowNull: false,
-        defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
-        type: DataTypes.UUID,
-        unique: true,
+    this.init(
+      {
+        id: {
+          allowNull: false,
+          defaultValue: DataTypes.UUIDV4,
+          primaryKey: true,
+          type: DataTypes.UUID,
+          unique: true,
+        },
+        userId: {
+          type: DataTypes.TEXT,
+          allowNull: false,
+        },
+        partner1Id: DataTypes.TEXT,
+        partner2Id: DataTypes.TEXT,
+        timeStarted: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: NOW,
+        },
+        finished: {
+          type: DataTypes.BOOLEAN,
+          allowNull: false,
+          defaultValue: false,
+        },
       },
-      userId: {
-        type: DataTypes.TEXT,
-        allowNull: false,
+      {
+        sequelize,
+        tableName: 'tests',
       },
-      partner1Id: DataTypes.TEXT,
-      partner2Id: DataTypes.TEXT,
-      timeStarted: {
-        type: DataTypes.DATE,
-        allowNull: false,
-        defaultValue: NOW,
-      },
-      finished: {
-        type: DataTypes.BOOLEAN,
-        allowNull: false,
-        defaultValue: false,
-      },
-    }, {
-      sequelize,
-      tableName: 'tests',
-    });
+    );
   }
 }
 
 export default Test;
-export { testSchema };
-export type { TestAttributes, TestCreationAttributes };
+export {testSchema};
+export type {TestAttributes, TestCreationAttributes};

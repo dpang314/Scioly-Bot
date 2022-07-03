@@ -1,25 +1,32 @@
 import {
   Association,
-  DataTypes, HasManyCreateAssociationMixin, Model, Optional, Sequelize,
+  DataTypes,
+  HasManyCreateAssociationMixin,
+  Model,
+  Optional,
+  Sequelize,
 } from 'sequelize';
 import TemplateEvent from './TemplateEventModel';
 import yup from 'yup';
 
 interface TemplateAttributes {
-  id: string,
-  name: string,
+  id: string;
+  name: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface TemplateCreationAttributes extends Optional<TemplateAttributes, 'id'> {}
+interface TemplateCreationAttributes
+  extends Optional<TemplateAttributes, 'id'> {}
 
 const templateSchema: yup.SchemaOf<TemplateCreationAttributes> = yup.object({
   id: yup.string().optional(),
   name: yup.string().required(),
-})
+});
 
-class Template extends Model<TemplateAttributes, TemplateCreationAttributes>
-  implements TemplateAttributes {
+class Template
+  extends Model<TemplateAttributes, TemplateCreationAttributes>
+  implements TemplateAttributes
+{
   declare id: string;
 
   declare name: string;
@@ -29,30 +36,33 @@ class Template extends Model<TemplateAttributes, TemplateCreationAttributes>
   declare readonly templateEvents?: TemplateEvent[];
 
   declare static associations: {
-        // eslint-disable-next-line no-use-before-define
-        templateEvents: Association<Template, TemplateEvent>;
-      };
+    // eslint-disable-next-line no-use-before-define
+    templateEvents: Association<Template, TemplateEvent>;
+  };
 
   public static initialize(sequelize: Sequelize) {
-    this.init({
-      id: {
-        allowNull: false,
-        defaultValue: DataTypes.UUIDV4,
-        primaryKey: true,
-        type: DataTypes.UUID,
-        unique: true,
+    this.init(
+      {
+        id: {
+          allowNull: false,
+          defaultValue: DataTypes.UUIDV4,
+          primaryKey: true,
+          type: DataTypes.UUID,
+          unique: true,
+        },
+        name: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
       },
-      name: {
-        type: DataTypes.STRING,
-        allowNull: false,
+      {
+        sequelize,
+        tableName: 'templates',
       },
-    }, {
-      sequelize,
-      tableName: 'templates',
-    });
+    );
   }
 }
 
 export default Template;
-export { templateSchema };
-export type { TemplateAttributes, TemplateCreationAttributes };
+export {templateSchema};
+export type {TemplateAttributes, TemplateCreationAttributes};

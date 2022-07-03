@@ -1,32 +1,39 @@
-import { Router } from 'express';
-import { Template, TemplateEvent } from '../../models';
+import {Router} from 'express';
+import {Template, TemplateEvent} from '../../models';
 
 const templatesRouter = Router();
 
 templatesRouter.post('/', async (req, res) => {
   const template = await Template.create(req.body, {
-    include: [{
-      model: TemplateEvent,
-      as: 'templateEvents',
-    }],
+    include: [
+      {
+        model: TemplateEvent,
+        as: 'templateEvents',
+      },
+    ],
   });
   res.status(200).json(template);
 });
 
 templatesRouter.get('/', async (req, res) => {
-  const templates = await Template.findAll({ include: [{ model: TemplateEvent, as: 'templateEvents' }] });
+  const templates = await Template.findAll({
+    include: [{model: TemplateEvent, as: 'templateEvents'}],
+  });
   res.status(200).json(templates);
 });
 
 templatesRouter.put('/:id', async (req, res) => {
-  const { id } = req.params;
+  const {id} = req.params;
   if (req.body.name) {
-    await Template.update({ name: req.body.name }, { where: { id } });
+    await Template.update({name: req.body.name}, {where: {id}});
   }
   const newEvents: Array<TemplateEvent> = [];
   if (req.body.templateEvents) {
     req.body.templateEvents.forEach(async (event) => {
-      const [newEvent] = await TemplateEvent.upsert({ ...event, templateId: id });
+      const [newEvent] = await TemplateEvent.upsert({
+        ...event,
+        templateId: id,
+      });
       newEvents.push(newEvent);
     });
   }
@@ -46,8 +53,11 @@ templatesRouter.put('/:id', async (req, res) => {
 });
 
 templatesRouter.get('/:id', async (req, res) => {
-  const { id } = req.params;
-  const tournaments = await Template.findOne({ where: { id }, include: [{ model: TemplateEvent, as: 'templateEvents' }] });
+  const {id} = req.params;
+  const tournaments = await Template.findOne({
+    where: {id},
+    include: [{model: TemplateEvent, as: 'templateEvents'}],
+  });
   res.status(200).json(tournaments);
 });
 

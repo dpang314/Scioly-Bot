@@ -9,7 +9,7 @@ import {
 } from 'sequelize';
 import Test from './TestModel';
 import TournamentEvent from './TournamentEventModel';
-import yup from 'yup';
+import * as Yup from 'yup';
 
 interface TournamentAttributes {
   id: string;
@@ -23,13 +23,13 @@ interface TournamentAttributes {
 interface TournamentCreationAttributes
   extends Optional<TournamentAttributes, 'id'> {}
 
-const tournamentSchema: yup.SchemaOf<TournamentCreationAttributes> = yup.object(
+const tournamentSchema: Yup.SchemaOf<TournamentCreationAttributes> = Yup.object(
   {
-    id: yup.string().optional(),
-    userId: yup.string().required(),
-    name: yup.string().required(),
-    active: yup.boolean().required(),
-    submission: yup.string().required(),
+    id: Yup.string().optional(),
+    userId: Yup.string().required(),
+    name: Yup.string().required(),
+    active: Yup.boolean().required(),
+    submission: Yup.string().required(),
   },
 );
 

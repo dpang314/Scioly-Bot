@@ -7,7 +7,7 @@ import {
   Sequelize,
 } from 'sequelize';
 import TemplateEvent from './TemplateEventModel';
-import yup from 'yup';
+import * as Yup from 'yup';
 
 interface TemplateAttributes {
   id: string;
@@ -18,9 +18,9 @@ interface TemplateAttributes {
 interface TemplateCreationAttributes
   extends Optional<TemplateAttributes, 'id'> {}
 
-const templateSchema: yup.SchemaOf<TemplateCreationAttributes> = yup.object({
-  id: yup.string().optional(),
-  name: yup.string().required(),
+const templateSchema: Yup.SchemaOf<TemplateCreationAttributes> = Yup.object({
+  id: Yup.string().optional(),
+  name: Yup.string().required(),
 });
 
 class Template

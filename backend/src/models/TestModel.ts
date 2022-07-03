@@ -1,6 +1,6 @@
 import {DataTypes, NOW, Optional, Model, Sequelize} from 'sequelize';
 import TournamentEvent from './TournamentEventModel';
-import yup from 'yup';
+import * as Yup from 'yup';
 
 interface TestAttributes {
   id: string;
@@ -14,13 +14,13 @@ interface TestAttributes {
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface TestCreationAttributes extends Optional<TestAttributes, 'id'> {}
 
-const testSchema: yup.SchemaOf<TestCreationAttributes> = yup.object({
-  id: yup.string().optional(),
-  userId: yup.string().required(),
-  partner1Id: yup.string().optional(),
-  partner2Id: yup.string().optional(),
-  timeStarted: yup.date().optional(),
-  finished: yup.boolean().required(),
+const testSchema: Yup.SchemaOf<TestCreationAttributes> = Yup.object({
+  id: Yup.string().optional(),
+  userId: Yup.string().required(),
+  partner1Id: Yup.string().optional(),
+  partner2Id: Yup.string().optional(),
+  timeStarted: Yup.date().optional(),
+  finished: Yup.boolean().required(),
 });
 
 class Test

@@ -1,5 +1,5 @@
 import {DataTypes, Model, Optional, Sequelize} from 'sequelize';
-import {object, number, string, SchemaOf} from 'yup';
+import * as Yup from 'yup';
 
 interface TemplateEventAttributes {
   id: string;
@@ -11,10 +11,10 @@ interface TemplateEventAttributes {
 interface TemplateEventCreationAttributes
   extends Optional<TemplateEventAttributes, 'id'> {}
 
-const templateEventSchema: SchemaOf<TemplateEventCreationAttributes> = object({
-  id: string().optional(),
-  name: string().max(100, 'Must be 100 characters or less').required(),
-  minutes: number()
+const templateEventSchema: Yup.SchemaOf<TemplateEventCreationAttributes> = Yup.object({
+  id: Yup.string().optional(),
+  name: Yup.string().max(100, 'Must be 100 characters or less').required(),
+  minutes: Yup.number()
     .min(0, "Test can't have a negative time limit")
     .max(1440, 'Test must be under 1440 minutes long')
     .required(),

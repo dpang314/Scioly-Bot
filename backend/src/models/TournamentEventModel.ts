@@ -7,7 +7,7 @@ import {
   Sequelize,
 } from 'sequelize';
 import Test from './TestModel';
-import yup from 'yup';
+import * as Yup from 'yup';
 
 interface TournamentEventAttributes {
   id: string;
@@ -20,12 +20,12 @@ interface TournamentEventAttributes {
 interface TournamentEventCreationAttributes
   extends Optional<TournamentEventAttributes, 'id'> {}
 
-const tournamentEventSchema: yup.SchemaOf<TournamentEventCreationAttributes> =
-  yup.object({
-    id: yup.string().optional(),
-    name: yup.string().required(),
-    minutes: yup.number().required(),
-    link: yup.string().required(),
+const tournamentEventSchema: Yup.SchemaOf<TournamentEventCreationAttributes> =
+  Yup.object({
+    id: Yup.string().optional(),
+    name: Yup.string().required(),
+    minutes: Yup.number().required(),
+    link: Yup.string().required(),
   });
 
 class TournamentEvent

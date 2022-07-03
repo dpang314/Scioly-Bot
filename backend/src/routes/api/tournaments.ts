@@ -16,21 +16,24 @@ tournamentsRouter.get('/', async (req, res) => {
 });
 
 tournamentsRouter.post('/', async (req, res) => {
+  // user is guaranteed to exist because of middleware
   const tournament = await Tournament.create({
-    userId: req.user.id,
+    userId: (req.user as Express.User).id,
     ...req.body,
   });
   const template = await Template.findOne({
     where: {id: req.body.template},
     include: [{model: TemplateEvent, as: 'templateEvents'}],
   });
-  template.templateEvents.forEach(async (templateEvent) => {
-    await tournament.createTournamentEvent({
-      name: templateEvent.name,
-      minutes: templateEvent.minutes,
-      link: '',
+  if (template?.templateEvents) {
+    template.templateEvents.forEach(async (templateEvent) => {
+      await tournament.createTournamentEvent({
+        name: templateEvent.name,
+        minutes: templateEvent.minutes,
+        link: '',
+      });
     });
-  });
+  }
   res.status(200).json(tournament);
 });
 
@@ -45,7 +48,7 @@ tournamentsRouter.get('/:id', async (req, res) => {
 
 tournamentsRouter.put('/:id', async (req, res) => {
   const {id} = req.params;
-  const newEvents = [];
+  const newEvents: TournamentEvent[] = [];
   if (req.body.tournamentEvents) {
     req.body.tournamentEvents.forEach(async (event) => {
       const [newEvent] = await TournamentEvent.upsert({

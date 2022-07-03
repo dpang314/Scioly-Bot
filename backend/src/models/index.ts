@@ -1,6 +1,5 @@
 import 'pg';
 import {Sequelize} from 'sequelize';
-import {DATABASE_CONNECTION} from '../configLoader';
 import TemplateEvent from './TemplateEventModel';
 import Template from './TemplateModel';
 import Test from './TestModel';
@@ -8,49 +7,57 @@ import TournamentEvent from './TournamentEventModel';
 import Tournament from './TournamentModel';
 import User from './User';
 
-const sequelize = new Sequelize(DATABASE_CONNECTION);
+// Creating in a function makes it easier to create mock databases
 
-const models = [
-  TemplateEvent,
-  Template,
-  Test,
-  TournamentEvent,
-  Tournament,
-  User,
-];
+const createDatabase = (DATABASE_CONNECTION: string) => {
+  const sequelize = new Sequelize(DATABASE_CONNECTION, {
+    logging: false,
+  });
 
-models.forEach((model) => model.initialize(sequelize));
+  const models = [
+    TemplateEvent,
+    Template,
+    Test,
+    TournamentEvent,
+    Tournament,
+    User,
+  ];
 
-Template.hasMany(TemplateEvent, {
-  sourceKey: 'id',
-  foreignKey: 'templateId',
-  as: 'templateEvents',
-});
+  models.forEach((model) => model.initialize(sequelize));
 
-Test.belongsTo(TournamentEvent, {
-  as: 'tournamentEvent',
-});
+  Template.hasMany(TemplateEvent, {
+    sourceKey: 'id',
+    foreignKey: 'templateId',
+    as: 'templateEvents',
+  });
 
-TournamentEvent.hasMany(Test, {
-  sourceKey: 'id',
-  foreignKey: 'tournamentEventId',
-  as: 'tests',
-});
+  Test.belongsTo(TournamentEvent, {
+    as: 'tournamentEvent',
+  });
 
-Tournament.hasMany(Test, {
-  sourceKey: 'id',
-  foreignKey: 'tournamentId',
-  as: 'tests',
-});
+  TournamentEvent.hasMany(Test, {
+    sourceKey: 'id',
+    foreignKey: 'tournamentEventId',
+    as: 'tests',
+  });
 
-Tournament.hasMany(TournamentEvent, {
-  sourceKey: 'id',
-  foreignKey: 'tournamentId',
-  as: 'tournamentEvents',
-});
+  Tournament.hasMany(Test, {
+    sourceKey: 'id',
+    foreignKey: 'tournamentId',
+    as: 'tests',
+  });
+
+  Tournament.hasMany(TournamentEvent, {
+    sourceKey: 'id',
+    foreignKey: 'tournamentId',
+    as: 'tournamentEvents',
+  });
+
+  return sequelize;
+};
 
 export {
-  sequelize as db,
+  createDatabase,
   TemplateEvent,
   Template,
   Test,

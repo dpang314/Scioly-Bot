@@ -4,6 +4,7 @@ import {
 } from 'sequelize';
 import Test from './TestModel';
 import TournamentEvent from './TournamentEventModel';
+import yup from 'yup';
 
 interface TournamentAttributes {
   id: string,
@@ -15,6 +16,14 @@ interface TournamentAttributes {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface TournamentCreationAttributes extends Optional<TournamentAttributes, 'id'> {}
+
+const tournamentSchema: yup.SchemaOf<TournamentCreationAttributes> = yup.object({
+  id: yup.string().optional(),
+  userId: yup.string().required(),
+  name: yup.string().required(),
+  active: yup.boolean().required(),
+  submission: yup.string().required(),
+})
 
 class Tournament extends
   Model<TournamentAttributes, TournamentCreationAttributes> implements TournamentAttributes {
@@ -80,4 +89,5 @@ class Tournament extends
 }
 
 export default Tournament;
+export { tournamentSchema };
 export type { TournamentAttributes, TournamentCreationAttributes };

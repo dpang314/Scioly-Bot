@@ -1,6 +1,7 @@
 import {
   DataTypes, Model, Optional, Sequelize,
 } from 'sequelize';
+import { object, number, string, SchemaOf } from 'yup';
 
 interface TemplateEventAttributes {
   id: string,
@@ -10,6 +11,14 @@ interface TemplateEventAttributes {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface TemplateEventCreationAttributes extends Optional<TemplateEventAttributes, 'id'> {}
+
+const templateEventSchema: SchemaOf<TemplateEventCreationAttributes> = object({
+  id: string().optional(),
+  name: string().max(100, 'Must be 100 characters or less').required(),
+  minutes: number().min(0, 'Test can\'t have a negative time limit')
+  .max(1440, 'Test must be under 1440 minutes long')
+  .required(),
+})
 
 class TemplateEvent extends Model<TemplateEventAttributes, TemplateEventCreationAttributes>
   implements TemplateEventAttributes {
@@ -53,4 +62,5 @@ class TemplateEvent extends Model<TemplateEventAttributes, TemplateEventCreation
 }
 
 export default TemplateEvent;
+export { templateEventSchema };
 export type { TemplateEventAttributes, TemplateEventCreationAttributes };

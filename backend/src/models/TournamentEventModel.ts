@@ -3,6 +3,7 @@ import {
   DataTypes, HasManyCreateAssociationMixin, Model, Optional, Sequelize,
 } from 'sequelize';
 import Test from './TestModel';
+import yup from 'yup';
 
 interface TournamentEventAttributes {
   id: string,
@@ -13,6 +14,13 @@ interface TournamentEventAttributes {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface TournamentEventCreationAttributes extends Optional<TournamentEventAttributes, 'id'> {}
+
+const tournamentEventSchema: yup.SchemaOf<TournamentEventCreationAttributes> = yup.object({
+  id: yup.string().optional(),
+  name: yup.string().required(),
+  minutes: yup.number().required(),
+  link: yup.string().required(),
+});
 
 class TournamentEvent extends Model<TournamentEventAttributes, TournamentEventCreationAttributes>
   implements TournamentEventAttributes {
@@ -68,4 +76,5 @@ class TournamentEvent extends Model<TournamentEventAttributes, TournamentEventCr
 }
 
 export default TournamentEvent;
+export { tournamentEventSchema };
 export type { TournamentEventAttributes, TournamentEventCreationAttributes };

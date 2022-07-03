@@ -3,6 +3,7 @@ import {
   DataTypes, HasManyCreateAssociationMixin, Model, Optional, Sequelize,
 } from 'sequelize';
 import TemplateEvent from './TemplateEventModel';
+import yup from 'yup';
 
 interface TemplateAttributes {
   id: string,
@@ -11,6 +12,11 @@ interface TemplateAttributes {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface TemplateCreationAttributes extends Optional<TemplateAttributes, 'id'> {}
+
+const templateSchema: yup.SchemaOf<TemplateCreationAttributes> = yup.object({
+  id: yup.string().optional(),
+  name: yup.string().required(),
+})
 
 class Template extends Model<TemplateAttributes, TemplateCreationAttributes>
   implements TemplateAttributes {
@@ -48,4 +54,5 @@ class Template extends Model<TemplateAttributes, TemplateCreationAttributes>
 }
 
 export default Template;
+export { templateSchema };
 export type { TemplateAttributes, TemplateCreationAttributes };

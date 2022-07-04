@@ -6,7 +6,7 @@ import {
   Optional,
   Sequelize,
 } from 'sequelize';
-import Test from './TestModel';
+import Test, { TestCreationAttributes, testSchema } from './TestModel';
 import * as Yup from 'yup';
 
 interface TournamentEventAttributes {
@@ -14,6 +14,7 @@ interface TournamentEventAttributes {
   name: string;
   minutes: number;
   link: string;
+  tests?: TestCreationAttributes[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -26,6 +27,7 @@ const tournamentEventSchema: Yup.SchemaOf<TournamentEventCreationAttributes> =
     name: Yup.string().required(),
     minutes: Yup.number().required(),
     link: Yup.string().required(),
+    tests: Yup.array().of(testSchema).optional(),
   });
 
 class TournamentEvent

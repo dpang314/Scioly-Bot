@@ -6,12 +6,13 @@ import {
   Optional,
   Sequelize,
 } from 'sequelize';
-import TemplateEvent from './TemplateEventModel';
+import TemplateEvent, { TemplateEventCreationAttributes, templateEventSchema } from './TemplateEventModel';
 import * as Yup from 'yup';
 
 interface TemplateAttributes {
   id: string;
   name: string;
+  templateEvents?: TemplateEventCreationAttributes[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -21,6 +22,7 @@ interface TemplateCreationAttributes
 const templateSchema: Yup.SchemaOf<TemplateCreationAttributes> = Yup.object({
   id: Yup.string().optional(),
   name: Yup.string().required(),
+  templateEvents: Yup.array().of(templateEventSchema).optional(),
 });
 
 class Template

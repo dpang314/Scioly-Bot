@@ -8,7 +8,7 @@ import {
   Sequelize,
 } from 'sequelize';
 import Test from './TestModel';
-import TournamentEvent from './TournamentEventModel';
+import TournamentEvent, { TournamentEventCreationAttributes, tournamentEventSchema } from './TournamentEventModel';
 import * as Yup from 'yup';
 
 interface TournamentAttributes {
@@ -17,6 +17,7 @@ interface TournamentAttributes {
   name: string;
   active: boolean;
   submission: string;
+  tournamentEvents?: TournamentEventCreationAttributes[];
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
@@ -30,6 +31,7 @@ const tournamentSchema: Yup.SchemaOf<TournamentCreationAttributes> = Yup.object(
     name: Yup.string().required(),
     active: Yup.boolean().required(),
     submission: Yup.string().required(),
+    tournamentEvents: Yup.array().of(tournamentEventSchema).optional()
   },
 );
 

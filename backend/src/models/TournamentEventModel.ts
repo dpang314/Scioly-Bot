@@ -78,6 +78,7 @@ class TournamentEvent
       {
         sequelize,
         tableName: 'tournament_events',
+        timestamps: false,
       },
     );
   }

@@ -76,6 +76,7 @@ class Test
       {
         sequelize,
         tableName: 'tests',
+        timestamps: false,
       },
     );
   }

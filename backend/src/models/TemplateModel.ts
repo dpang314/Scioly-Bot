@@ -58,6 +58,7 @@ class Template
       {
         sequelize,
         tableName: 'templates',
+        timestamps: false,
       },
     );
   }

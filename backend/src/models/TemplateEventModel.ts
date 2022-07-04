@@ -33,10 +33,6 @@ class TemplateEvent
 
   declare templateId: string;
 
-  declare readonly createdAt: Date;
-
-  declare readonly updatedAt: Date;
-
   public static initialize(sequelize: Sequelize) {
     this.init(
       {
@@ -59,6 +55,7 @@ class TemplateEvent
       {
         sequelize,
         tableName: 'template_events',
+        timestamps: false,
       },
     );
   }

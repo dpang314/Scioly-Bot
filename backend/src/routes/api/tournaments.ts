@@ -5,6 +5,10 @@ import {
   Tournament,
   TournamentEvent,
 } from '../../models';
+import {
+  TournamentCreationAttributes,
+  tournamentSchema,
+} from '../../models/TournamentModel';
 
 const tournamentsRouter = Router();
 
@@ -17,25 +21,41 @@ tournamentsRouter.get('/', async (req, res) => {
 });
 
 tournamentsRouter.post('/', async (req, res) => {
+  if (!req.user) return res.status(401).send('Unauthorized');
   // user is guaranteed to exist because of middleware
-  const tournament = await Tournament.create({
+  const tournament: TournamentCreationAttributes = {
+    name: req.body.name,
+    active: req.body.active,
+    submission: req.body.submission,
+    tournamentEvents: req.body.tournamentEvents,
     userId: req.user?.id,
-    ...req.body,
-  });
-  const template = await Template.findOne({
-    where: {id: req.body.template},
-    include: [{model: TemplateEvent, as: 'templateEvents'}],
-  });
-  if (template?.templateEvents) {
-    template.templateEvents.forEach(async (templateEvent) => {
-      await tournament.createTournamentEvent({
-        name: templateEvent.name,
-        minutes: templateEvent.minutes,
-        link: '',
-      });
-    });
+  };
+  let validatedTournament;
+  try {
+    validatedTournament = await tournamentSchema.validate(tournament);
+  } catch (e) {
+    return res.status(400).send('Invalid tournament');
   }
-  res.status(200).json(tournament);
+  const tournamentModel = await Tournament.create(validatedTournament);
+
+  if (req.body.template) {
+    const template = await Template.findOne({
+      where: {id: req.body.template},
+      include: [{model: TemplateEvent, as: 'templateEvents'}],
+    });
+    if (template?.templateEvents) {
+      template.templateEvents.forEach(async (templateEvent) => {
+        await tournamentModel.createTournamentEvent({
+          name: templateEvent.name,
+          minutes: templateEvent.minutes,
+          link: '',
+        });
+      });
+    }
+    const updatedTournament = await Tournament.findByPk(tournamentModel.id);
+    return res.status(200).json(updatedTournament);
+  }
+  return res.status(200).json(tournamentModel);
 });
 
 tournamentsRouter.get('/:id', async (req, res) => {

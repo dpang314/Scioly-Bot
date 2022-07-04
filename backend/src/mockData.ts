@@ -14,6 +14,11 @@ const getMockData = async () => {
 
   const mockUser = await User.create(mockUserData);
 
+  const mockOtherUser = await User.create({
+    id: 'some other user',
+    discordName: 'Some other user',
+  });
+
   const addMockUser: RequestHandler = (req, res, next) => {
     req.user = mockUserData;
     next();
@@ -25,6 +30,7 @@ const getMockData = async () => {
     mockDatabase,
     mockApp,
     mockUser,
+    mockOtherUser,
   };
 };
 

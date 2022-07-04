@@ -6,7 +6,7 @@ import {
   Optional,
   Sequelize,
 } from 'sequelize';
-import Test, { TestCreationAttributes, testSchema } from './TestModel';
+import Test, {TestCreationAttributes, testSchema} from './TestModel';
 import * as Yup from 'yup';
 
 interface TournamentEventAttributes {

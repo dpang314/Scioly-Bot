@@ -6,7 +6,10 @@ import {
   Optional,
   Sequelize,
 } from 'sequelize';
-import TemplateEvent, { TemplateEventCreationAttributes, templateEventSchema } from './TemplateEventModel';
+import TemplateEvent, {
+  TemplateEventCreationAttributes,
+  templateEventSchema,
+} from './TemplateEventModel';
 import * as Yup from 'yup';
 
 interface TemplateAttributes {

@@ -8,7 +8,10 @@ import {
   Sequelize,
 } from 'sequelize';
 import Test from './TestModel';
-import TournamentEvent, { TournamentEventCreationAttributes, tournamentEventSchema } from './TournamentEventModel';
+import TournamentEvent, {
+  TournamentEventCreationAttributes,
+  tournamentEventSchema,
+} from './TournamentEventModel';
 import * as Yup from 'yup';
 
 interface TournamentAttributes {
@@ -31,7 +34,7 @@ const tournamentSchema: Yup.SchemaOf<TournamentCreationAttributes> = Yup.object(
     name: Yup.string().required(),
     active: Yup.boolean().required(),
     submission: Yup.string().required(),
-    tournamentEvents: Yup.array().of(tournamentEventSchema).optional()
+    tournamentEvents: Yup.array().of(tournamentEventSchema).optional(),
   },
 );
 

@@ -1,23 +1,20 @@
-import {Express} from 'express';
-import {Sequelize} from 'sequelize/types';
 import request from 'supertest';
 
-import getMockData from '../mockData';
+import {mockApp, mockDatabase} from '../mock_data/server';
+import {mockUser, mockOtherUser} from '../mock_data/users';
 
 import {Tournament, TournamentEvent, User} from '../models';
-import {TournamentCreationAttributes} from '../models/TournamentModel';
+import {
+  validTournament,
+  validOtherTournament,
+  invalidTournament,
+  incompleteTournament,
+} from '../mock_data/tournaments';
 
 describe('tournament endpoint', () => {
-  let mockData: {
-    mockDatabase: Sequelize;
-    mockApp: Express;
-    mockUser: User;
-    mockOtherUser: User;
-  };
   let server: request.SuperTest<request.Test>;
   beforeAll(async () => {
-    mockData = await getMockData();
-    server = request(mockData.mockApp);
+    server = request(mockApp);
   });
 
   describe('GET', () => {
@@ -26,32 +23,15 @@ describe('tournament endpoint', () => {
 
     beforeEach(async () => {
       // clears database
-      await mockData.mockDatabase.sync({force: true});
-      tournament = await Tournament.create(
-        {
-          userId: mockData.mockUser.id,
-          name: 'test tournament',
-          active: false,
-          submission: 'https://google.com/',
-          tournamentEvents: [
-            {
-              name: 'test event',
-              minutes: 1000,
-              link: 'test event link',
-            },
-          ],
-        },
-        {include: [{model: TournamentEvent, as: 'tournamentEvents'}]},
-      );
-      otherTournament = await Tournament.create(
-        {
-          userId: mockData.mockOtherUser.id,
-          name: "some other tournament mock user doesn't have access to",
-          active: true,
-          submission: 'https://github.com/',
-        },
-        {include: [{model: TournamentEvent, as: 'tournamentEvents'}]},
-      );
+      await mockDatabase.sync({force: true});
+      await User.create(mockUser);
+      await User.create(mockOtherUser);
+      tournament = await Tournament.create(validTournament, {
+        include: [{model: TournamentEvent, as: 'tournamentEvents'}],
+      });
+      otherTournament = await Tournament.create(validOtherTournament, {
+        include: [{model: TournamentEvent, as: 'tournamentEvents'}],
+      });
     });
     test("getting list only returns user's tournaments", async () => {
       const response = await server.get('/api/tournaments');
@@ -81,32 +61,25 @@ describe('tournament endpoint', () => {
   });
 
   describe('POST', () => {
-    let tournament: TournamentCreationAttributes;
-
     beforeEach(async () => {
-      await mockData.mockDatabase.sync({force: true});
-      tournament = {
-        userId: mockData.mockUser.id,
-        name: 'test tournament',
-        active: false,
-        submission: 'https://google.com/',
-        tournamentEvents: [
-          {
-            name: 'test event',
-            minutes: 1000,
-            link: 'test event link',
-          },
-        ],
-      };
+      await mockDatabase.sync({force: true});
     });
     test('valid tournament succeeds', async () => {
-      const response = await server.post('/api/tournaments').send(tournament);
-      expect(response.statusCode).toBe(200);
-    });
-    test('invalid tournament returns 400', async () => {
       const response = await server
         .post('/api/tournaments')
-        .send({password: 'hunter2'});
+        .send(validTournament);
+      expect(response.statusCode).toBe(200);
+    });
+    test('incomplete tournament returns 400', async () => {
+      const response = await server
+        .post('/api/tournaments')
+        .send(incompleteTournament);
+      expect(response.statusCode).toBe(400);
+    });
+    test('tournament with invalid field returns 400', async () => {
+      const response = await server
+        .post('/api/tournaments')
+        .send(invalidTournament);
       expect(response.statusCode).toBe(400);
     });
     // TODO add a test with a template

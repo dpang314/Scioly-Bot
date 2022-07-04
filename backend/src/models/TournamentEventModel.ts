@@ -24,8 +24,11 @@ interface TournamentEventCreationAttributes
 const tournamentEventSchema: Yup.SchemaOf<TournamentEventCreationAttributes> =
   Yup.object({
     id: Yup.string().optional(),
-    name: Yup.string().required(),
-    minutes: Yup.number().required(),
+    name: Yup.string().max(100, 'Must be 100 characters or less').required(),
+    minutes: Yup.number()
+      .min(0, "Test can't have a negative time limit")
+      .max(1440, 'Test must be under 1440 minutes long')
+      .required(),
     link: Yup.string().required(),
     tests: Yup.array().of(testSchema).optional(),
   });

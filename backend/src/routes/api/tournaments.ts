@@ -10,6 +10,7 @@ const tournamentsRouter = Router();
 
 tournamentsRouter.get('/', async (req, res) => {
   const tournaments = await Tournament.findAll({
+    where: {userId: req.user?.id},
     include: [{model: TournamentEvent, as: 'tournamentEvents'}],
   });
   res.status(200).json(tournaments);
@@ -18,7 +19,7 @@ tournamentsRouter.get('/', async (req, res) => {
 tournamentsRouter.post('/', async (req, res) => {
   // user is guaranteed to exist because of middleware
   const tournament = await Tournament.create({
-    userId: (req.user as Express.User).id,
+    userId: req.user?.id,
     ...req.body,
   });
   const template = await Template.findOne({

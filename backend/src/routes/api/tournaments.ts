@@ -40,11 +40,14 @@ tournamentsRouter.post('/', async (req, res) => {
 
 tournamentsRouter.get('/:id', async (req, res) => {
   const {id} = req.params;
-  const tournaments = await Tournament.findOne({
+  const tournament = await Tournament.findOne({
     where: {id},
     include: [{model: TournamentEvent, as: 'tournamentEvents'}],
   });
-  res.status(200).json(tournaments);
+  if (!tournament) res.status(404).send('Not found');
+  else if (tournament.userId != req.user?.id)
+    res.status(401).send('Unauthorized');
+  else res.status(200).json(tournament);
 });
 
 tournamentsRouter.put('/:id', async (req, res) => {

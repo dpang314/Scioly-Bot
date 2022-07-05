@@ -1,4 +1,6 @@
-import {DataTypes, Optional, Model, Sequelize} from 'sequelize';
+import {DataTypes, Optional, Model, Sequelize, Association} from 'sequelize';
+import Template from './TemplateModel';
+import Tournament from './TournamentModel';
 
 interface UserAttributes {
   id: string;
@@ -15,6 +17,14 @@ class User
   declare id: string;
 
   declare discordName: string;
+
+  declare readonly templates?: Template[];
+
+  declare readonly tournaments?: Tournament[];
+
+  declare static associations: {
+    tournaments: Association<User, Tournament>;
+  };
 
   public static initialize(sequelize: Sequelize) {
     this.init(

@@ -11,7 +11,7 @@ tournamentsRouter.get('/', async (req, res) => {
   const tournaments = await req.user?.getTournaments({
     include: [{model: TournamentEvent, as: 'tournamentEvents'}],
   });
-  // Return tournaments or empty
+  // avoids returning undefined
   res.status(200).json(tournaments ? tournaments : []);
 });
 

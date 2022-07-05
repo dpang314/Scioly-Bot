@@ -19,7 +19,6 @@ const validTournament2: TournamentCreationAttributes = {
   submission: 'link',
   tournamentEvents: [
     {
-      id: 'test event 2 id',
       name: 'another test event',
       minutes: 10,
       link: 'another test event link',

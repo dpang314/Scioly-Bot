@@ -5,7 +5,7 @@ import {
   Model,
   Sequelize,
 } from 'sequelize';
-import Test, {TestCreationAttributes, testSchema} from './TestModel';
+import Test, {TestCreationAttributes, testCreationSchema} from './TestModel';
 import * as Yup from 'yup';
 
 interface TournamentEventAttributes {
@@ -20,7 +20,7 @@ interface TournamentEventAttributes {
 interface TournamentEventCreationAttributes
   extends Omit<TournamentEventAttributes, 'id'> {}
 
-const tournamentEventSchema: Yup.SchemaOf<TournamentEventCreationAttributes> =
+const tournamentEventCreationSchema: Yup.SchemaOf<TournamentEventCreationAttributes> =
   Yup.object({
     name: Yup.string().max(100, 'Must be 100 characters or less').required(),
     minutes: Yup.number()
@@ -28,7 +28,20 @@ const tournamentEventSchema: Yup.SchemaOf<TournamentEventCreationAttributes> =
       .max(1440, 'Test must be under 1440 minutes long')
       .required(),
     link: Yup.string().required(),
-    tests: Yup.array().of(testSchema).optional(),
+    tests: Yup.array().of(testCreationSchema).optional(),
+  });
+
+interface TournamentEventUpdateAttributes
+  extends Partial<Omit<TournamentEventAttributes, 'tests'>> {
+  id: string;
+}
+
+const tournamentEventUpdateSchema: Yup.SchemaOf<TournamentEventUpdateAttributes> =
+  Yup.object({
+    id: Yup.string().required(),
+    name: tournamentEventCreationSchema.fields.name.optional(),
+    minutes: tournamentEventCreationSchema.fields.minutes.optional(),
+    link: tournamentEventCreationSchema.fields.link.optional(),
   });
 
 class TournamentEvent
@@ -88,5 +101,5 @@ class TournamentEvent
 }
 
 export default TournamentEvent;
-export {tournamentEventSchema};
-export type {TournamentEventAttributes, TournamentEventCreationAttributes};
+export {tournamentEventCreationSchema, tournamentEventUpdateSchema};
+export type {TournamentEventAttributes, TournamentEventCreationAttributes, TournamentEventUpdateAttributes};

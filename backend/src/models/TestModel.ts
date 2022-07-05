@@ -14,7 +14,7 @@ interface TestAttributes {
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface TestCreationAttributes extends Omit<TestAttributes, 'id'> {}
 
-const testSchema: Yup.SchemaOf<TestCreationAttributes> = Yup.object({
+const testCreationSchema: Yup.SchemaOf<TestCreationAttributes> = Yup.object({
   userId: Yup.string().required(),
   partner1Id: Yup.string().optional(),
   partner2Id: Yup.string().optional(),
@@ -82,5 +82,5 @@ class Test
 }
 
 export default Test;
-export {testSchema};
+export {testCreationSchema};
 export type {TestAttributes, TestCreationAttributes};

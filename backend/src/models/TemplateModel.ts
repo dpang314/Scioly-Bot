@@ -8,7 +8,7 @@ import {
 } from 'sequelize';
 import TemplateEvent, {
   TemplateEventCreationAttributes,
-  templateEventSchema,
+  templateEventCreationSchema,
 } from './TemplateEventModel';
 import * as Yup from 'yup';
 
@@ -21,10 +21,25 @@ interface TemplateAttributes {
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface TemplateCreationAttributes extends Omit<TemplateAttributes, 'id'> {}
 
-const templateSchema: Yup.SchemaOf<TemplateCreationAttributes> = Yup.object({
-  name: Yup.string().required(),
-  templateEvents: Yup.array().of(templateEventSchema).optional(),
-});
+const templateCreationSchema: Yup.SchemaOf<TemplateCreationAttributes> =
+  Yup.object({
+    name: Yup.string().required(),
+    templateEvents: Yup.array().of(templateEventCreationSchema).optional(),
+  });
+
+// template events must be updated individually to properly create/delete
+
+interface TemplateUpdateAttributes
+  extends Partial<Omit<TemplateAttributes, 'templateEvents'>> {
+  id: string;
+}
+
+const templateUpdateSchema: Yup.SchemaOf<TemplateUpdateAttributes> = Yup.object(
+  {
+    id: Yup.string().required(),
+    name: templateCreationSchema.fields.name.optional(),
+  },
+);
 
 class Template
   extends Model<TemplateAttributes, TemplateCreationAttributes>
@@ -69,5 +84,5 @@ class Template
 }
 
 export default Template;
-export {templateSchema};
-export type {TemplateAttributes, TemplateCreationAttributes};
+export {templateCreationSchema, templateUpdateSchema};
+export type {TemplateAttributes, TemplateCreationAttributes, TemplateUpdateAttributes};

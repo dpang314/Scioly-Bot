@@ -11,13 +11,25 @@ interface TemplateEventAttributes {
 interface TemplateEventCreationAttributes
   extends Omit<TemplateEventAttributes, 'id'> {}
 
-const templateEventSchema: Yup.SchemaOf<TemplateEventCreationAttributes> =
+const templateEventCreationSchema: Yup.SchemaOf<TemplateEventCreationAttributes> =
   Yup.object({
     name: Yup.string().max(100, 'Must be 100 characters or less').required(),
     minutes: Yup.number()
       .min(0, "Test can't have a negative time limit")
       .max(1440, 'Test must be under 1440 minutes long')
       .required(),
+  });
+
+interface TemplateEventUpdateAttributes
+  extends Partial<TemplateEventAttributes> {
+  id: string;
+}
+
+const templateEventModificationSchema: Yup.SchemaOf<TemplateEventUpdateAttributes> =
+  Yup.object({
+    name: templateEventCreationSchema.fields.name.optional(),
+    minutes: templateEventCreationSchema.fields.minutes.optional(),
+    id: Yup.string().required(),
   });
 
 class TemplateEvent
@@ -61,5 +73,5 @@ class TemplateEvent
 }
 
 export default TemplateEvent;
-export {templateEventSchema};
-export type {TemplateEventAttributes, TemplateEventCreationAttributes};
+export {templateEventCreationSchema, templateEventModificationSchema};
+export type {TemplateEventAttributes, TemplateEventCreationAttributes, TemplateEventUpdateAttributes};

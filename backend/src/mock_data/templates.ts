@@ -1,4 +1,4 @@
-import { TemplateCreationAttributes } from '../models/TemplateModel';
+import {TemplateCreationAttributes} from '../models/TemplateModel';
 
 const validTemplate: TemplateCreationAttributes = {
   name: 'test template',
@@ -14,7 +14,6 @@ const validTemplate2: TemplateCreationAttributes = {
   name: 'test tournament 2',
   templateEvents: [
     {
-      id: 'test event 2 id',
       name: 'another test event',
       minutes: 10,
     },

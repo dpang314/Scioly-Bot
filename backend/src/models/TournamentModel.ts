@@ -9,7 +9,7 @@ import {
 import Test from './TestModel';
 import TournamentEvent, {
   TournamentEventCreationAttributes,
-  tournamentEventSchema,
+  tournamentEventCreationSchema,
 } from './TournamentEventModel';
 import * as Yup from 'yup';
 
@@ -25,14 +25,26 @@ interface TournamentAttributes {
 interface TournamentCreationAttributes
   extends Omit<TournamentAttributes, 'id'> {}
 
-const tournamentSchema: Yup.SchemaOf<TournamentCreationAttributes> = Yup.object(
-  {
+const tournamentCreationSchema: Yup.SchemaOf<TournamentCreationAttributes> =
+  Yup.object({
     name: Yup.string().required(),
     active: Yup.boolean().required(),
     submission: Yup.string().required(),
-    tournamentEvents: Yup.array().of(tournamentEventSchema).optional(),
-  },
-);
+    tournamentEvents: Yup.array().of(tournamentEventCreationSchema).optional(),
+  });
+
+interface TournamentUpdateAttributes
+  extends Partial<Omit<TournamentAttributes, 'tournamentEvents'>> {
+  id: string;
+}
+
+const tournamentUpdateSchema: Yup.SchemaOf<TournamentUpdateAttributes> =
+  Yup.object({
+    id: Yup.string().required(),
+    name: tournamentCreationSchema.fields.name.optional(),
+    active: tournamentCreationSchema.fields.active.optional(),
+    submission: tournamentCreationSchema.fields.submission.optional(),
+  });
 
 class Tournament
   extends Model<TournamentAttributes, TournamentCreationAttributes>
@@ -95,5 +107,5 @@ class Tournament
 }
 
 export default Tournament;
-export {tournamentSchema};
-export type {TournamentAttributes, TournamentCreationAttributes};
+export {tournamentCreationSchema, tournamentUpdateSchema};
+export type {TournamentAttributes, TournamentCreationAttributes, TournamentUpdateAttributes};

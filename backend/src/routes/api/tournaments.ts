@@ -63,29 +63,55 @@ tournamentsRouter.post('/', async (req, res) => {
 
 tournamentsRouter.put('/:id', async (req, res) => {
   const {id} = req.params;
-  const newEvents: TournamentEvent[] = [];
+  // tournament events need to be manually created/updated/deleted
+  const tournament: TournamentCreationAttributes = {
+    name: req.body.name,
+    active: req.body.active,
+    submission: req.body.submission,
+  };
+  const oldTournament = await req.user?.getTournaments({
+    where: {id},
+    include: [{model: TournamentEvent, as: 'tournamentEvents'}],
+  });
+  if (!oldTournament || !oldTournament[0])
+    return res.status(404).send('Not found');
+  try {
+    // still need to validate tournament events
+    await tournamentSchema.validate({
+      ...tournament,
+      tournamentEvents: req.body.tournamentEvents,
+    });
+  } catch (e) {
+    return res.status(400).send('Invalid tournament');
+  }
+  await oldTournament[0].update(tournament);
+  if (oldTournament[0].tournamentEvents) {
+    oldTournament[0].tournamentEvents.forEach(async (event) => {
+      if (
+        !req.body.tournamentEvents ||
+        req.body.tournamentEvents.findIndex((e) => e.id === event.id) == -1
+      ) {
+        await event.destroy();
+      }
+    });
+  }
   if (req.body.tournamentEvents) {
     req.body.tournamentEvents.forEach(async (event) => {
-      const [newEvent] = await TournamentEvent.upsert({
+      await TournamentEvent.upsert({
         ...event,
         tournamentId: id,
       });
-      newEvents.push(newEvent);
     });
   }
-  if (req.body.removed) {
-    req.body.removed.forEach(async (remove) => {
-      await TournamentEvent.destroy({
-        where: {
-          id: remove,
-        },
-      });
-    });
+  const updatedTournament = await req.user?.getTournaments({
+    where: {id},
+    include: [{model: TournamentEvent, as: 'tournamentEvents'}],
+  });
+
+  if (updatedTournament && updatedTournament[0]) {
+    return res.status(200).json(updatedTournament[0]);
   }
-  if (req.body.active !== null) {
-    await Tournament.update({active: req.body.active}, {where: {id}});
-  }
-  res.status(200).json({tournamentEvents: newEvents, active: req.body.active});
+  return res.status(404).send('Not found');
 });
 
 tournamentsRouter.delete('/:id', async (req, res) => {
@@ -97,11 +123,11 @@ tournamentsRouter.delete('/:id', async (req, res) => {
   if (tournament && tournament[0]) {
     tournament[0].tournamentEvents?.forEach(async (tournamentEvent) => {
       await tournamentEvent.destroy();
-    })
+    });
     const deletedTournament = await tournament[0].destroy();
     return res.status(200).json(deletedTournament);
   }
   return res.status(404).json('Not found');
-})
+});
 
 export default tournamentsRouter;

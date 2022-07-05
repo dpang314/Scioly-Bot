@@ -42,8 +42,6 @@ class Tournament
 {
   declare id: string;
 
-  declare userId: string;
-
   declare name: string;
 
   declare active: boolean;

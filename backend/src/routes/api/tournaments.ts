@@ -88,4 +88,20 @@ tournamentsRouter.put('/:id', async (req, res) => {
   res.status(200).json({tournamentEvents: newEvents, active: req.body.active});
 });
 
+tournamentsRouter.delete('/:id', async (req, res) => {
+  const {id} = req.params;
+  const tournament = await req.user?.getTournaments({
+    where: {id},
+    include: [{model: TournamentEvent, as: 'tournamentEvents'}],
+  });
+  if (tournament && tournament[0]) {
+    tournament[0].tournamentEvents?.forEach(async (tournamentEvent) => {
+      await tournamentEvent.destroy();
+    })
+    const deletedTournament = await tournament[0].destroy();
+    return res.status(200).json(deletedTournament);
+  }
+  return res.status(404).json('Not found');
+})
+
 export default tournamentsRouter;

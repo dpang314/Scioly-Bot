@@ -91,4 +91,45 @@ describe('tournament endpoint', () => {
     });
     // TODO add a test with a template
   });
+
+  describe('DELETE', () => {
+    let tournament: Tournament;
+    let otherTournament: Tournament;
+
+    beforeEach(async () => {
+      tournament = await mockData.mockUser.createTournament(validTournament, {
+        include: [{model: TournamentEvent, as: 'tournamentEvents'}],
+      });
+      otherTournament = await mockData.mockOtherUser.createTournament(
+        validOtherTournament,
+        {
+          include: [{model: TournamentEvent, as: 'tournamentEvents'}],
+        },
+      );
+    });
+
+    test('deleting a tournament by id succeeds', async () => {
+      const response = await server.delete(`/api/tournaments/${tournament.id}`);
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toStrictEqual(tournament.toJSON());
+      expect(await Tournament.count({ where: {id: tournament.id} })).toBe(0);
+      tournament.tournamentEvents?.forEach(async (tournamentEvent) => {
+        expect(await TournamentEvent.count({ where: {id: tournamentEvent.id }})).toBe(0);
+      })
+    });
+
+    test("getting a different user's tournament returns 404", async () => {
+      const response = await server.delete(
+        `/api/tournaments/${otherTournament.id}`,
+      );
+      expect(response.statusCode).toBe(404);
+    });
+
+    test('getting a nonexistent tournament returns 404', async () => {
+      const response = await server.delete(
+        '/api/tournaments/this-is-not-a-real-id',
+      );
+      expect(response.statusCode).toBe(404);
+    });
+  })
 });

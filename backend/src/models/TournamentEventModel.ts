@@ -3,7 +3,6 @@ import {
   DataTypes,
   HasManyCreateAssociationMixin,
   Model,
-  Optional,
   Sequelize,
 } from 'sequelize';
 import Test, {TestCreationAttributes, testSchema} from './TestModel';
@@ -19,11 +18,10 @@ interface TournamentEventAttributes {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface TournamentEventCreationAttributes
-  extends Optional<TournamentEventAttributes, 'id'> {}
+  extends Omit<TournamentEventAttributes, 'id'> {}
 
 const tournamentEventSchema: Yup.SchemaOf<TournamentEventCreationAttributes> =
   Yup.object({
-    id: Yup.string().optional(),
     name: Yup.string().max(100, 'Must be 100 characters or less').required(),
     minutes: Yup.number()
       .min(0, "Test can't have a negative time limit")

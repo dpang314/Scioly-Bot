@@ -1,4 +1,4 @@
-import {DataTypes, Model, Optional, Sequelize} from 'sequelize';
+import {DataTypes, Model, Sequelize} from 'sequelize';
 import * as Yup from 'yup';
 
 interface TemplateEventAttributes {
@@ -9,11 +9,10 @@ interface TemplateEventAttributes {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface TemplateEventCreationAttributes
-  extends Optional<TemplateEventAttributes, 'id'> {}
+  extends Omit<TemplateEventAttributes, 'id'> {}
 
 const templateEventSchema: Yup.SchemaOf<TemplateEventCreationAttributes> =
   Yup.object({
-    id: Yup.string().optional(),
     name: Yup.string().max(100, 'Must be 100 characters or less').required(),
     minutes: Yup.number()
       .min(0, "Test can't have a negative time limit")

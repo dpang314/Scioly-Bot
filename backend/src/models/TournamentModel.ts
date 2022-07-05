@@ -4,7 +4,6 @@ import {
   HasManyAddAssociationMixin,
   HasManyCreateAssociationMixin,
   Model,
-  Optional,
   Sequelize,
 } from 'sequelize';
 import Test from './TestModel';
@@ -24,11 +23,10 @@ interface TournamentAttributes {
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface TournamentCreationAttributes
-  extends Optional<TournamentAttributes, 'id'> {}
+  extends Omit<TournamentAttributes, 'id'> {}
 
 const tournamentSchema: Yup.SchemaOf<TournamentCreationAttributes> = Yup.object(
   {
-    id: Yup.string().optional(),
     name: Yup.string().required(),
     active: Yup.boolean().required(),
     submission: Yup.string().required(),

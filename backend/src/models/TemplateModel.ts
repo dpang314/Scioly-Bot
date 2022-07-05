@@ -2,8 +2,8 @@ import {
   Association,
   DataTypes,
   HasManyCreateAssociationMixin,
+  HasManyGetAssociationsMixin,
   Model,
-  Optional,
   Sequelize,
 } from 'sequelize';
 import TemplateEvent, {
@@ -19,11 +19,9 @@ interface TemplateAttributes {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface TemplateCreationAttributes
-  extends Optional<TemplateAttributes, 'id'> {}
+interface TemplateCreationAttributes extends Omit<TemplateAttributes, 'id'> {}
 
 const templateSchema: Yup.SchemaOf<TemplateCreationAttributes> = Yup.object({
-  id: Yup.string().optional(),
   name: Yup.string().required(),
   templateEvents: Yup.array().of(templateEventSchema).optional(),
 });
@@ -36,6 +34,7 @@ class Template
 
   declare name: string;
 
+  declare getTemplateEvents: HasManyGetAssociationsMixin<TemplateEvent>;
   declare createTemplateEvent: HasManyCreateAssociationMixin<TemplateEvent>;
 
   declare readonly templateEvents?: TemplateEvent[];

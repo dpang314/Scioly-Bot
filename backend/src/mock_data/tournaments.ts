@@ -1,8 +1,6 @@
 import {TournamentCreationAttributes} from '../models/TournamentModel';
-import {mockOtherUser, mockUser} from './users';
 
 const validTournament: TournamentCreationAttributes = {
-  userId: mockUser.id,
   name: 'test tournament',
   active: false,
   submission: 'https://google.com/',
@@ -16,7 +14,6 @@ const validTournament: TournamentCreationAttributes = {
 };
 
 const validOtherTournament: TournamentCreationAttributes = {
-  userId: mockOtherUser.id,
   name: "some other tournament mock user doesn't have access to",
   active: true,
   submission: 'https://github.com/',
@@ -26,8 +23,7 @@ const incompleteTournament = {
   name: 'hunter2',
 };
 
-const invalidTournament = {
-  userId: mockUser.id,
+const invalidTournament: TournamentCreationAttributes = {
   name: 'test tournament',
   active: false,
   submission: 'https://google.com/',

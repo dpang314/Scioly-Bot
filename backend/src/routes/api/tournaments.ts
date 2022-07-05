@@ -1,10 +1,5 @@
 import {Router} from 'express';
-import {
-  Template,
-  TemplateEvent,
-  Tournament,
-  TournamentEvent,
-} from '../../models';
+import {TemplateEvent, Tournament, TournamentEvent} from '../../models';
 import {
   TournamentCreationAttributes,
   tournamentSchema,
@@ -13,22 +8,29 @@ import {
 const tournamentsRouter = Router();
 
 tournamentsRouter.get('/', async (req, res) => {
-  const tournaments = await Tournament.findAll({
-    where: {userId: req.user?.id},
+  const tournaments = await req.user?.getTournaments({
     include: [{model: TournamentEvent, as: 'tournamentEvents'}],
   });
-  res.status(200).json(tournaments);
+  // Return tournaments or empty
+  res.status(200).json(tournaments ? tournaments : []);
+});
+
+tournamentsRouter.get('/:id', async (req, res) => {
+  const {id} = req.params;
+  const tournament = await req.user?.getTournaments({
+    where: {id},
+    include: [{model: TournamentEvent, as: 'tournamentEvents'}],
+  });
+  if (!tournament || tournament.length == 0) res.status(404).send('Not found');
+  else res.status(200).json(tournament[0]);
 });
 
 tournamentsRouter.post('/', async (req, res) => {
-  if (!req.user) return res.status(401).send('Unauthorized');
-  // user is guaranteed to exist because of middleware
   const tournament: TournamentCreationAttributes = {
     name: req.body.name,
     active: req.body.active,
     submission: req.body.submission,
     tournamentEvents: req.body.tournamentEvents,
-    userId: req.user?.id,
   };
   let validatedTournament;
   try {
@@ -36,38 +38,27 @@ tournamentsRouter.post('/', async (req, res) => {
   } catch (e) {
     return res.status(400).send('Invalid tournament');
   }
-  const tournamentModel = await Tournament.create(validatedTournament);
+  const tournamentModel = await req.user?.createTournament(validatedTournament);
 
   if (req.body.template) {
-    const template = await Template.findOne({
+    const template = await req.user?.getTemplates({
       where: {id: req.body.template},
+      limit: 1,
       include: [{model: TemplateEvent, as: 'templateEvents'}],
     });
-    if (template?.templateEvents) {
-      template.templateEvents.forEach(async (templateEvent) => {
-        await tournamentModel.createTournamentEvent({
+    if (template && template[0].templateEvents) {
+      template[0].templateEvents.forEach(async (templateEvent) => {
+        await tournamentModel?.createTournamentEvent({
           name: templateEvent.name,
           minutes: templateEvent.minutes,
           link: '',
         });
       });
     }
-    const updatedTournament = await Tournament.findByPk(tournamentModel.id);
+    const updatedTournament = await Tournament.findByPk(tournamentModel?.id);
     return res.status(200).json(updatedTournament);
   }
   return res.status(200).json(tournamentModel);
-});
-
-tournamentsRouter.get('/:id', async (req, res) => {
-  const {id} = req.params;
-  const tournament = await Tournament.findOne({
-    where: {id},
-    include: [{model: TournamentEvent, as: 'tournamentEvents'}],
-  });
-  if (!tournament) res.status(404).send('Not found');
-  else if (tournament.userId != req.user?.id)
-    res.status(401).send('Unauthorized');
-  else res.status(200).json(tournament);
 });
 
 tournamentsRouter.put('/:id', async (req, res) => {

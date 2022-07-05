@@ -1,69 +1,76 @@
 import request from 'supertest';
 
-import {mockApp, mockDatabase} from '../mock_data/server';
-import {mockUser, mockOtherUser} from '../mock_data/users';
-
-import {Tournament, TournamentEvent, User} from '../models';
+import {Tournament, TournamentEvent} from '../models';
 import {
   validTournament,
   validOtherTournament,
   invalidTournament,
   incompleteTournament,
 } from '../mock_data/tournaments';
+import createMockApp, {MockApp} from '../mock_data/app';
 
 describe('tournament endpoint', () => {
   let server: request.SuperTest<request.Test>;
-  beforeAll(async () => {
-    server = request(mockApp);
+  let mockData: MockApp;
+  beforeEach(async () => {
+    mockData = await createMockApp();
+    server = request(mockData.mockApp);
   });
 
   describe('GET', () => {
-    let tournament: Tournament;
-    let otherTournament: Tournament;
-
-    beforeEach(async () => {
-      // clears database
-      await mockDatabase.sync({force: true});
-      await User.create(mockUser);
-      await User.create(mockOtherUser);
-      tournament = await Tournament.create(validTournament, {
-        include: [{model: TournamentEvent, as: 'tournamentEvents'}],
-      });
-      otherTournament = await Tournament.create(validOtherTournament, {
-        include: [{model: TournamentEvent, as: 'tournamentEvents'}],
+    describe('without tournaments', () => {
+      test('getting list of user without tournaments returns empty array', async () => {
+        const response = await server.get('/api/tournaments');
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toStrictEqual([]);
       });
     });
-    test("getting list only returns user's tournaments", async () => {
-      const response = await server.get('/api/tournaments');
-      expect(response.statusCode).toBe(200);
-      expect(response.body).toStrictEqual([tournament.toJSON()]);
-    });
 
-    test('getting a tournament by id succeeds', async () => {
-      const response = await server.get(`/api/tournaments/${tournament.id}`);
-      expect(response.statusCode).toBe(200);
-      expect(response.body).toStrictEqual(tournament.toJSON());
-    });
+    describe('with tournaments', () => {
+      let tournament: Tournament;
+      let otherTournament: Tournament;
 
-    test("getting a different user's tournament returns 401", async () => {
-      const response = await server.get(
-        `/api/tournaments/${otherTournament.id}`,
-      );
-      expect(response.statusCode).toBe(401);
-    });
+      beforeEach(async () => {
+        tournament = await mockData.mockUser.createTournament(validTournament, {
+          include: [{model: TournamentEvent, as: 'tournamentEvents'}],
+        });
+        otherTournament = await mockData.mockOtherUser.createTournament(
+          validOtherTournament,
+          {
+            include: [{model: TournamentEvent, as: 'tournamentEvents'}],
+          },
+        );
+      });
 
-    test('getting a nonexistent tournament returns 404', async () => {
-      const response = await server.get(
-        '/api/tournaments/this-is-not-a-real-id',
-      );
-      expect(response.statusCode).toBe(404);
+      test("getting list only returns user's tournaments", async () => {
+        const response = await server.get('/api/tournaments');
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toStrictEqual([tournament.toJSON()]);
+      });
+
+      test('getting a tournament by id succeeds', async () => {
+        const response = await server.get(`/api/tournaments/${tournament.id}`);
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toStrictEqual(tournament.toJSON());
+      });
+
+      test("getting a different user's tournament returns 404", async () => {
+        const response = await server.get(
+          `/api/tournaments/${otherTournament.id}`,
+        );
+        expect(response.statusCode).toBe(404);
+      });
+
+      test('getting a nonexistent tournament returns 404', async () => {
+        const response = await server.get(
+          '/api/tournaments/this-is-not-a-real-id',
+        );
+        expect(response.statusCode).toBe(404);
+      });
     });
   });
 
   describe('POST', () => {
-    beforeEach(async () => {
-      await mockDatabase.sync({force: true});
-    });
     test('valid tournament succeeds', async () => {
       const response = await server
         .post('/api/tournaments')

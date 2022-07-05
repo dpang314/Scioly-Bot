@@ -53,6 +53,18 @@ const createDatabase = (DATABASE_CONNECTION: string) => {
     as: 'tournamentEvents',
   });
 
+  User.hasMany(Template, {
+    sourceKey: 'id',
+    foreignKey: 'user',
+    as: 'templates',
+  });
+
+  User.hasMany(Tournament, {
+    sourceKey: 'id',
+    foreignKey: 'user',
+    as: 'tournaments',
+  });
+
   return sequelize;
 };
 

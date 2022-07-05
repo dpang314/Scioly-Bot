@@ -16,7 +16,6 @@ import * as Yup from 'yup';
 
 interface TournamentAttributes {
   id: string;
-  userId: string;
   name: string;
   active: boolean;
   submission: string;
@@ -30,7 +29,6 @@ interface TournamentCreationAttributes
 const tournamentSchema: Yup.SchemaOf<TournamentCreationAttributes> = Yup.object(
   {
     id: Yup.string().optional(),
-    userId: Yup.string().required(),
     name: Yup.string().required(),
     active: Yup.boolean().required(),
     submission: Yup.string().required(),
@@ -76,10 +74,6 @@ class Tournament
           type: DataTypes.UUID,
           unique: true,
           defaultValue: DataTypes.UUIDV4,
-        },
-        userId: {
-          type: DataTypes.TEXT,
-          allowNull: false,
         },
         name: {
           type: DataTypes.TEXT,

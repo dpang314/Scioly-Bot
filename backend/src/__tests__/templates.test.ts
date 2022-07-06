@@ -106,7 +106,7 @@ describe('template endpoint', () => {
     test('valid partial template succeeds', async () => {
       const response = await server
         .patch(`/api/templates/${template.id}`)
-        .send({ name: 'hunter2' });
+        .send({name: 'hunter2'});
       expect(response.statusCode).toBe(200);
       expect(response.body).toStrictEqual({
         ...template.toJSON(),
@@ -153,14 +153,14 @@ describe('template endpoint', () => {
       });
     });
 
-    test("getting a different user's template returns 404", async () => {
+    test("deleting a different user's template returns 404", async () => {
       const response = await server.delete(
         `/api/templates/${otherTemplate.id}`,
       );
       expect(response.statusCode).toBe(404);
     });
 
-    test('getting a nonexistent template returns 404', async () => {
+    test('deleting a nonexistent template returns 404', async () => {
       const response = await server.delete(
         '/api/templates/this-is-not-a-real-id',
       );

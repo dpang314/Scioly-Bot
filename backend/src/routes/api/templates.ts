@@ -49,9 +49,11 @@ templatesRouter.patch('/:id', async (req, res) => {
   const templateModel = await req.user?.getTemplates({
     where: {
       id,
-    }, include: [{model: TemplateEvent, as: 'templateEvents'}],
+    },
+    include: [{model: TemplateEvent, as: 'templateEvents'}],
   });
-  if (!templateModel || !templateModel[0]) return res.status(404).send('Not found');
+  if (!templateModel || !templateModel[0])
+    return res.status(404).send('Not found');
   const template: TemplateUpdateAttributes = {
     id,
     ...req.body,

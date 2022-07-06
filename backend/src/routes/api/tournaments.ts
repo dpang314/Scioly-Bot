@@ -1,5 +1,10 @@
 import {Router} from 'express';
-import {Template, TemplateEvent, Tournament, TournamentEvent} from '../../models';
+import {
+  Template,
+  TemplateEvent,
+  Tournament,
+  TournamentEvent,
+} from '../../models';
 import {
   TournamentCreationAttributes,
   tournamentCreationSchema,
@@ -48,11 +53,15 @@ tournamentsRouter.post('/', async (req, res) => {
       limit: 1,
       include: [{model: TemplateEvent, as: 'templateEvents'}],
     });
-    if (!template || !template[0]) return res.status(404).send('Template not found');
+    if (!template || !template[0])
+      return res.status(404).send('Template not found');
   }
-  const tournamentModel = await req.user?.createTournament(validatedTournament, {
-    include: [{model: TournamentEvent, as: 'tournamentEvents'}],
-  });
+  const tournamentModel = await req.user?.createTournament(
+    validatedTournament,
+    {
+      include: [{model: TournamentEvent, as: 'tournamentEvents'}],
+    },
+  );
 
   if (template && template[0].templateEvents) {
     template[0].templateEvents.forEach(async (templateEvent) => {
@@ -76,9 +85,11 @@ tournamentsRouter.patch('/:id', async (req, res) => {
   const tournamentModel = await req.user?.getTournaments({
     where: {
       id,
-    }, include: [{model: TournamentEvent, as: 'tournamentEvents'}],
+    },
+    include: [{model: TournamentEvent, as: 'tournamentEvents'}],
   });
-  if (!tournamentModel || !tournamentModel[0]) return res.status(404).send('Not found');
+  if (!tournamentModel || !tournamentModel[0])
+    return res.status(404).send('Not found');
   const tournament: TournamentUpdateAttributes = {
     id,
     ...req.body,

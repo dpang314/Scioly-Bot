@@ -146,9 +146,12 @@ describe('tournament endpoint', () => {
       expect(response.statusCode).toBe(404);
     });
     test("valid tournament with other user's template returns 404", async () => {
-      const template = await mockData.mockOtherUser.createTemplate(validTemplate, {
-        include: [{model: TemplateEvent, as: 'templateEvents'}],
-      });
+      const template = await mockData.mockOtherUser.createTemplate(
+        validTemplate,
+        {
+          include: [{model: TemplateEvent, as: 'templateEvents'}],
+        },
+      );
       const response = await server.post('/api/tournaments').send({
         ...validTournament,
         template: template.id,
@@ -190,7 +193,9 @@ describe('tournament endpoint', () => {
       expect(response.statusCode).toBe(400);
     });
     test("modifying a different user's tournament returns 404", async () => {
-      const response = await server.patch(`/api/tournaments/${otherTournament.id}`);
+      const response = await server.patch(
+        `/api/tournaments/${otherTournament.id}`,
+      );
       expect(response.statusCode).toBe(404);
     });
   });
@@ -223,14 +228,14 @@ describe('tournament endpoint', () => {
       });
     });
 
-    test("getting a different user's tournament returns 404", async () => {
+    test("deleting a different user's tournament returns 404", async () => {
       const response = await server.delete(
         `/api/tournaments/${otherTournament.id}`,
       );
       expect(response.statusCode).toBe(404);
     });
 
-    test('getting a nonexistent tournament returns 404', async () => {
+    test('deleting a nonexistent tournament returns 404', async () => {
       const response = await server.delete(
         '/api/tournaments/this-is-not-a-real-id',
       );

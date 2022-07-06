@@ -13,24 +13,24 @@ const validTournament: TournamentCreationAttributes = {
   ],
 };
 
-const validTournament2: TournamentCreationAttributes = {
+const validTournamentWithoutEvents: TournamentCreationAttributes = {
   name: 'test tournament 2',
   active: true,
   submission: 'link',
-  tournamentEvents: [
-    {
-      name: 'another test event',
-      minutes: 10,
-      link: 'another test event link',
-    },
-  ],
+  tournamentEvents: [],
 };
 
 const validOtherTournament: TournamentCreationAttributes = {
   name: "some other tournament mock user doesn't have access to",
   active: true,
   submission: 'https://github.com/',
-  tournamentEvents: [],
+  tournamentEvents: [
+    {
+      name: 'other test event',
+      minutes: 1000,
+      link: 'test event link',
+    },
+  ],
 };
 
 const incompleteTournament = {};
@@ -44,7 +44,7 @@ const invalidTournament: TournamentCreationAttributes = {
 
 export {
   validTournament,
-  validTournament2,
+  validTournamentWithoutEvents,
   validOtherTournament,
   incompleteTournament,
   invalidTournament,

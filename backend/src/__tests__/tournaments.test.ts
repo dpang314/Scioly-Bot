@@ -1,14 +1,14 @@
 import request from 'supertest';
 
-import {Tournament, TournamentEvent} from '../models';
+import {TemplateEvent, Tournament, TournamentEvent} from '../models';
 import {
   validTournament,
   validOtherTournament,
   invalidTournament,
   incompleteTournament,
-  validTournament2,
 } from '../mock_data/tournaments';
 import createMockApp, {MockApp} from '../mock_data/app';
+import {validTemplate} from '../mock_data/templates';
 
 describe('tournament endpoint', () => {
   let server: request.SuperTest<request.Test>;
@@ -77,6 +77,27 @@ describe('tournament endpoint', () => {
         .post('/api/tournaments')
         .send(validTournament);
       expect(response.statusCode).toBe(200);
+      // can't use id because the user should never be able
+      // to define an id manually
+      const newTournament = await mockData.mockUser.getTournaments({
+        where: {
+          name: validTournament.name,
+          active: validTournament.active,
+          submission: validTournament.submission,
+        },
+        include: [{model: TournamentEvent, as: 'tournamentEvents'}],
+      });
+      expect(response.body).toStrictEqual({
+        ...validTournament,
+        tournamentEvents: [
+          {
+            ...validTournament.tournamentEvents![0],
+            id: newTournament[0].tournamentEvents![0].id,
+            tournamentId: newTournament[0].id,
+          },
+        ],
+        id: newTournament[0].id,
+      });
     });
     test('incomplete tournament returns 400', async () => {
       const response = await server
@@ -90,10 +111,53 @@ describe('tournament endpoint', () => {
         .send(invalidTournament);
       expect(response.statusCode).toBe(400);
     });
-    // TODO add a test with a template
+    test('valid tournament with template succeeds', async () => {
+      const template = await mockData.mockUser.createTemplate(validTemplate, {
+        include: [{model: TemplateEvent, as: 'templateEvents'}],
+      });
+      const response = await server.post('/api/tournaments').send({
+        ...validTournament,
+        template: template.id,
+      });
+      expect(response.statusCode).toBe(200);
+      const newTournament = await mockData.mockUser.getTournaments({
+        where: {
+          name: validTournament.name,
+          active: validTournament.active,
+          submission: validTournament.submission,
+        },
+        include: [{model: TournamentEvent, as: 'tournamentEvents'}],
+      });
+      expect(response.body.tournamentEvents.length).toBe(2);
+      expect({
+        ...response.body,
+        tournamentEvents: [],
+      }).toStrictEqual({
+        ...validTournament,
+        tournamentEvents: [],
+        id: newTournament[0].id,
+      });
+    });
+    test('valid tournament with invalid template returns 404', async () => {
+      const response = await server.post('/api/tournaments').send({
+        ...validTournament,
+        template: 'this is not a real template id',
+      });
+      expect(response.statusCode).toBe(404);
+    });
+    test("valid tournament with other user's template returns 404", async () => {
+      const template = await mockData.mockOtherUser.createTemplate(validTemplate, {
+        include: [{model: TemplateEvent, as: 'templateEvents'}],
+      });
+      const response = await server.post('/api/tournaments').send({
+        ...validTournament,
+        template: template.id,
+      });
+      expect(response.statusCode).toBe(404);
+    });
   });
 
-  describe('PUT', () => {
+  describe('PATCH', () => {
     let tournament: Tournament;
     let otherTournament: Tournament;
 
@@ -109,50 +173,24 @@ describe('tournament endpoint', () => {
       );
     });
 
-    test('valid tournament succeeds', async () => {
+    test('valid partial tournament succeeds', async () => {
       const response = await server
-        .put(`/api/tournaments/${tournament.id}`)
-        .send(validOtherTournament);
-      expect(response.statusCode).toBe(200);
-      expect(response.body).toStrictEqual({
-        ...validOtherTournament,
-        user: mockData.mockUser.id,
-        id: tournament.id,
-      });
-    });
-    test('valid tournament replaces tournamentEvents', async () => {
-      const response = await server
-        .put(`/api/tournaments/${tournament.id}`)
-        .send(validTournament2);
-      expect(response.statusCode).toBe(200);
-      expect(response.body).toStrictEqual({
-        ...validTournament2,
-        tournamentEvents: [
-          {
-            ...validTournament2.tournamentEvents![0],
-            tournamentId: tournament.id,
-          },
-        ],
-        user: mockData.mockUser.id,
-        id: tournament.id,
-      });
-    });
-    test('incomplete tournament returns 400', async () => {
-      const response = await server
-        .put(`/api/tournaments/${tournament.id}`)
+        .patch(`/api/tournaments/${tournament.id}`)
         .send(incompleteTournament);
-      expect(response.statusCode).toBe(400);
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toStrictEqual({
+        ...tournament.toJSON(),
+        ...incompleteTournament,
+      });
     });
     test('tournament with invalid field returns 400', async () => {
       const response = await server
-        .put(`/api/tournaments/${tournament.id}`)
+        .patch(`/api/tournaments/${tournament.id}`)
         .send(invalidTournament);
       expect(response.statusCode).toBe(400);
     });
     test("modifying a different user's tournament returns 404", async () => {
-      const response = await server.put(
-        `/api/tournaments/${otherTournament.id}`,
-      );
+      const response = await server.patch(`/api/tournaments/${otherTournament.id}`);
       expect(response.statusCode).toBe(404);
     });
   });

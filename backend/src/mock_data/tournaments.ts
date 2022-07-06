@@ -33,22 +33,13 @@ const validOtherTournament: TournamentCreationAttributes = {
   tournamentEvents: [],
 };
 
-const incompleteTournament = {
-  name: 'hunter2',
-};
+const incompleteTournament = {};
 
 const invalidTournament: TournamentCreationAttributes = {
-  name: 'test tournament',
+  // Exceeds maximum length
+  name: 'a loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong name over 100 characters long',
   active: false,
   submission: 'https://google.com/',
-  tournamentEvents: [
-    {
-      name: 'test event',
-      // Exceeds maximum time set with yup
-      minutes: 10000000,
-      link: 'test event link',
-    },
-  ],
 };
 
 export {

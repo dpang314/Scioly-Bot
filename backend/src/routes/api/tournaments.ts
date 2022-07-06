@@ -1,8 +1,10 @@
 import {Router} from 'express';
-import {TemplateEvent, Tournament, TournamentEvent} from '../../models';
+import {Template, TemplateEvent, Tournament, TournamentEvent} from '../../models';
 import {
   TournamentCreationAttributes,
-  tournamentSchema,
+  tournamentCreationSchema,
+  TournamentUpdateAttributes,
+  tournamentUpdateSchema,
 } from '../../models/TournamentModel';
 
 const tournamentsRouter = Router();
@@ -11,7 +13,7 @@ tournamentsRouter.get('/', async (req, res) => {
   const tournaments = await req.user?.getTournaments({
     include: [{model: TournamentEvent, as: 'tournamentEvents'}],
   });
-  // avoids returning undefined
+  // Return tournaments or empty
   res.status(200).json(tournaments ? tournaments : []);
 });
 
@@ -34,84 +36,61 @@ tournamentsRouter.post('/', async (req, res) => {
   };
   let validatedTournament;
   try {
-    validatedTournament = await tournamentSchema.validate(tournament);
+    validatedTournament = await tournamentCreationSchema.validate(tournament);
   } catch (e) {
     return res.status(400).send('Invalid tournament');
   }
-  const tournamentModel = await req.user?.createTournament(validatedTournament);
 
+  let template: Template[] | undefined;
   if (req.body.template) {
-    const template = await req.user?.getTemplates({
+    template = await req.user?.getTemplates({
       where: {id: req.body.template},
       limit: 1,
       include: [{model: TemplateEvent, as: 'templateEvents'}],
     });
-    if (template && template[0].templateEvents) {
-      template[0].templateEvents.forEach(async (templateEvent) => {
-        await tournamentModel?.createTournamentEvent({
-          name: templateEvent.name,
-          minutes: templateEvent.minutes,
-          link: '',
-        });
+    if (!template || !template[0]) return res.status(404).send('Template not found');
+  }
+  const tournamentModel = await req.user?.createTournament(validatedTournament, {
+    include: [{model: TournamentEvent, as: 'tournamentEvents'}],
+  });
+
+  if (template && template[0].templateEvents) {
+    template[0].templateEvents.forEach(async (templateEvent) => {
+      await tournamentModel?.createTournamentEvent({
+        name: templateEvent.name,
+        minutes: templateEvent.minutes,
+        link: '',
       });
-    }
-    const updatedTournament = await Tournament.findByPk(tournamentModel?.id);
+    });
+    const updatedTournament = await Tournament.findByPk(tournamentModel?.id, {
+      include: [{model: TournamentEvent, as: 'tournamentEvents'}],
+    });
     return res.status(200).json(updatedTournament);
   }
+
   return res.status(200).json(tournamentModel);
 });
 
-tournamentsRouter.put('/:id', async (req, res) => {
+tournamentsRouter.patch('/:id', async (req, res) => {
   const {id} = req.params;
-  // tournament events need to be manually created/updated/deleted
-  const tournament: TournamentCreationAttributes = {
-    name: req.body.name,
-    active: req.body.active,
-    submission: req.body.submission,
-  };
-  const oldTournament = await req.user?.getTournaments({
-    where: {id},
-    include: [{model: TournamentEvent, as: 'tournamentEvents'}],
+  const tournamentModel = await req.user?.getTournaments({
+    where: {
+      id,
+    }, include: [{model: TournamentEvent, as: 'tournamentEvents'}],
   });
-  if (!oldTournament || !oldTournament[0])
-    return res.status(404).send('Not found');
+  if (!tournamentModel || !tournamentModel[0]) return res.status(404).send('Not found');
+  const tournament: TournamentUpdateAttributes = {
+    id,
+    ...req.body,
+  };
+  let validatedTournament;
   try {
-    // still need to validate tournament events
-    await tournamentSchema.validate({
-      ...tournament,
-      tournamentEvents: req.body.tournamentEvents,
-    });
+    validatedTournament = await tournamentUpdateSchema.validate(tournament);
   } catch (e) {
     return res.status(400).send('Invalid tournament');
   }
-  await oldTournament[0].update(tournament);
-  if (oldTournament[0].tournamentEvents) {
-    oldTournament[0].tournamentEvents.forEach(async (event) => {
-      if (
-        !req.body.tournamentEvents ||
-        req.body.tournamentEvents.findIndex((e) => e.id === event.id) == -1
-      ) {
-        await event.destroy();
-      }
-    });
-  }
-  if (req.body.tournamentEvents) {
-    req.body.tournamentEvents.forEach(async (event) => {
-      await TournamentEvent.upsert({
-        ...event,
-        tournamentId: id,
-      });
-    });
-  }
-  const updatedTournament = await req.user?.getTournaments({
-    where: {id},
-    include: [{model: TournamentEvent, as: 'tournamentEvents'}],
-  });
-
-  if (updatedTournament && updatedTournament[0]) {
-    return res.status(200).json(updatedTournament[0]);
-  }
-  return res.status(404).send('Not found');
+  const updatedModel = await tournamentModel[0].update(validatedTournament);
+  return res.status(200).json(updatedModel);
 });
 
 tournamentsRouter.delete('/:id', async (req, res) => {

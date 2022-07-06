@@ -10,8 +10,13 @@ const validTemplate: TemplateCreationAttributes = {
   ],
 };
 
+const validTemplateWithoutEvents: TemplateCreationAttributes = {
+  name: 'test template 2',
+  templateEvents: [],
+};
+
 const validTemplate2: TemplateCreationAttributes = {
-  name: 'test tournament 2',
+  name: 'test template 2',
   templateEvents: [
     {
       name: 'another test event',
@@ -21,8 +26,13 @@ const validTemplate2: TemplateCreationAttributes = {
 };
 
 const validOtherTemplate: TemplateCreationAttributes = {
-  name: "some other tournament mock user doesn't have access to",
-  templateEvents: [],
+  name: "some other template mock user doesn't have access to",
+  templateEvents: [
+    {
+      name: 'test event',
+      minutes: 1000,
+    },
+  ],
 };
 
 const incompleteTemplate = {
@@ -36,6 +46,7 @@ const invalidTemplate: TemplateCreationAttributes = {
 
 export {
   validTemplate,
+  validTemplateWithoutEvents,
   validTemplate2,
   validOtherTemplate,
   incompleteTemplate,

@@ -3,8 +3,8 @@ import {TournamentEvent} from '../../models';
 import {
   TournamentEventCreationAttributes,
   tournamentEventCreationSchema,
-  TournamentEventAttributes,
   tournamentEventUpdateSchema,
+  TournamentEventUpdateAttributes,
 } from '../../models/TournamentEventModel';
 
 const tournamentEventsRouter = Router();
@@ -82,7 +82,7 @@ tournamentEventsRouter.patch(
     });
     if (!tournaments || !tournaments[0])
       return res.status(404).json('Not found');
-    const tournamentEventAttributes: TournamentEventAttributes = {
+    const tournamentEventAttributes: TournamentEventUpdateAttributes = {
       id: eventId,
       ...req.body,
     };

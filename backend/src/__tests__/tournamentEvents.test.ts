@@ -10,7 +10,7 @@ import {
   incompleteTournamentEvent,
   invalidTournamentEvent,
   validTournamentEvent,
-} from '../mock_data/tournamentEvent';
+} from '../mock_data/tournamentEvents';
 import createMockApp, {MockApp} from '../mock_data/app';
 
 describe('tournament event endpoint', () => {
@@ -37,7 +37,7 @@ describe('tournament event endpoint', () => {
       );
     });
 
-    test('getting list of user without tournaments returns empty array', async () => {
+    test('getting list of tournament without tournament events returns empty array', async () => {
       const tournamentWithoutEvents = await mockData.mockUser.createTournament(
         validTournamentWithoutEvents,
       );

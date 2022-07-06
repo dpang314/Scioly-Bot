@@ -1,7 +1,7 @@
 import {CLIENT_ID, DISCORD_SECRET} from '../configLoader';
 import passport from 'passport';
 import {Strategy as DiscordStrategy} from 'passport-discord';
-import {User} from '../models';
+import {User} from 'scioly-bot-common';
 
 passport.serializeUser((user, done) => {
   if (user instanceof User) {

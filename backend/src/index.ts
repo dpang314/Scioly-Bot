@@ -1,6 +1,6 @@
 import createApp from './app';
 import {DATABASE_CONNECTION} from './configLoader';
-import {createDatabase} from './models';
+import {createDatabase} from 'scioly-bot-common';
 
 const database = createDatabase(DATABASE_CONNECTION);
 

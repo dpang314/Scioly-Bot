@@ -1,11 +1,11 @@
 import {Router} from 'express';
-import {TournamentEvent} from '../../models';
 import {
+  TournamentEvent,
   TournamentEventCreationAttributes,
   tournamentEventCreationSchema,
   tournamentEventUpdateSchema,
   TournamentEventUpdateAttributes,
-} from '../../models/TournamentEventModel';
+} from 'scioly-bot-common';
 
 const tournamentEventsRouter = Router();
 

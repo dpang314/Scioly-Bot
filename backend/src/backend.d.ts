@@ -1,4 +1,4 @@
-import {User as UserModel} from './models';
+import {User as UserModel} from 'scioly-bot-common';
 
 declare global {
   namespace Express {

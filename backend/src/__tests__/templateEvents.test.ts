@@ -1,9 +1,17 @@
 import request from 'supertest';
 
-import {Template, TemplateEvent} from '../models';
-import { incompleteTemplateEvent, invalidTemplateEvent, validTemplateEvent } from '../mock_data/templateEvents';
+import {Template, TemplateEvent} from 'scioly-bot-common';
+import {
+  incompleteTemplateEvent,
+  invalidTemplateEvent,
+  validTemplateEvent,
+} from '../mock_data/templateEvents';
 import createMockApp, {MockApp} from '../mock_data/app';
-import { validOtherTemplate, validTemplate, validTemplateWithoutEvents } from '../mock_data/templates';
+import {
+  validOtherTemplate,
+  validTemplate,
+  validTemplateWithoutEvents,
+} from '../mock_data/templates';
 
 describe('template event endpoint', () => {
   let server: request.SuperTest<request.Test>;
@@ -41,9 +49,7 @@ describe('template event endpoint', () => {
     });
 
     test("getting list returns template's events", async () => {
-      const response = await server.get(
-        `/api/templates/${template.id}/events`,
-      );
+      const response = await server.get(`/api/templates/${template.id}/events`);
       expect(response.statusCode).toBe(200);
       expect(response.body).toStrictEqual(
         template.templateEvents?.map((event) => event.toJSON()),
@@ -57,9 +63,7 @@ describe('template event endpoint', () => {
         }`,
       );
       expect(response.statusCode).toBe(200);
-      expect(response.body).toStrictEqual(
-        template.templateEvents![0].toJSON(),
-      );
+      expect(response.body).toStrictEqual(template.templateEvents![0].toJSON());
     });
 
     test("getting a different user's template event returns 404", async () => {
@@ -108,8 +112,7 @@ describe('template event endpoint', () => {
         .post(`/api/templates/${templateWithoutEvents.id}/events`)
         .send(validTemplateEvent);
       expect(response.statusCode).toBe(200);
-      const newTemplateEvents =
-        await templateWithoutEvents.getTemplateEvents();
+      const newTemplateEvents = await templateWithoutEvents.getTemplateEvents();
       expect(newTemplateEvents.length).toBe(1);
       expect(response.body).toStrictEqual(newTemplateEvents![0].toJSON());
     });
@@ -142,9 +145,7 @@ describe('template event endpoint', () => {
           include: [{model: TemplateEvent, as: 'templateEvents'}],
         },
       );
-      templateEvent = await template.createTemplateEvent(
-        validTemplateEvent,
-      );
+      templateEvent = await template.createTemplateEvent(validTemplateEvent);
     });
 
     test('invalid template returns 404', async () => {
@@ -196,9 +197,7 @@ describe('template event endpoint', () => {
           include: [{model: TemplateEvent, as: 'templateEvents'}],
         },
       );
-      templateEvent = await template.createTemplateEvent(
-        validTemplateEvent,
-      );
+      templateEvent = await template.createTemplateEvent(validTemplateEvent);
     });
 
     test('invalid template returns 404', async () => {
@@ -221,13 +220,13 @@ describe('template event endpoint', () => {
       );
       expect(response.statusCode).toBe(200);
       expect(response.body).toStrictEqual(templateEvent.toJSON());
-      expect(
-        await TemplateEvent.count({where: {id: templateEvent.id}}),
-      ).toBe(0);
+      expect(await TemplateEvent.count({where: {id: templateEvent.id}})).toBe(
+        0,
+      );
       template.templateEvents?.forEach(async (templateEvent) => {
-        expect(
-          await TemplateEvent.count({where: {id: templateEvent.id}}),
-        ).toBe(0);
+        expect(await TemplateEvent.count({where: {id: templateEvent.id}})).toBe(
+          0,
+        );
       });
     });
 

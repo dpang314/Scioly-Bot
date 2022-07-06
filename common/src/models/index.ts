@@ -68,6 +68,13 @@ const createDatabase = (DATABASE_CONNECTION: string) => {
   return sequelize;
 };
 
+export * from './TemplateModel';
+export * from './TemplateEventModel';
+export * from './TestModel';
+export * from './TournamentEventModel';
+export * from './TournamentModel';
+export * from './User';
+
 export {
   createDatabase,
   TemplateEvent,

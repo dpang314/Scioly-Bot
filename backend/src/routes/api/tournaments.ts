@@ -4,13 +4,11 @@ import {
   TemplateEvent,
   Tournament,
   TournamentEvent,
-} from '../../models';
-import {
   TournamentCreationAttributes,
   tournamentCreationSchema,
   TournamentUpdateAttributes,
   tournamentUpdateSchema,
-} from '../../models/TournamentModel';
+} from 'scioly-bot-common';
 
 const tournamentsRouter = Router();
 

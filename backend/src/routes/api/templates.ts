@@ -1,11 +1,11 @@
 import {Router} from 'express';
-import {TemplateEvent} from '../../models';
 import {
+  TemplateEvent,
   TemplateCreationAttributes,
   templateCreationSchema,
   TemplateUpdateAttributes,
   templateUpdateSchema,
-} from '../../models/TemplateModel';
+} from 'scioly-bot-common';
 
 const templatesRouter = Router();
 

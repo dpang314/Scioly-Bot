@@ -1,4 +1,4 @@
-import {TournamentEventCreationAttributes} from '../models/TournamentEventModel';
+import {TournamentEventCreationAttributes} from 'scioly-bot-common';
 
 const validTournamentEvent: TournamentEventCreationAttributes = {
   name: 'test event',

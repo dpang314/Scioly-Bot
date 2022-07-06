@@ -1,6 +1,6 @@
 import request from 'supertest';
 
-import {Template, TemplateEvent} from '../models';
+import {Template, TemplateEvent} from 'scioly-bot-common';
 import {
   validTemplate,
   validOtherTemplate,

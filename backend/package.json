@@ -1,6 +1,7 @@
 {
   "name": "scioly-bot-backend",
   "version": "1.0.0",
+  "main": "build/index",
   "description": "",
   "scripts": {
     "dev": "ts-node src/index.ts",

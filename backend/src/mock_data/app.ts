@@ -1,7 +1,6 @@
 import {RequestHandler} from 'express';
 import createApp from '../app';
-import {createDatabase} from '../models';
-import User from '../models/User';
+import {createDatabase, User} from 'scioly-bot-common';
 import {Express} from 'express';
 import {Sequelize} from 'sequelize/types';
 

@@ -1,14 +1,19 @@
 {
   "name": "scioly-bot",
+  "workspaces": [
+    "backend",
+    "bot",
+    "frontend",
+    "common"
+  ],
   "version": "1.0.0",
   "description": "",
   "main": "index.ts",
   "scripts": {
-    "postinstall": "concurrently \"cd frontend && npm install\" \"cd backend && npm install\" \"cd bot && npm install\"",
-    "all:lint": "eslint .",
+    "lint": "eslint .",
     "format": "prettier --write .",
-    "start": "cd backend && npm run backend:start",
-    "all:build": "concurrently \"cd frontend && npm run frontend:build\" \"cd backend && npm run backend:build\" \"cd bot && npm run bot:build\"",
+    "start": "npm run start --workspace=backend",
+    "build": "npm run build --workspaces",
     "e2e": "start-server-and-test http://localhost:5000 'cypress open'",
     "e2e:headless": "start-server-and-test next:start http://localhost:3000 cypress:headless"
   },

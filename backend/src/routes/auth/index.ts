@@ -19,4 +19,11 @@ authRouter.get('/discord/user', async (req, res) => {
   res.json(req.user);
 });
 
+authRouter.post('/logout', (req, res, next) => {
+  req.logout((err) => {
+    if (err) return next(err);
+    res.redirect(NODE_ENV == 'development' ? 'http://localhost:3000/' : '/');
+  });
+})
+
 export default authRouter;

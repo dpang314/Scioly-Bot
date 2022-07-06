@@ -6,7 +6,6 @@ import {
   validOtherTemplate,
   invalidTemplate,
   incompleteTemplate,
-  validTemplate2,
 } from '../mock_data/templates';
 import createMockApp, {MockApp} from '../mock_data/app';
 
@@ -56,9 +55,7 @@ describe('template endpoint', () => {
       });
 
       test("getting a different user's template returns 404", async () => {
-        const response = await server.get(
-          `/api/templates/${otherTemplate.id}`,
-        );
+        const response = await server.get(`/api/templates/${otherTemplate.id}`);
         expect(response.statusCode).toBe(404);
       });
 
@@ -73,9 +70,7 @@ describe('template endpoint', () => {
 
   describe('POST', () => {
     test('valid templates succeeds', async () => {
-      const response = await server
-        .post('/api/templates')
-        .send(validTemplate);
+      const response = await server.post('/api/templates').send(validTemplate);
       expect(response.statusCode).toBe(200);
     });
     test('incomplete template returns 400', async () => {
@@ -90,10 +85,9 @@ describe('template endpoint', () => {
         .send(invalidTemplate);
       expect(response.statusCode).toBe(400);
     });
-    // TODO add a test with a template
   });
 
-  describe('PUT', () => {
+  describe('PATCH', () => {
     let template: Template;
     let otherTemplate: Template;
 
@@ -109,50 +103,24 @@ describe('template endpoint', () => {
       );
     });
 
-    test('valid template succeeds', async () => {
+    test('valid partial template succeeds', async () => {
       const response = await server
-        .put(`/api/templates/${template.id}`)
-        .send(validOtherTemplate);
+        .patch(`/api/templates/${template.id}`)
+        .send({ name: 'hunter2' });
       expect(response.statusCode).toBe(200);
       expect(response.body).toStrictEqual({
-        ...validOtherTemplate,
-        user: mockData.mockUser.id,
-        id: template.id,
+        ...template.toJSON(),
+        name: 'hunter2',
       });
-    });
-    test('valid template replaces templateEvents', async () => {
-      const response = await server
-        .put(`/api/templates/${template.id}`)
-        .send(validTemplate2);
-      expect(response.statusCode).toBe(200);
-      expect(response.body).toStrictEqual({
-        ...validTemplate2,
-        templateEvents: [
-          {
-            ...validTemplate2.templateEvents![0],
-            templateId: template.id,
-          },
-        ],
-        user: mockData.mockUser.id,
-        id: template.id,
-      });
-    });
-    test('incomplete template returns 400', async () => {
-      const response = await server
-        .put(`/api/templates/${template.id}`)
-        .send(incompleteTemplate);
-      expect(response.statusCode).toBe(400);
     });
     test('template with invalid field returns 400', async () => {
       const response = await server
-        .put(`/api/templates/${template.id}`)
+        .patch(`/api/templates/${template.id}`)
         .send(invalidTemplate);
       expect(response.statusCode).toBe(400);
     });
     test("modifying a different user's template returns 404", async () => {
-      const response = await server.put(
-        `/api/templates/${otherTemplate.id}`,
-      );
+      const response = await server.patch(`/api/templates/${otherTemplate.id}`);
       expect(response.statusCode).toBe(404);
     });
   });
@@ -179,9 +147,9 @@ describe('template endpoint', () => {
       expect(response.body).toStrictEqual(template.toJSON());
       expect(await Template.count({where: {id: template.id}})).toBe(0);
       template.templateEvents?.forEach(async (templateEvent) => {
-        expect(
-          await TemplateEvent.count({where: {id: templateEvent.id}}),
-        ).toBe(0);
+        expect(await TemplateEvent.count({where: {id: templateEvent.id}})).toBe(
+          0,
+        );
       });
     });
 

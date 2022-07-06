@@ -23,7 +23,7 @@ interface TemplateCreationAttributes extends Omit<TemplateAttributes, 'id'> {}
 
 const templateCreationSchema: Yup.SchemaOf<TemplateCreationAttributes> =
   Yup.object({
-    name: Yup.string().required(),
+    name: Yup.string().max(100).required(),
     templateEvents: Yup.array().of(templateEventCreationSchema).optional(),
   });
 
@@ -48,6 +48,8 @@ class Template
   declare id: string;
 
   declare name: string;
+
+  declare readonly userId?: string;
 
   declare getTemplateEvents: HasManyGetAssociationsMixin<TemplateEvent>;
   declare createTemplateEvent: HasManyCreateAssociationMixin<TemplateEvent>;
@@ -85,4 +87,8 @@ class Template
 
 export default Template;
 export {templateCreationSchema, templateUpdateSchema};
-export type {TemplateAttributes, TemplateCreationAttributes, TemplateUpdateAttributes};
+export type {
+  TemplateAttributes,
+  TemplateCreationAttributes,
+  TemplateUpdateAttributes,
+};

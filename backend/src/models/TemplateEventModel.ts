@@ -74,4 +74,8 @@ class TemplateEvent
 
 export default TemplateEvent;
 export {templateEventCreationSchema, templateEventModificationSchema};
-export type {TemplateEventAttributes, TemplateEventCreationAttributes, TemplateEventUpdateAttributes};
+export type {
+  TemplateEventAttributes,
+  TemplateEventCreationAttributes,
+  TemplateEventUpdateAttributes,
+};

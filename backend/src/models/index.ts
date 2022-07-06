@@ -55,13 +55,13 @@ const createDatabase = (DATABASE_CONNECTION: string) => {
 
   User.hasMany(Template, {
     sourceKey: 'id',
-    foreignKey: 'user',
+    foreignKey: 'userId',
     as: 'templates',
   });
 
   User.hasMany(Tournament, {
     sourceKey: 'id',
-    foreignKey: 'user',
+    foreignKey: 'userId',
     as: 'tournaments',
   });
 

@@ -30,14 +30,8 @@ const incompleteTemplate = {
 };
 
 const invalidTemplate: TemplateCreationAttributes = {
-  name: 'test tournament',
-  templateEvents: [
-    {
-      name: 'test event',
-      // Exceeds maximum time set with yup
-      minutes: 10000000,
-    },
-  ],
+  // Exceeds maximum length
+  name: 'a loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong name over 100 characters long',
 };
 
 export {

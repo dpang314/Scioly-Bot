@@ -102,4 +102,8 @@ class TournamentEvent
 
 export default TournamentEvent;
 export {tournamentEventCreationSchema, tournamentEventUpdateSchema};
-export type {TournamentEventAttributes, TournamentEventCreationAttributes, TournamentEventUpdateAttributes};
+export type {
+  TournamentEventAttributes,
+  TournamentEventCreationAttributes,
+  TournamentEventUpdateAttributes,
+};

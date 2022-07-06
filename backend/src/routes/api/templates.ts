@@ -2,7 +2,9 @@ import {Router} from 'express';
 import {TemplateEvent} from '../../models';
 import {
   TemplateCreationAttributes,
-  templateSchema,
+  templateCreationSchema,
+  TemplateUpdateAttributes,
+  templateUpdateSchema,
 } from '../../models/TemplateModel';
 
 const templatesRouter = Router();
@@ -32,62 +34,36 @@ templatesRouter.post('/', async (req, res) => {
   };
   let validatedTemplate;
   try {
-    validatedTemplate = await templateSchema.validate(template);
+    validatedTemplate = await templateCreationSchema.validate(template);
   } catch (e) {
     return res.status(400).send('Invalid template');
   }
-  const templateModel = await req.user?.createTemplate(validatedTemplate);
+  const templateModel = await req.user?.createTemplate(validatedTemplate, {
+    include: [{model: TemplateEvent, as: 'templateEvents'}],
+  });
   return res.status(200).json(templateModel);
 });
 
-templatesRouter.put('/:id', async (req, res) => {
+templatesRouter.patch('/:id', async (req, res) => {
   const {id} = req.params;
-  // template events need to be manually created/updated/deleted
-  const template: TemplateCreationAttributes = {
-    name: req.body.name,
+  const templateModel = await req.user?.getTemplates({
+    where: {
+      id,
+    }, include: [{model: TemplateEvent, as: 'templateEvents'}],
+  });
+  if (!templateModel || !templateModel[0]) return res.status(404).send('Not found');
+  const template: TemplateUpdateAttributes = {
+    id,
+    ...req.body,
   };
-  const oldTemplate = await req.user?.getTemplates({
-    where: {id},
-    include: [{model: TemplateEvent, as: 'templateEvents'}],
-  });
-  if (!oldTemplate || !oldTemplate[0]) return res.status(404).send('Not found');
+  let validatedTemplate;
   try {
-    // still need to validate tournament events
-    await templateSchema.validate({
-      ...template,
-      templateEvents: req.body.templateEvents,
-    });
+    validatedTemplate = await templateUpdateSchema.validate(template);
   } catch (e) {
-    return res.status(400).send('Invalid tournament');
+    return res.status(400).send('Invalid template');
   }
-  await oldTemplate[0].update(template);
-  if (oldTemplate[0].templateEvents) {
-    oldTemplate[0].templateEvents.forEach(async (event) => {
-      if (
-        !req.body.templateEvents ||
-        req.body.templateEvents.findIndex((e) => e.id === event.id) == -1
-      ) {
-        await event.destroy();
-      }
-    });
-  }
-  if (req.body.templateEvents) {
-    req.body.templateEvents.forEach(async (event) => {
-      await TemplateEvent.upsert({
-        ...event,
-        templateId: id,
-      });
-    });
-  }
-  const updatedTemplate = await req.user?.getTemplates({
-    where: {id},
-    include: [{model: TemplateEvent, as: 'templateEvents'}],
-  });
-
-  if (updatedTemplate && updatedTemplate[0]) {
-    return res.status(200).json(updatedTemplate[0]);
-  }
-  return res.status(404).send('Not found');
+  const updatedModel = await templateModel[0].update(validatedTemplate);
+  return res.status(200).json(updatedModel);
 });
 
 templatesRouter.delete('/:id', async (req, res) => {

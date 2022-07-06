@@ -27,7 +27,7 @@ interface TournamentCreationAttributes
 
 const tournamentCreationSchema: Yup.SchemaOf<TournamentCreationAttributes> =
   Yup.object({
-    name: Yup.string().required(),
+    name: Yup.string().max(100).required(),
     active: Yup.boolean().required(),
     submission: Yup.string().required(),
     tournamentEvents: Yup.array().of(tournamentEventCreationSchema).optional(),
@@ -57,6 +57,8 @@ class Tournament
   declare active: boolean;
 
   declare submission: string;
+
+  declare readonly userId?: string;
 
   declare readonly tournamentEvents?: TournamentEvent[];
 
@@ -108,4 +110,8 @@ class Tournament
 
 export default Tournament;
 export {tournamentCreationSchema, tournamentUpdateSchema};
-export type {TournamentAttributes, TournamentCreationAttributes, TournamentUpdateAttributes};
+export type {
+  TournamentAttributes,
+  TournamentCreationAttributes,
+  TournamentUpdateAttributes,
+};

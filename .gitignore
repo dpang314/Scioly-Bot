@@ -7,3 +7,4 @@ cypress/reports/*
 cypress/screenshots/*
 cypress/videos/*
 tsconfig.tsbuildinfo
+.DS_Store

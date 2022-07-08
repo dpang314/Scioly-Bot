@@ -1,10 +1,7 @@
 {
   "name": "scioly-bot",
   "workspaces": [
-    "backend",
-    "bot",
-    "frontend",
-    "common"
+    "packages/*"
   ],
   "version": "1.0.0",
   "description": "",
@@ -12,7 +9,6 @@
   "scripts": {
     "lint": "eslint .",
     "format": "prettier --write .",
-    "start": "npm run start --workspace=backend",
     "build": "npm run build --workspaces",
     "e2e": "start-server-and-test http://localhost:5000 'cypress open'",
     "e2e:headless": "start-server-and-test next:start http://localhost:3000 cypress:headless"

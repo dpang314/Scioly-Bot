@@ -1,0 +1,14 @@
+{
+  "name": "scioly-bot-types",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/index",
+  "scripts": {
+    "build": "tsc --build"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "yup": "^0.32.11"
+  }
+}

@@ -25,9 +25,10 @@
   "include": ["./**/*", "./**/.eslintrc.js"],
   "exclude": ["node_modules", "**/__tests__/**"],
   "references": [
-    {"path": "./backend"},
-    {"path": "./common"},
-    {"path": "./frontend"},
-    {"path": "./bot"}
+    {"path": "./packages/backend"},
+    {"path": "./packages/models"},
+    {"path": "./packages/types"},
+    {"path": "./packages/frontend"},
+    {"path": "./packages/bot"}
   ]
 }

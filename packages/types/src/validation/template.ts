@@ -1,10 +1,11 @@
 import * as Yup from 'yup';
 import {TemplateCreationAttributes, TemplateUpdateAttributes} from '../types';
+import {nameSchema} from '../util';
 import {templateEventCreationSchema} from './templateEvent';
 
 const templateCreationSchema: Yup.SchemaOf<TemplateCreationAttributes> =
   Yup.object({
-    name: Yup.string().max(100).required(),
+    name: nameSchema.required('Required'),
     templateEvents: Yup.array().of(templateEventCreationSchema).optional(),
   });
 

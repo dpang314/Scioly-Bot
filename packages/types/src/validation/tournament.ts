@@ -3,13 +3,14 @@ import {
   TournamentCreationAttributes,
   TournamentUpdateAttributes,
 } from '../types';
+import {nameSchema, urlSchema} from '../util';
 import {tournamentEventCreationSchema} from './tournamentEvent';
 
 const tournamentCreationSchema: Yup.SchemaOf<TournamentCreationAttributes> =
   Yup.object({
-    name: Yup.string().max(100).required(),
-    active: Yup.boolean().required(),
-    submission: Yup.string().required(),
+    name: nameSchema.required('Required'),
+    active: Yup.boolean().required('Required'),
+    submission: urlSchema.required('Required'),
     tournamentEvents: Yup.array().of(tournamentEventCreationSchema).optional(),
   });
 

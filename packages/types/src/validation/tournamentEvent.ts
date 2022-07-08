@@ -3,16 +3,14 @@ import {
   TournamentEventCreationAttributes,
   TournamentEventUpdateAttributes,
 } from '../types';
+import {minutesSchema, nameSchema, urlSchema} from '../util';
 import {testCreationSchema} from './test';
 
 const tournamentEventCreationSchema: Yup.SchemaOf<TournamentEventCreationAttributes> =
   Yup.object({
-    name: Yup.string().max(100, 'Must be 100 characters or less').required(),
-    minutes: Yup.number()
-      .min(0, "Test can't have a negative time limit")
-      .max(1440, 'Test must be under 1440 minutes long')
-      .required(),
-    link: Yup.string().required(),
+    name: nameSchema.required('Required'),
+    minutes: minutesSchema.required('Required'),
+    link: urlSchema.required('Required'),
     tests: Yup.array().of(testCreationSchema).optional(),
   });
 

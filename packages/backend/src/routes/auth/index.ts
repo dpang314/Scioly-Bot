@@ -1,4 +1,4 @@
-import {NODE_ENV} from '../../configLoader';
+import {NODE_ENV} from 'scioly-bot-config';
 import {Router} from 'express';
 import passport from 'passport';
 

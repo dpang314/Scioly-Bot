@@ -29,6 +29,7 @@
     {"path": "./packages/models"},
     {"path": "./packages/types"},
     {"path": "./packages/frontend"},
-    {"path": "./packages/bot"}
+    {"path": "./packages/bot"},
+    {"path": "./packages/config"}
   ]
 }

@@ -1,5 +1,6 @@
 import {useContext} from 'react';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import Loading from './components/Loading';
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
 import Templates from './pages/Templates';
@@ -9,16 +10,15 @@ import UserContext from './providers/UserContext';
 
 const AppRoutes = () => {
   const user = useContext(UserContext);
-  if (user) {
+  // loading
+  if (user === undefined) {
+    <Loading />;
+  } else if (user === null) {
     return (
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/templates" element={<Templates />} />
-          <Route path="/tournaments" element={<Tournaments />} />
-          <Route path="/templates/:templateId" />
-          <Route path="/tournaments/:tournamentId" />
-          <Route path="/*" element={<NotFound />} />
+          <Route path="/*" element={<Unauthorized />} />
         </Routes>
       </Router>
     );
@@ -27,7 +27,11 @@ const AppRoutes = () => {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/*" element={<Unauthorized />} />
+        <Route path="/templates" element={<Templates />} />
+        <Route path="/tournaments" element={<Tournaments />} />
+        <Route path="/templates/:templateId" />
+        <Route path="/tournaments/:tournamentId" />
+        <Route path="/*" element={<NotFound />} />
       </Routes>
     </Router>
   );

@@ -3,7 +3,7 @@ import cors from 'cors';
 import router from './routes';
 import session from 'express-session';
 import SequelizeStore from 'connect-session-sequelize';
-import {SESSION_SECRET} from './configLoader';
+import {SESSION_SECRET} from 'scioly-bot-config';
 const Store = SequelizeStore(session.Store);
 import passport from 'passport';
 import path from 'path';

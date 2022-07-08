@@ -1,4 +1,4 @@
-import {CLIENT_ID, DISCORD_SECRET} from '../configLoader';
+import {CLIENT_ID, DISCORD_SECRET} from 'scioly-bot-config';
 import passport from 'passport';
 import {Strategy as DiscordStrategy} from 'passport-discord';
 import {User} from 'scioly-bot-models';

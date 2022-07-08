@@ -1,4 +1,4 @@
-import {TemplateCreationAttributes} from 'scioly-bot-types/src/validation/template';
+import {TemplateCreationAttributes} from 'scioly-bot-types';
 
 const validTemplate: TemplateCreationAttributes = {
   name: 'test template',

@@ -1,7 +1,7 @@
 import {Client, Collection, CommandInteraction, Intents} from 'discord.js';
 import * as fs from 'fs';
 import path from 'path';
-import {DISCORD_TOKEN} from '../backend/configLoader';
+import {DISCORD_TOKEN} from 'scioly-bot-config';
 import checkTests from './tasks/checkTests';
 
 interface SlashCommand {

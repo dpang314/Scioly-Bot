@@ -1,0 +1,11 @@
+{
+  "name": "scioly-bot-config",
+  "version": "1.0.0",
+  "description": "",
+  "main": "build/index",
+  "scripts": {
+    "build": "tsc --build"
+  },
+  "author": "",
+  "license": "ISC"
+}

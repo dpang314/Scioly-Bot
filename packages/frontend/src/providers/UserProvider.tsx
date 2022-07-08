@@ -4,14 +4,17 @@ import {getUser} from '../api/auth';
 import UserContext from './UserContext';
 
 const UserProvider = ({children}: {children: React.ReactNode}) => {
-  const [user, setUser] = useState<UserAttributes | undefined>(undefined);
+  const [user, setUser] = useState<UserAttributes | undefined | null>(
+    undefined,
+  );
 
   useEffect(() => {
     getUser().then(async (res) => {
       if (res.status === 200) {
         setUser(await res.json());
       } else {
-        setUser(undefined);
+        // used to indicate that the user is not logged in
+        setUser(null);
       }
     });
   }, []);

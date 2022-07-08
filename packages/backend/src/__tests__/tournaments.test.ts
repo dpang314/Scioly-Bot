@@ -6,6 +6,7 @@ import {
   validOtherTournament,
   invalidTournament,
   incompleteTournament,
+  validTournamentWithoutEvents,
 } from '../mock_data/tournaments';
 import createMockApp, {MockApp} from '../mock_data/app';
 import {validTemplate} from '../mock_data/templates';
@@ -156,6 +157,68 @@ describe('tournament endpoint', () => {
         ...validTournament,
         template: template.id,
       });
+      expect(response.statusCode).toBe(404);
+    });
+  });
+
+  describe('PUT', () => {
+    let tournament: Tournament;
+    let otherTournament: Tournament;
+
+    beforeEach(async () => {
+      tournament = await mockData.mockUser.createTournament(validTournament, {
+        include: [{model: TournamentEvent, as: 'tournamentEvents'}],
+      });
+      otherTournament = await mockData.mockOtherUser.createTournament(
+        validOtherTournament,
+        {
+          include: [{model: TournamentEvent, as: 'tournamentEvents'}],
+        },
+      );
+    });
+
+    test('valid tournament adds event', async () => {
+      const response = await server
+        .put(`/api/tournaments/${tournament.id}`)
+        .send(validOtherTournament);
+      await tournament.reload();
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toStrictEqual({
+        ...tournament.toJSON(),
+        ...validOtherTournament,
+        tournamentEvents: [
+          {
+            id: tournament.tournamentEvents![0].id,
+            link: validOtherTournament.tournamentEvents![0].link,
+            minutes: validOtherTournament.tournamentEvents![0].minutes,
+            name: validOtherTournament.tournamentEvents![0].name,
+            tournamentId: tournament.id,
+          },
+        ],
+        userId: tournament.userId,
+      });
+    });
+    test('valid tournament removes event', async () => {
+      const response = await server
+        .put(`/api/tournaments/${tournament.id}`)
+        .send(validTournamentWithoutEvents);
+      await tournament.reload();
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toStrictEqual({
+        ...tournament.toJSON(),
+        ...validTournamentWithoutEvents,
+        tournamentEvents: [],
+        userId: tournament.userId,
+      });
+    });
+    test('tournament with invalid field returns 400', async () => {
+      const response = await server
+        .put(`/api/tournaments/${tournament.id}`)
+        .send(invalidTournament);
+      expect(response.statusCode).toBe(400);
+    });
+    test("modifying a different user's tournament returns 404", async () => {
+      const response = await server.put(`/api/tournaments/${otherTournament.id}`);
       expect(response.statusCode).toBe(404);
     });
   });

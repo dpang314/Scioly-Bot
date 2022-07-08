@@ -1,16 +1,6 @@
 import {Router} from 'express';
-import {
-  TournamentEvent,
-  Template,
-  TemplateEvent,
-  Tournament,
-} from 'scioly-bot-models';
-import {
-  TournamentCreationAttributes,
-  tournamentCreationSchema,
-  TournamentUpdateAttributes,
-  tournamentUpdateSchema,
-} from 'scioly-bot-types';
+import { TournamentEvent, Template, TemplateEvent, Tournament } from 'scioly-bot-models';
+import { TournamentCreationAttributes, tournamentCreationSchema, tournamentEventCreationSchema, TournamentUpdateAttributes, tournamentUpdateSchema } from 'scioly-bot-types';
 
 const tournamentsRouter = Router();
 
@@ -102,6 +92,83 @@ tournamentsRouter.patch('/:id', async (req, res) => {
   }
   const updatedModel = await tournamentModel[0].update(validatedTournament);
   return res.status(200).json(updatedModel);
+});
+
+tournamentsRouter.put('/:id', async (req, res) => {
+  const {id} = req.params;
+  const tournamentModel = await req.user?.getTournaments({
+    where: {
+      id,
+    },
+    include: [{model: TournamentEvent, as: 'tournamentEvents'}],
+  });
+  if (!tournamentModel || !tournamentModel[0])
+    return res.status(404).send('Not found');
+  const tournament: TournamentUpdateAttributes = {
+    id,
+    active: req.body.active,
+    submission: req.body.submission,
+    name: req.body.name,
+  };
+  let validatedTournament;
+  try {
+    validatedTournament = await tournamentUpdateSchema.validate(tournament);
+    for (const event of req.body.tournamentEvents) {
+      await tournamentEventCreationSchema.validate({
+        name: event.name,
+        minutes: event.minutes,
+        link: event.link,
+      });
+    }
+  } catch (e) {
+    return res.status(400).send('Invalid tournament');
+  }
+  const updatedModel = await tournamentModel[0].update(validatedTournament, {
+    include: [{model: TournamentEvent, as: 'tournamentEvents'}],
+  });
+  if (req.body.tournamentEvents) {
+    if (updatedModel.tournamentEvents) {
+      for await (const event of updatedModel.tournamentEvents) {
+        if (
+          req.body.tournamentEvents.findIndex(
+            (newEvent) => newEvent.id === event.id,
+          ) === -1
+        ) {
+          await event.destroy();
+        }
+      }
+    }
+
+    for await (const event of req.body.tournamentEvents) {
+      if (!event.id) {
+        await updatedModel.createTournamentEvent({
+          name: event.name,
+          minutes: event.minutes,
+          link: event.link,
+        });
+      } else {
+        const existingEvent = await updatedModel.getTournamentEvents({
+          where: {
+            id: event.id,
+          },
+        });
+        if (!existingEvent || !existingEvent[0]) {
+          await updatedModel.createTournamentEvent({
+            name: event.name,
+            minutes: event.minutes,
+            link: event.link,
+          });
+        } else {
+          await existingEvent[0].update({
+            name: event.name,
+            minutes: event.minutes,
+            link: event.link,
+          });
+        }
+      }
+    }
+  }
+  return res.status(200).json(await updatedModel.reload());
 });
 
 tournamentsRouter.delete('/:id', async (req, res) => {

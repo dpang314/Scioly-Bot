@@ -1,31 +1,34 @@
 import {Modal, TableRow, TableCell, Switch, Button} from '@mui/material';
 import Box from '@mui/material/Box';
 import React, {FunctionComponent} from 'react';
-
-import TournamentEventsForm from './TournamentEventsForm';
+import {TemplateAttributes, TournamentAttributes} from 'scioly-bot-types';
+import {updateTournament} from '../../api/tournmanent';
+import TournamentForm from './TournamentForm';
 
 type Props = {
-  id: string;
-  name: string;
-  active: boolean;
+  tournament: TournamentAttributes;
+  templates: TemplateAttributes[];
+  addStateTournament: (tournament: TournamentAttributes) => void;
+  updateStateTournament: (tournament: TournamentAttributes) => void;
 };
 
-const TournamentRow: FunctionComponent<Props> = ({id, name, active}) => {
+const TournamentRow: FunctionComponent<Props> = ({
+  tournament,
+  templates,
+  addStateTournament,
+  updateStateTournament,
+}) => {
   const [open, setOpen] = React.useState(false);
-  const [status, setStatus] = React.useState(active);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const toggleStatus = async () => {
-    const res = await fetch(`/api/tournaments/${id}/`, {
-      body: JSON.stringify({active: !status}),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      method: 'PUT',
+    // TODO switch to PATCH
+    const response = await updateTournament(tournament.id, {
+      ...tournament,
+      active: !tournament.active,
     });
-    const tournament = await res.json();
-    setStatus(tournament.active);
+    updateStateTournament(await response.json());
   };
 
   const style = {
@@ -44,20 +47,26 @@ const TournamentRow: FunctionComponent<Props> = ({id, name, active}) => {
     <>
       <Modal open={open} onClose={handleClose}>
         <Box sx={style}>
-          <TournamentEventsForm id={id} tournamentName={name} />
+          <TournamentForm
+            tournament={tournament}
+            templates={templates}
+            setOpen={setOpen}
+            addStateTournament={addStateTournament}
+            updateStateTournament={updateStateTournament}
+          />
         </Box>
       </Modal>
       <TableRow
-        key={name}
+        key={tournament.id}
         sx={{'&:last-child td, &:last-child th': {border: 0}}}>
         <TableCell component="th" scope="row">
-          {name}
+          {tournament.name}
         </TableCell>
         <TableCell align="right">
           <Switch
             onChange={toggleStatus}
-            checked={status}
-            inputProps={{'aria-label': 'controlled'}}
+            checked={tournament.active}
+            // inputProps={{'aria-label': 'controlled'}}
           />
         </TableCell>
         <TableCell align="right">

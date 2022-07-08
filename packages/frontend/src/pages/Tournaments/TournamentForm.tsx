@@ -1,118 +1,243 @@
-import {FormControl, Box, TextField, MenuItem, Button} from '@mui/material';
-import {Formik} from 'formik';
-import React, {FunctionComponent} from 'react';
+import {FormControl, Box, TextField, Button, MenuItem} from '@mui/material';
+import {Formik, FieldArray} from 'formik';
+import {FunctionComponent, useEffect, useState} from 'react';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import ErrorMessage from '../../components/ErrorMessage';
+import {
+  TemplateAttributes,
+  TournamentAttributes,
+  tournamentCreationSchema,
+} from 'scioly-bot-types';
+import {createTemplate, updateTemplate} from '../../api/templates';
 import * as Yup from 'yup';
-import {TemplateAttributes, TournamentAttributes} from 'scioly-bot-types';
-import {urlRegex} from '../../util';
-
-// eslint-disable-next-line no-unused-vars
-export type AddTournament = (tournament: TournamentAttributes) => void;
+import {createTournament, updateTournament} from '../../api/tournmanent';
+import TemplateForm from '../Templates/TemplateForm';
 
 type FormProps = {
-  templates: Array<TemplateAttributes>;
-  // eslint-disable-next-line no-unused-vars
+  tournament?: TournamentAttributes;
+  templates: TemplateAttributes[];
   setOpen: (open: boolean) => void;
-  addTournament: AddTournament;
+  addStateTournament: (tournament: TournamentAttributes) => void;
+  updateStateTournament: (tournament: TournamentAttributes) => void;
 };
 
 const TournamentForm: FunctionComponent<FormProps> = ({
-  templates,
   setOpen,
-  addTournament,
-}) => {
-  const error = {
-    color: 'red',
-  };
-  return (
-    <Formik
-      initialValues={{name: '', template: '', submission: ''}}
-      validationSchema={Yup.object({
-        name: Yup.string()
-          .max(100, 'Must be 100 characters or less')
-          .required('Required'),
-        template: Yup.string().required('Required'),
-        submission: Yup.string()
-          .max(100, 'Must be 100 characters or less')
-          .matches(urlRegex, 'Must be a valid URL')
-          .required('Required'),
-      })}
-      onSubmit={async (values, {setSubmitting}) => {
-        const res = await fetch('/api/tournaments', {
-          body: JSON.stringify(values),
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          method: 'POST',
+  tournament,
+  templates,
+  addStateTournament,
+  updateStateTournament,
+}) => (
+  <Formik
+    initialValues={{
+      name: tournament ? tournament.name : '',
+      submission: tournament ? tournament.submission : '',
+      template: 0,
+      tournamentEvents: tournament?.tournamentEvents
+        ? tournament.tournamentEvents
+        : [],
+    }}
+    validationSchema={Yup.object({
+      name: tournamentCreationSchema.fields.name,
+      submission: tournamentCreationSchema.fields.submission,
+      tournamentEvents: tournamentCreationSchema.fields.tournamentEvents,
+      template: Yup.number().optional(),
+    })}
+    onSubmit={async (values, {setSubmitting}) => {
+      if (tournament) {
+        const response = await updateTournament(tournament.id, {
+          id: tournament.id,
+          ...values,
         });
-        const template = await res.json();
-        addTournament(template);
-        setSubmitting(false);
-        setOpen(false);
-      }}>
-      {(formik) => (
-        <form onSubmit={formik.handleSubmit}>
-          <FormControl fullWidth margin="normal">
-            <Box sx={{marginBottom: '10px'}}>
-              <TextField
-                id="name"
-                label="Tournament Name"
-                variant="outlined"
-                sx={{display: 'block'}}
-                fullWidth
-                {...formik.getFieldProps('name')}
-              />
-              {formik.touched.name && formik.errors.name ? (
-                <Box sx={error}>{formik.errors.name}</Box>
-              ) : null}
-            </Box>
+        updateStateTournament(await response.json());
+      } else {
+        const newTournament = await createTournament({
+          ...values,
+          active: false,
+        });
+        addStateTournament(await newTournament.json());
+      }
+      setSubmitting(false);
+      setOpen(false);
+    }}>
+    {(formik) => (
+      <form onSubmit={formik.handleSubmit}>
+        <FormControl fullWidth margin="normal">
+          <Box sx={{marginBottom: '10px'}}>
+            <TextField
+              id="name"
+              label="Tournament Name"
+              variant="outlined"
+              sx={{display: 'block'}}
+              fullWidth
+              {...formik.getFieldProps('name')}
+            />
+            {formik.touched.name && formik.errors.name ? (
+              <Box sx={{color: 'red'}}>{formik.errors.name}</Box>
+            ) : null}
+          </Box>
 
-            <Box sx={{marginBottom: '10px'}}>
-              <TextField
-                id="submission"
-                label="Submission Form Link  "
-                variant="outlined"
-                sx={{display: 'block'}}
-                fullWidth
-                {...formik.getFieldProps('submission')}
-              />
-              {formik.touched.submission && formik.errors.submission ? (
-                <Box sx={error}>{formik.errors.submission}</Box>
-              ) : null}
-            </Box>
+          <Box sx={{marginBottom: '10px'}}>
+            <TextField
+              id="submission"
+              label="Submission Form Link  "
+              variant="outlined"
+              sx={{display: 'block'}}
+              fullWidth
+              {...formik.getFieldProps('submission')}
+            />
+            {formik.touched.submission && formik.errors.submission ? (
+              <Box sx={{color: 'red'}}>{formik.errors.submission}</Box>
+            ) : null}
+          </Box>
+          {tournament ? (
+            <></>
+          ) : (
+            <>
+              <Box sx={{marginBottom: '10px'}}>
+                <TextField
+                  name="template"
+                  label="Template"
+                  value={formik.values.template}
+                  onBlur={formik.handleBlur}
+                  onChange={(e) => {
+                    // formik.values.template doesn't seem to update until after onChange
+                    // Running formik.handleChange first does not work either
+                    if (parseInt(e.target.value) >= 0) {
+                      const template = templates[parseInt(e.target.value)];
+                      if (template.templateEvents) {
+                        formik.setFieldValue(
+                          'tournamentEvents',
+                          template.templateEvents.map((templateEvent) => ({
+                            ...templateEvent,
+                            link: '',
+                          })),
+                          true,
+                        );
+                      } else {
+                        formik.setFieldValue('tournamentEvents', [], true);
+                      }
+                    } else {
+                      formik.setFieldValue('tournamentEvents', [], true);
+                    }
+                    formik.handleChange(e);
+                  }}
+                  fullWidth
+                  select>
+                  {templates
+                    ? templates.map((template, index) => (
+                        <MenuItem
+                          key={template.id}
+                          id={template.id}
+                          value={index}>
+                          {template.name}
+                        </MenuItem>
+                      ))
+                    : null}
+                </TextField>
+                {formik.touched.template && formik.errors.template ? (
+                  <Box sx={{color: 'red'}}>{formik.errors.template}</Box>
+                ) : null}
+              </Box>
+            </>
+          )}
 
-            <Box sx={{marginBottom: '10px'}}>
-              <TextField
-                name="template"
-                label="Template"
-                value={formik.values.template}
-                onBlur={formik.handleBlur}
-                onChange={formik.handleChange}
-                fullWidth
-                select>
-                {templates
-                  ? templates.map((template) => (
-                      <MenuItem
-                        key={template.id}
-                        id={template.id}
-                        value={template.id}>
-                        {template.name}
-                      </MenuItem>
-                    ))
-                  : null}
-              </TextField>
-              {formik.touched.template && formik.errors.template ? (
-                <Box sx={error}>{formik.errors.template}</Box>
-              ) : null}
-            </Box>
+          <FieldArray
+            name="tournamentEvents"
+            render={(arrayHelpers) => (
+              <div style={{width: 'auto'}}>
+                {formik.values.tournamentEvents &&
+                formik.values.tournamentEvents.length > 0 ? (
+                  formik.values.tournamentEvents.map((event, index) => (
+                    <div
+                      key={event.id ? event.id : index}
+                      style={{
+                        marginBottom: '10px',
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignContent: 'center',
+                      }}>
+                      <div style={{flex: 2, marginRight: '10px'}}>
+                        <TextField
+                          label="Name"
+                          {...formik.getFieldProps(
+                            `tournamentEvents[${index}].name`,
+                          )}
+                          fullWidth
+                        />
+                        <ErrorMessage
+                          name={`tournamentEvents[${index}].name`}
+                        />
+                      </div>
+                      <div style={{flex: 2, marginRight: '10px'}}>
+                        <TextField
+                          {...formik.getFieldProps(
+                            `tournamentEvents[${index}].minutes`,
+                          )}
+                          label="Minutes"
+                          fullWidth
+                        />
+                        <ErrorMessage
+                          name={`tournamentEvents[${index}].minutes`}
+                        />
+                      </div>
+                      <div style={{flex: 7}}>
+                        <TextField
+                          {...formik.getFieldProps(
+                            `tournamentEvents[${index}].link`,
+                          )}
+                          label="Link"
+                          fullWidth
+                        />
+                        <ErrorMessage
+                          name={`tournamentEvents[${index}].link`}
+                        />
+                      </div>
+                      <Button
+                        onClick={() => {
+                          arrayHelpers.remove(index);
+                        }}>
+                        <RemoveCircleOutlineIcon />
+                      </Button>
+                      <Button
+                        onClick={() =>
+                          arrayHelpers.insert(index + 1, {
+                            name: '',
+                            minutes: '',
+                            link: '',
+                          })
+                        }>
+                        <AddCircleIcon />
+                      </Button>
+                    </div>
+                  ))
+                ) : (
+                  <Button
+                    variant="outlined"
+                    fullWidth
+                    onClick={() => arrayHelpers.push({name: '', minutes: ''})}>
+                    Add event
+                  </Button>
+                )}
+              </div>
+            )}
+          />
+          {typeof formik.errors.tournamentEvents === 'string' ? (
+            <div style={{color: 'red', marginBottom: '10px'}}>
+              {formik.errors.tournamentEvents}
+            </div>
+          ) : (
+            <div style={{color: 'red', marginBottom: '10px'}} />
+          )}
 
-            <Button type="submit" variant="contained">
-              Create
-            </Button>
-          </FormControl>
-        </form>
-      )}
-    </Formik>
-  );
-};
+          <Button type="submit" variant="contained">
+            Save
+          </Button>
+        </FormControl>
+      </form>
+    )}
+  </Formik>
+);
 
 export default TournamentForm;

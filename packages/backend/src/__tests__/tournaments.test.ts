@@ -1,6 +1,6 @@
 import request from 'supertest';
 
-import {TemplateEvent, Tournament, TournamentEvent} from 'scioly-bot-models';
+import {Tournament, TournamentEvent} from 'scioly-bot-models';
 import {
   validTournament,
   validOtherTournament,
@@ -9,7 +9,6 @@ import {
   validTournamentWithoutEvents,
 } from '../mock_data/tournaments';
 import createMockApp, {MockApp} from '../mock_data/app';
-import {validTemplate} from '../mock_data/templates';
 
 describe('tournament endpoint', () => {
   let server: request.SuperTest<request.Test>;
@@ -112,53 +111,6 @@ describe('tournament endpoint', () => {
         .send(invalidTournament);
       expect(response.statusCode).toBe(400);
     });
-    test('valid tournament with template succeeds', async () => {
-      const template = await mockData.mockUser.createTemplate(validTemplate, {
-        include: [{model: TemplateEvent, as: 'templateEvents'}],
-      });
-      const response = await server.post('/api/tournaments').send({
-        ...validTournament,
-        template: template.id,
-      });
-      expect(response.statusCode).toBe(200);
-      const newTournament = await mockData.mockUser.getTournaments({
-        where: {
-          name: validTournament.name,
-          active: validTournament.active,
-          submission: validTournament.submission,
-        },
-        include: [{model: TournamentEvent, as: 'tournamentEvents'}],
-      });
-      expect(response.body.tournamentEvents.length).toBe(2);
-      expect({
-        ...response.body,
-        tournamentEvents: [],
-      }).toStrictEqual({
-        ...validTournament,
-        tournamentEvents: [],
-        id: newTournament[0].id,
-      });
-    });
-    test('valid tournament with invalid template returns 404', async () => {
-      const response = await server.post('/api/tournaments').send({
-        ...validTournament,
-        template: 'this is not a real template id',
-      });
-      expect(response.statusCode).toBe(404);
-    });
-    test("valid tournament with other user's template returns 404", async () => {
-      const template = await mockData.mockOtherUser.createTemplate(
-        validTemplate,
-        {
-          include: [{model: TemplateEvent, as: 'templateEvents'}],
-        },
-      );
-      const response = await server.post('/api/tournaments').send({
-        ...validTournament,
-        template: template.id,
-      });
-      expect(response.statusCode).toBe(404);
-    });
   });
 
   describe('PUT', () => {
@@ -218,7 +170,9 @@ describe('tournament endpoint', () => {
       expect(response.statusCode).toBe(400);
     });
     test("modifying a different user's tournament returns 404", async () => {
-      const response = await server.put(`/api/tournaments/${otherTournament.id}`);
+      const response = await server.put(
+        `/api/tournaments/${otherTournament.id}`,
+      );
       expect(response.statusCode).toBe(404);
     });
   });

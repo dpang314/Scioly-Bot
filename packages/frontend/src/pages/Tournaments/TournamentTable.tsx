@@ -10,21 +10,24 @@ import {
 } from '@mui/material';
 import React, {FunctionComponent} from 'react';
 
-import {AddTournament} from './TournamentForm';
 import {TemplateAttributes, TournamentAttributes} from 'scioly-bot-types';
 import TournamentModalButton from './TournamentModalButton';
 import TournamentRow from './TournamentRow';
 
 type Props = {
-  templates: Array<TemplateAttributes>;
-  tournaments: Array<TournamentAttributes>;
-  addTournament: AddTournament;
+  templates: TemplateAttributes[];
+  tournaments: TournamentAttributes[];
+  addStateTournament: (tournament: TournamentAttributes) => void;
+  updateStateTournament: (tournament: TournamentAttributes) => void;
+  deleteStateTournament: (tournament: TournamentAttributes) => void;
 };
 
 const TournamentTable: FunctionComponent<Props> = ({
   templates,
   tournaments,
-  addTournament,
+  addStateTournament,
+  updateStateTournament,
+  deleteStateTournament,
 }) => (
   <Container maxWidth="sm" sx={{paddingTop: '20px'}}>
     <TableContainer component={Paper}>
@@ -34,7 +37,8 @@ const TournamentTable: FunctionComponent<Props> = ({
             <TableCell colSpan={3}>
               <TournamentModalButton
                 templates={templates}
-                addTournament={addTournament}
+                addStateTournament={addStateTournament}
+                updateStateTournament={updateStateTournament}
               />
             </TableCell>
           </TableRow>
@@ -49,9 +53,10 @@ const TournamentTable: FunctionComponent<Props> = ({
             ? tournaments.map((tournament) => (
                 <TournamentRow
                   key={tournament.id}
-                  id={tournament.id}
-                  name={tournament.name}
-                  active={tournament.active}
+                  tournament={tournament}
+                  templates={templates}
+                  addStateTournament={addStateTournament}
+                  updateStateTournament={updateStateTournament}
                 />
               ))
             : null}

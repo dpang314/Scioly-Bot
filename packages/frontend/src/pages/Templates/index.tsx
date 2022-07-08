@@ -9,11 +9,9 @@ import {TemplateAttributes} from 'scioly-bot-types';
 
 const Templates = () => {
   const [templates, setTemplates] = useState<TemplateAttributes[]>([]);
-  const [status, setStatus] = useState<number | null>(null);
   useEffect(() => {
     (async () => {
       const response = await getTemplates();
-      setStatus(response.status);
       setTemplates(await response.json());
     })();
   }, []);
@@ -41,10 +39,6 @@ const Templates = () => {
 
   if (!templates) {
     return <Loading />;
-  }
-
-  if (status === 401) {
-    return <Unauthorized />;
   }
 
   return (

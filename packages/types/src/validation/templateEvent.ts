@@ -1,14 +1,8 @@
 import * as Yup from 'yup';
-
-interface TemplateEventAttributes {
-  id: string;
-  name: string;
-  minutes: number;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface TemplateEventCreationAttributes
-  extends Omit<TemplateEventAttributes, 'id'> {}
+import {
+  TemplateEventCreationAttributes,
+  TemplateEventUpdateAttributes,
+} from '../types';
 
 const templateEventCreationSchema: Yup.SchemaOf<TemplateEventCreationAttributes> =
   Yup.object({
@@ -21,11 +15,6 @@ const templateEventCreationSchema: Yup.SchemaOf<TemplateEventCreationAttributes>
       .required('Required'),
   });
 
-interface TemplateEventUpdateAttributes
-  extends Partial<TemplateEventAttributes> {
-  id: string;
-}
-
 const templateEventUpdateSchema: Yup.SchemaOf<TemplateEventUpdateAttributes> =
   Yup.object({
     name: templateEventCreationSchema.fields.name.optional(),
@@ -34,8 +23,3 @@ const templateEventUpdateSchema: Yup.SchemaOf<TemplateEventUpdateAttributes> =
   });
 
 export {templateEventCreationSchema, templateEventUpdateSchema};
-export type {
-  TemplateEventAttributes,
-  TemplateEventCreationAttributes,
-  TemplateEventUpdateAttributes,
-};

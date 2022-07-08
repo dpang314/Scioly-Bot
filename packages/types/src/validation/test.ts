@@ -1,16 +1,5 @@
 import * as Yup from 'yup';
-
-interface TestAttributes {
-  id: string;
-  userId: string;
-  partner1Id?: string;
-  partner2Id?: string;
-  timeStarted?: Date;
-  finished: boolean;
-}
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface TestCreationAttributes extends Omit<TestAttributes, 'id'> {}
+import {TestCreationAttributes} from '../types';
 
 const testCreationSchema: Yup.SchemaOf<TestCreationAttributes> = Yup.object({
   userId: Yup.string().required(),
@@ -21,4 +10,3 @@ const testCreationSchema: Yup.SchemaOf<TestCreationAttributes> = Yup.object({
 });
 
 export {testCreationSchema};
-export type {TestAttributes, TestCreationAttributes};

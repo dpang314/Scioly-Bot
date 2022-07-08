@@ -1,23 +1,9 @@
 import * as Yup from 'yup';
 import {
-  TournamentEventAttributes,
-  TournamentEventCreationAttributes,
-  tournamentEventCreationSchema,
-} from './tournamentEvent';
-
-interface TournamentAttributes {
-  id: string;
-  name: string;
-  active: boolean;
-  submission: string;
-  tournamentEvents?: TournamentEventAttributes[];
-}
-
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface TournamentCreationAttributes
-  extends Omit<TournamentAttributes, 'id' | 'tournamentEvents'> {
-  tournamentEvents?: TournamentEventCreationAttributes[];
-}
+  TournamentCreationAttributes,
+  TournamentUpdateAttributes,
+} from '../types';
+import {tournamentEventCreationSchema} from './tournamentEvent';
 
 const tournamentCreationSchema: Yup.SchemaOf<TournamentCreationAttributes> =
   Yup.object({
@@ -26,11 +12,6 @@ const tournamentCreationSchema: Yup.SchemaOf<TournamentCreationAttributes> =
     submission: Yup.string().required(),
     tournamentEvents: Yup.array().of(tournamentEventCreationSchema).optional(),
   });
-
-interface TournamentUpdateAttributes
-  extends Partial<Omit<TournamentAttributes, 'tournamentEvents'>> {
-  id: string;
-}
 
 const tournamentUpdateSchema: Yup.SchemaOf<TournamentUpdateAttributes> =
   Yup.object({
@@ -41,8 +22,3 @@ const tournamentUpdateSchema: Yup.SchemaOf<TournamentUpdateAttributes> =
   });
 
 export {tournamentCreationSchema, tournamentUpdateSchema};
-export type {
-  TournamentAttributes,
-  TournamentCreationAttributes,
-  TournamentUpdateAttributes,
-};

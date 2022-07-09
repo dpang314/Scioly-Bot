@@ -1,14 +1,23 @@
 {
-  "extends": "../../tsconfig.json",
   "ts-node": {
     "files": true
   },
   "compilerOptions": {
-    "noEmit": false,
+    "target": "ES6",
+    "module": "CommonJS",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "rootDir": "src",
     "outDir": "build",
-    "composite": true
+    "noEmit": false,
+    "declaration": false,
+    // @discordjs/builders has type errors
+    "skipLibCheck": true
   },
   "include": ["src", "src/*.d.ts"],
-  "references": [{"path": "../types"}, {"path": "../models"}]
+  "references": [
+    {"path": "../types"},
+    {"path": "../models"},
+    {"path": "../config"}
+  ]
 }

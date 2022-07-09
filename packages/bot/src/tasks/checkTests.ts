@@ -1,6 +1,6 @@
 import {MessageEmbed, User} from 'discord.js';
-import {Test, TournamentEvent, Tournament} from '../../backend/models';
-import {client} from '../index';
+import {Test, TournamentEvent, Tournament} from 'scioly-bot-models';
+import {client} from '..';
 
 const checkTests = async () => {
   const sendReminder = async (
@@ -43,13 +43,11 @@ const checkTests = async () => {
       },
     ],
   });
-  const notArray = (array: Array<unknown>) =>
-    !Array.isArray(array) || !array.length;
-  if (notArray(tournaments)) return;
+  if (!tournaments) return;
   tournaments.forEach(async (tournament) => {
-    if (notArray(tournament.tournamentEvents)) return;
+    if (!tournament.tournamentEvents) return;
     tournament.tournamentEvents.forEach(async (event) => {
-      if (notArray(event.tests)) return;
+      if (!event.tests) return;
       event.tests.forEach(async (test) => {
         if (!test.finished) {
           const currentTime = new Date().getTime();

@@ -2,16 +2,28 @@ import fs from 'fs';
 import {REST} from '@discordjs/rest';
 import {Routes} from 'discord-api-types/v9';
 import {DISCORD_TOKEN, CLIENT_ID, GUILD_ID} from 'scioly-bot-config';
+import {CommandInteraction} from 'discord.js';
+import {SlashCommandBuilder} from '@discordjs/builders';
+import path from 'path';
 
-const commands = [];
+interface Command {
+  data: SlashCommandBuilder;
+  execute: (interaction: CommandInteraction) => Promise<void>;
+}
+
+// is of type RESTPostAPIApplicationCommandsJSONBody, but @discordjs/builders doesn't export the type
+const commands: any[] = [];
 const commandFiles = fs
-  .readdirSync('./commands')
+  .readdirSync(path.resolve(__dirname, './commands'))
   .filter((file: string) => file.endsWith('.ts'));
 
 commandFiles.forEach((file) => {
   // eslint-disable-next-line max-len
   // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const command = require(`./commands/${file}`);
+  const command: Command = require(path.resolve(
+    __dirname,
+    `./commands/${file}`,
+  ));
   commands.push(command.data.toJSON());
 });
 

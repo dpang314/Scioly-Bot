@@ -1,7 +1,8 @@
 import {Client, Collection, CommandInteraction, Intents} from 'discord.js';
 import * as fs from 'fs';
 import path from 'path';
-import {DISCORD_TOKEN} from 'scioly-bot-config';
+import {DATABASE_CONNECTION, DISCORD_TOKEN} from 'scioly-bot-config';
+import {createDatabase} from 'scioly-bot-models';
 import checkTests from './tasks/checkTests';
 
 interface SlashCommand {
@@ -21,17 +22,17 @@ client.commands = new Collection();
 
 const commandFiles = fs
   .readdirSync(path.resolve(__dirname, './commands'))
-  .filter((file: string) => file.endsWith('.ts'));
+  .filter((file: string) => file.endsWith('.ts') || file.endsWith('.js'));
 
 commandFiles.forEach((file) => {
-  // eslint-disable-next-line max-len
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const command = require(`./commands/${file}`);
+  const command = require(path.resolve(__dirname, `./commands/${file}`));
   client.commands.set(command.data.name, command);
 });
 
 client.once('ready', async () => {
+  createDatabase(DATABASE_CONNECTION);
   setInterval(checkTests, 10 * 1000);
+  console.log('bot started');
 });
 
 client.on('interactionCreate', async (interaction) => {

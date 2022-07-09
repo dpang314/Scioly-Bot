@@ -16,9 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "concurrently": "^7.1.0",
     "cypress": "^9.5.4",
-    "dotenv": "^10.0.0",
     "typescript": "^4.6.3"
   },
   "devDependencies": {
@@ -36,6 +34,7 @@
     "jest": "^28.1.2",
     "prettier": "^2.7.1",
     "start-server-and-test": "^1.14.0",
-    "ts-jest": "^28.0.5"
+    "ts-jest": "^28.0.5",
+    "ts-node": "^10.8.2"
   }
 }

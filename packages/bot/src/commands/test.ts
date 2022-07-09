@@ -4,23 +4,38 @@ import {
   MessageActionRow,
   MessageSelectMenu,
   SelectMenuInteraction,
-  User,
+  User as DiscordUser,
   MessageButton,
   MessageEmbed,
 } from 'discord.js';
 
 import {SlashCommandBuilder} from '@discordjs/builders';
 
-import {TestCreationAttributes} from '../../backend/models/TestModel';
-import {Tournament, TournamentEvent} from '../../backend/models';
+import {TestCreationAttributes} from 'scioly-bot-types';
+import {Tournament, TournamentEvent, User} from 'scioly-bot-models';
 
 const getTournament = async (interaction: CommandInteraction) => {
-  const tournaments = await Tournament.findAll({where: {active: true}});
+  // TODO switch to manually setting available servers for more efficient tournament retrieval
+  const members = await interaction.guild?.members.list();
+  if (!members) {
+    return null;
+  }
+  const tournaments: Tournament[] = [];
+  for (const member of members) {
+    if (member[1].permissions.has('ADMINISTRATOR')) {
+      const administrator = await User.findByPk(member[1].id, {
+        include: [{model: Tournament, as: 'tournaments'}],
+      });
+      if (administrator && administrator.tournaments) {
+        tournaments.concat(administrator.tournaments);
+      }
+    }
+  }
   if (tournaments.length === 0) {
     await interaction.reply('No tournaments');
     return null;
   }
-  const tournamentOptions = [];
+  const tournamentOptions: {label: string; value: string}[] = [];
   for (let i = 0; i < tournaments.length; i += 1) {
     tournamentOptions.push({
       label: tournaments[i].name,
@@ -69,42 +84,49 @@ const getEvent = async (
   tournament: Tournament,
 ) => {
   const events = tournament.tournamentEvents;
-  const eventOptions = [];
-  for (let i = 0; i < events.length; i += 1) {
-    eventOptions.push({label: events[i].name, value: events[i].id});
-  }
-
-  const row = new MessageActionRow().addComponents(
-    new MessageSelectMenu()
-      .setCustomId('eventSelect')
-      .setPlaceholder('Nothing selected')
-      .addOptions(eventOptions),
-  );
-  const message = (await interaction.editReply({
-    content: 'Select test from the dropdown',
-    components: [row],
-  })) as Message;
-
-  const filter = async (i: SelectMenuInteraction) => {
-    if (i.user.id !== interaction.user.id) {
-      i.followUp({content: 'This is not for you.', ephemeral: true});
-      return false;
+  const eventOptions: {label: string; value: string}[] = [];
+  if (events) {
+    for (let i = 0; i < events.length; i += 1) {
+      eventOptions.push({label: events[i].name, value: events[i].id});
     }
-    i.deferUpdate();
-    return i.user.id === interaction.user.id;
-  };
 
-  try {
-    const i = await message.awaitMessageComponent({
-      filter,
-      componentType: 'SELECT_MENU',
-      time: 60000,
-    });
-    const foundTest = events.find((event) => event.id === i.values[0]);
-    await message.edit(`Event: ${foundTest.name}`);
-    return foundTest;
-  } catch (error) {
-    await message.edit('Test failed');
+    const row = new MessageActionRow().addComponents(
+      new MessageSelectMenu()
+        .setCustomId('eventSelect')
+        .setPlaceholder('Nothing selected')
+        .addOptions(eventOptions),
+    );
+    const message = (await interaction.editReply({
+      content: 'Select test from the dropdown',
+      components: [row],
+    })) as Message;
+
+    const filter = async (i: SelectMenuInteraction) => {
+      if (i.user.id !== interaction.user.id) {
+        i.followUp({content: 'This is not for you.', ephemeral: true});
+        return false;
+      }
+      i.deferUpdate();
+      return i.user.id === interaction.user.id;
+    };
+
+    try {
+      const i = await message.awaitMessageComponent({
+        filter,
+        componentType: 'SELECT_MENU',
+        time: 60000,
+      });
+      const foundTest = events.find(
+        (event) => event.id === i.values[0],
+      ) as TournamentEvent;
+      await message.edit(`Event: ${foundTest.name}`);
+      return foundTest;
+    } catch (error) {
+      await message.edit('Test failed');
+      return null;
+    }
+  } else {
+    await interaction.editReply('Tournament has no events.');
     return null;
   }
 };
@@ -229,7 +251,7 @@ const confirm = async (
     ) {
       const test = await event.createTest(testAttributes);
 
-      const sendTest = async (user: User, name: string) => {
+      const sendTest = async (user: DiscordUser, name: string) => {
         try {
           const testEmbed = new MessageEmbed()
             .setColor('RANDOM')
@@ -288,7 +310,9 @@ module.exports = {
     const tournament = await getTournament(interaction);
     if (tournament) {
       const event = await getEvent(interaction, tournament);
-      await confirm(interaction, tournament, event);
+      if (event) {
+        await confirm(interaction, tournament, event);
+      }
     }
   },
 };

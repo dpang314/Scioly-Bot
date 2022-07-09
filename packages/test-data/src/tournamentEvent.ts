@@ -1,4 +1,7 @@
-import {TournamentEventCreationAttributes} from 'scioly-bot-types';
+import {
+  TournamentEventAttributes,
+  TournamentEventCreationAttributes,
+} from 'scioly-bot-types';
 
 const validTournamentEvent: TournamentEventCreationAttributes = {
   name: 'test event',
@@ -16,8 +19,14 @@ const invalidTournamentEvent: TournamentEventCreationAttributes = {
   link: 'https://www.github.com',
 };
 
+const validCompleteTournamentEvent: TournamentEventAttributes = {
+  ...validTournamentEvent,
+  id: 'valid tournament event with all attributes',
+};
+
 export {
   validTournamentEvent,
   incompleteTournamentEvent,
   invalidTournamentEvent,
+  validCompleteTournamentEvent,
 };

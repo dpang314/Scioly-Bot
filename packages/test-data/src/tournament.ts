@@ -1,4 +1,8 @@
-import {TournamentCreationAttributes} from 'scioly-bot-types';
+import {
+  TournamentAttributes,
+  TournamentCreationAttributes,
+} from 'scioly-bot-types';
+import {validCompleteTournamentEvent} from './tournamentEvent';
 
 const validTournament: TournamentCreationAttributes = {
   name: 'test tournament',
@@ -42,10 +46,17 @@ const invalidTournament: TournamentCreationAttributes = {
   submission: 'https://www.google.com/',
 };
 
+const validCompleteTournament: TournamentAttributes = {
+  ...validTournament,
+  id: 'valid tournament with all attributes',
+  tournamentEvents: [validCompleteTournamentEvent],
+};
+
 export {
   validTournament,
   validTournamentWithoutEvents,
   validOtherTournament,
   incompleteTournament,
   invalidTournament,
+  validCompleteTournament,
 };

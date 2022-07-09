@@ -1,4 +1,5 @@
-import {TemplateCreationAttributes} from 'scioly-bot-types';
+import {TemplateAttributes, TemplateCreationAttributes} from 'scioly-bot-types';
+import {validCompleteTemplateEvent} from './templateEvent';
 
 const validTemplate: TemplateCreationAttributes = {
   name: 'test template',
@@ -44,6 +45,12 @@ const invalidTemplate: TemplateCreationAttributes = {
   name: 'a loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong name over 100 characters long',
 };
 
+const validCompleteTemplate: TemplateAttributes = {
+  ...validTemplate,
+  id: 'valid template with all attributes',
+  templateEvents: [validCompleteTemplateEvent],
+};
+
 export {
   validTemplate,
   validTemplateWithoutEvents,
@@ -51,4 +58,5 @@ export {
   validOtherTemplate,
   incompleteTemplate,
   invalidTemplate,
+  validCompleteTemplate,
 };

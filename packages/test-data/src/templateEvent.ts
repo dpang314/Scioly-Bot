@@ -1,4 +1,7 @@
-import {TemplateEventCreationAttributes} from 'scioly-bot-types';
+import {
+  TemplateEventAttributes,
+  TemplateEventCreationAttributes,
+} from 'scioly-bot-types';
 
 const validTemplateEvent: TemplateEventCreationAttributes = {
   name: 'test event',
@@ -14,4 +17,14 @@ const invalidTemplateEvent: TemplateEventCreationAttributes = {
   minutes: 10000000000,
 };
 
-export {validTemplateEvent, incompleteTemplateEvent, invalidTemplateEvent};
+const validCompleteTemplateEvent: TemplateEventAttributes = {
+  ...validTemplateEvent,
+  id: 'valid template event with all attributes',
+};
+
+export {
+  validTemplateEvent,
+  incompleteTemplateEvent,
+  invalidTemplateEvent,
+  validCompleteTemplateEvent,
+};

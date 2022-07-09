@@ -18,7 +18,7 @@ type TemplateTableProps = {
   templates: Array<TemplateAttributes>;
   addStateTemplate: (template: TemplateAttributes) => void;
   updateStateTemplate: (template: TemplateAttributes) => void;
-  deleteStateTemplate: (template: TemplateAttributes) => void;
+  deleteStateTemplate: (id: string) => void;
 };
 
 const TemplateTable: FunctionComponent<TemplateTableProps> = ({
@@ -40,8 +40,9 @@ const TemplateTable: FunctionComponent<TemplateTableProps> = ({
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>Template</TableCell>
-            <TableCell align="right" />
+            <TableCell width="80%">Template</TableCell>
+            <TableCell width="10%" align="right" />
+            <TableCell width="10%" align="right" />
           </TableRow>
         </TableHead>
         <TableBody>
@@ -52,6 +53,7 @@ const TemplateTable: FunctionComponent<TemplateTableProps> = ({
                   template={template}
                   addStateTemplate={addStateTemplate}
                   updateStateTemplate={updateStateTemplate}
+                  deleteStateTemplate={deleteStateTemplate}
                 />
               ))
             : null}

@@ -28,9 +28,9 @@ const Templates = () => {
     );
   };
 
-  const deleteStateTemplate = (deletedTemplate: TemplateAttributes) => {
+  const deleteStateTemplate = (deletedTemplateId: string) => {
     setTemplates(
-      templates.filter((template) => template.id !== deletedTemplate.id),
+      templates.filter((template) => template.id !== deletedTemplateId),
     );
   };
 

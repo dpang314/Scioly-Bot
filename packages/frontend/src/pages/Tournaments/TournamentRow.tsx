@@ -2,7 +2,7 @@ import {Modal, TableRow, TableCell, Switch, Button} from '@mui/material';
 import Box from '@mui/material/Box';
 import React, {FunctionComponent} from 'react';
 import {TemplateAttributes, TournamentAttributes} from 'scioly-bot-types';
-import {updateTournament} from '../../api/tournmanent';
+import {deleteTournament, updateTournament} from '../../api/tournmanent';
 import TournamentForm from './TournamentForm';
 
 type Props = {
@@ -10,6 +10,7 @@ type Props = {
   templates: TemplateAttributes[];
   addStateTournament: (tournament: TournamentAttributes) => void;
   updateStateTournament: (tournament: TournamentAttributes) => void;
+  deleteStateTournament: (id: string) => void;
 };
 
 const TournamentRow: FunctionComponent<Props> = ({
@@ -17,6 +18,7 @@ const TournamentRow: FunctionComponent<Props> = ({
   templates,
   addStateTournament,
   updateStateTournament,
+  deleteStateTournament,
 }) => {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
@@ -29,6 +31,11 @@ const TournamentRow: FunctionComponent<Props> = ({
       active: !tournament.active,
     });
     updateStateTournament(await response.json());
+  };
+
+  const handleDelete = async () => {
+    await deleteTournament(tournament.id);
+    deleteStateTournament(tournament.id);
   };
 
   const style = {
@@ -59,18 +66,25 @@ const TournamentRow: FunctionComponent<Props> = ({
       <TableRow
         key={tournament.id}
         sx={{'&:last-child td, &:last-child th': {border: 0}}}>
-        <TableCell component="th" scope="row">
+        <TableCell width="50%" component="th" scope="row">
           {tournament.name}
         </TableCell>
-        <TableCell align="right">
+        <TableCell width="30%" align="right">
           <Switch
             onChange={toggleStatus}
             checked={tournament.active}
             // inputProps={{'aria-label': 'controlled'}}
           />
         </TableCell>
-        <TableCell align="right">
-          <Button onClick={handleOpen}>Edit</Button>
+        <TableCell width="10%" align="right">
+          <Button onClick={handleOpen} variant="outlined">
+            Edit
+          </Button>
+        </TableCell>
+        <TableCell width="10%" align="right">
+          <Button onClick={handleDelete} variant="outlined" color="error">
+            Delete
+          </Button>
         </TableCell>
       </TableRow>
     </>

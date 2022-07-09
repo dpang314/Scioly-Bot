@@ -19,7 +19,7 @@ type Props = {
   tournaments: TournamentAttributes[];
   addStateTournament: (tournament: TournamentAttributes) => void;
   updateStateTournament: (tournament: TournamentAttributes) => void;
-  deleteStateTournament: (tournament: TournamentAttributes) => void;
+  deleteStateTournament: (id: string) => void;
 };
 
 const TournamentTable: FunctionComponent<Props> = ({
@@ -34,7 +34,7 @@ const TournamentTable: FunctionComponent<Props> = ({
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell colSpan={3}>
+            <TableCell colSpan={4}>
               <TournamentModalButton
                 templates={templates}
                 addStateTournament={addStateTournament}
@@ -43,9 +43,12 @@ const TournamentTable: FunctionComponent<Props> = ({
             </TableCell>
           </TableRow>
           <TableRow>
-            <TableCell>Tournament</TableCell>
-            <TableCell align="right">Active?</TableCell>
-            <TableCell align="right" />
+            <TableCell width="50%">Tournament</TableCell>
+            <TableCell width="20%" align="right">
+              Active?
+            </TableCell>
+            <TableCell width="10%" align="right" />
+            <TableCell width="10%" align="right" />
           </TableRow>
         </TableHead>
         <TableBody>
@@ -57,6 +60,7 @@ const TournamentTable: FunctionComponent<Props> = ({
                   templates={templates}
                   addStateTournament={addStateTournament}
                   updateStateTournament={updateStateTournament}
+                  deleteStateTournament={deleteStateTournament}
                 />
               ))
             : null}

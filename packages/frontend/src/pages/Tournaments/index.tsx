@@ -43,11 +43,9 @@ const Tournaments = () => {
     );
   };
 
-  const deleteStateTournament = (deletedTournament: TournamentAttributes) => {
+  const deleteStateTournament = (deletedTournamentId: string) => {
     setTournaments(
-      tournaments.filter(
-        (tournament) => tournament.id !== deletedTournament.id,
-      ),
+      tournaments.filter((tournament) => tournament.id !== deletedTournamentId),
     );
   };
 

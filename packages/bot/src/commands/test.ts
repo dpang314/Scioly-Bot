@@ -18,6 +18,7 @@ const getTournament = async (interaction: CommandInteraction) => {
   // TODO switch to manually setting available servers for more efficient tournament retrieval
   const members = await interaction.guild?.members.list();
   if (!members) {
+    await interaction.reply('No tournaments');
     return null;
   }
   const tournaments: Tournament[] = [];
@@ -27,7 +28,7 @@ const getTournament = async (interaction: CommandInteraction) => {
         include: [{model: Tournament, as: 'tournaments'}],
       });
       if (administrator && administrator.tournaments) {
-        tournaments.concat(administrator.tournaments);
+        tournaments.push(...administrator.tournaments);
       }
     }
   }

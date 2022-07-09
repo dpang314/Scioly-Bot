@@ -4,11 +4,16 @@ const nameSchema = Yup.string()
   .typeError('Must be a string')
   .max(100, 'Must be 100 characters or less');
 
+// could add a transformation to automatically add https:// if the link
+// doesn't start with http:// or https:// as it is very likely that the link
+// should have https://. However, this could lead to a silent failure if
+// the link was actually supposed to have http://
 const urlSchema = Yup.string()
+  .trim()
   .typeError('Must be a string')
   .matches(
     /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/,
-    'Must be a valid URL',
+    'Must be a full URL with http:// or https://',
   );
 
 const minutesSchema = Yup.number()

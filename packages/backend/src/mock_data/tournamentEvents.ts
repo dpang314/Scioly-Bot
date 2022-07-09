@@ -3,7 +3,7 @@ import {TournamentEventCreationAttributes} from 'scioly-bot-types';
 const validTournamentEvent: TournamentEventCreationAttributes = {
   name: 'test event',
   minutes: 1000,
-  link: 'www.google.com',
+  link: 'https://www.google.com',
 };
 
 const incompleteTournamentEvent = {
@@ -13,7 +13,7 @@ const incompleteTournamentEvent = {
 const invalidTournamentEvent: TournamentEventCreationAttributes = {
   name: 'test event',
   minutes: 10000000000,
-  link: 'github.com',
+  link: 'https://www.github.com',
 };
 
 export {

@@ -8,16 +8,20 @@ import {
   TableContainer,
   TableHead,
 } from '@mui/material';
-import React, {FunctionComponent} from 'react';
+import {FunctionComponent} from 'react';
 
-import {TemplateAttributes, TournamentAttributes} from 'scioly-bot-types';
-import TournamentModalButton from './TournamentModalButton';
+import {
+  TemplateAttributes,
+  TournamentAttributes,
+  TournamentCreationAttributes,
+} from 'scioly-bot-types';
+import TournamentModalButton from './TournamentCreationButton';
 import TournamentRow from './TournamentRow';
 
 type Props = {
   templates: TemplateAttributes[];
   tournaments: TournamentAttributes[];
-  addStateTournament: (tournament: TournamentAttributes) => void;
+  addStateTournament: (tournament: TournamentCreationAttributes) => void;
   updateStateTournament: (tournament: TournamentAttributes) => void;
   deleteStateTournament: (id: string) => void;
 };

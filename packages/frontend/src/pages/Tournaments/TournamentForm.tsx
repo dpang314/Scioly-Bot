@@ -4,7 +4,6 @@ import {
   TextField,
   Button,
   MenuItem,
-  Menu,
 } from '@mui/material';
 import {Formik, FieldArray} from 'formik';
 import {FunctionComponent} from 'react';
@@ -14,16 +13,16 @@ import ErrorMessage from '../../components/ErrorMessage';
 import {
   TemplateAttributes,
   TournamentAttributes,
+  TournamentCreationAttributes,
   tournamentCreationSchema,
 } from 'scioly-bot-types';
 import * as Yup from 'yup';
-import {createTournament, updateTournament} from '../../api/tournmanent';
 
-type FormProps = {
+export type FormProps = {
   tournament?: TournamentAttributes;
   templates: TemplateAttributes[];
   setOpen: (open: boolean) => void;
-  addStateTournament: (tournament: TournamentAttributes) => void;
+  addStateTournament: (tournament: TournamentCreationAttributes) => void;
   updateStateTournament: (tournament: TournamentAttributes) => void;
 };
 
@@ -51,17 +50,16 @@ const TournamentForm: FunctionComponent<FormProps> = ({
     })}
     onSubmit={async (values, {setSubmitting}) => {
       if (tournament) {
-        const response = await updateTournament(tournament.id, {
+        updateStateTournament({
           id: tournament.id,
+          active: tournament.active,
           ...values,
         });
-        updateStateTournament(await response.json());
       } else {
-        const newTournament = await createTournament({
+        addStateTournament({
           ...values,
           active: false,
         });
-        addStateTournament(await newTournament.json());
       }
       setSubmitting(false);
       setOpen(false);

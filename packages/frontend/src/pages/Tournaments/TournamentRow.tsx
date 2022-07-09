@@ -1,14 +1,18 @@
 import {Modal, TableRow, TableCell, Switch, Button} from '@mui/material';
 import Box from '@mui/material/Box';
 import React, {FunctionComponent} from 'react';
-import {TemplateAttributes, TournamentAttributes} from 'scioly-bot-types';
+import {
+  TemplateAttributes,
+  TournamentAttributes,
+  TournamentCreationAttributes,
+} from 'scioly-bot-types';
 import {deleteTournament, updateTournament} from '../../api/tournmanent';
 import TournamentForm from './TournamentForm';
 
 type Props = {
   tournament: TournamentAttributes;
   templates: TemplateAttributes[];
-  addStateTournament: (tournament: TournamentAttributes) => void;
+  addStateTournament: (tournament: TournamentCreationAttributes) => void;
   updateStateTournament: (tournament: TournamentAttributes) => void;
   deleteStateTournament: (id: string) => void;
 };

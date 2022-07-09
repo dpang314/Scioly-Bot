@@ -1,9 +1,17 @@
 import {useEffect, useState} from 'react';
-import {TemplateAttributes, TournamentAttributes} from 'scioly-bot-types';
+import {
+  TemplateAttributes,
+  TournamentAttributes,
+  TournamentCreationAttributes,
+} from 'scioly-bot-types';
 import TournamentTable from './TournamentTable';
 import Loading from '../../components/Loading';
 import {getTemplates} from '../../api/templates';
-import {getTournaments} from '../../api/tournmanent';
+import {
+  createTournament,
+  getTournaments,
+  updateTournament,
+} from '../../api/tournmanent';
 
 const Tournaments = () => {
   const [tournaments, setTournaments] = useState<TournamentAttributes[]>([]);
@@ -22,14 +30,22 @@ const Tournaments = () => {
     })();
   }, []);
 
-  const addStateTournament = (newTournament: TournamentAttributes) => {
-    setTournaments([...tournaments, newTournament]);
+  const addStateTournament = async (
+    newTournament: TournamentCreationAttributes,
+  ) => {
+    const response = await createTournament(newTournament);
+    setTournaments([...tournaments, await response.json()]);
   };
 
-  const updateStateTournament = (updatedTournament: TournamentAttributes) => {
+  const updateStateTournament = async (
+    updatedTournament: TournamentAttributes,
+  ) => {
+    const response = await (
+      await updateTournament(updatedTournament.id, updatedTournament)
+    ).json();
     setTournaments(
       tournaments.map((tournament) => {
-        if (tournament.id === updatedTournament.id) {
+        if (tournament.id === response.id) {
           return updatedTournament;
         }
         return tournament;

@@ -236,7 +236,7 @@ describe('tournament endpoint', () => {
     test('deleting a tournament by id succeeds', async () => {
       const response = await server.delete(`/api/tournaments/${tournament.id}`);
       expect(response.statusCode).toBe(200);
-      expect(response.body).toStrictEqual(tournament.toJSON());
+      expect(response.body).toStrictEqual({});
       expect(await Tournament.count({where: {id: tournament.id}})).toBe(0);
       tournament.tournamentEvents?.forEach(async (tournamentEvent) => {
         expect(

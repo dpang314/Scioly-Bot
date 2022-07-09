@@ -161,8 +161,8 @@ tournamentsRouter.delete('/:id', async (req, res) => {
     tournament[0].tournamentEvents?.forEach(async (tournamentEvent) => {
       await tournamentEvent.destroy();
     });
-    const deletedTournament = await tournament[0].destroy();
-    return res.status(200).json(deletedTournament);
+    await tournament[0].destroy();
+    return res.status(200).send();
   }
   return res.status(404).json('Not found');
 });

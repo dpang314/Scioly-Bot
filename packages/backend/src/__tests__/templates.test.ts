@@ -206,7 +206,7 @@ describe('template endpoint', () => {
     test('deleting a template by id succeeds', async () => {
       const response = await server.delete(`/api/templates/${template.id}`);
       expect(response.statusCode).toBe(200);
-      expect(response.body).toStrictEqual(template.toJSON());
+      expect(response.body).toStrictEqual({});
       expect(await Template.count({where: {id: template.id}})).toBe(0);
       template.templateEvents?.forEach(async (templateEvent) => {
         expect(await TemplateEvent.count({where: {id: templateEvent.id}})).toBe(

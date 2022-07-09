@@ -150,8 +150,8 @@ templatesRouter.delete('/:id', async (req, res) => {
     template[0].templateEvents?.forEach(async (tournamentEvent) => {
       await tournamentEvent.destroy();
     });
-    const deletedTemplate = await template[0].destroy();
-    return res.status(200).json(deletedTemplate);
+    await template[0].destroy();
+    return res.status(200).send();
   }
   return res.status(404).json('Not found');
 });

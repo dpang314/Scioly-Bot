@@ -9,6 +9,6 @@ const app = createApp(database);
 const port = process.env.PORT || 5001;
 
 app.listen(port, async () => {
-  await database.sync({force: true});
+  await database.sync();
   console.log(`Example app listening at http://localhost:${port}`);
 });

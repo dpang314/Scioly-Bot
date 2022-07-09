@@ -1,4 +1,11 @@
-import {FormControl, Box, TextField, Button, MenuItem} from '@mui/material';
+import {
+  FormControl,
+  Box,
+  TextField,
+  Button,
+  MenuItem,
+  Menu,
+} from '@mui/material';
 import {Formik, FieldArray} from 'formik';
 import {FunctionComponent} from 'react';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
@@ -31,7 +38,7 @@ const TournamentForm: FunctionComponent<FormProps> = ({
     initialValues={{
       name: tournament ? tournament.name : '',
       submission: tournament ? tournament.submission : '',
-      template: 0,
+      template: '',
       tournamentEvents: tournament?.tournamentEvents
         ? tournament.tournamentEvents
         : [],
@@ -122,7 +129,11 @@ const TournamentForm: FunctionComponent<FormProps> = ({
                     formik.handleChange(e);
                   }}
                   fullWidth
-                  select>
+                  select
+                  defaultValue="">
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
                   {templates
                     ? templates.map((template, index) => (
                         <MenuItem

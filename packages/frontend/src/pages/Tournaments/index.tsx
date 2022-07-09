@@ -16,13 +16,7 @@ const Tournaments = () => {
   useEffect(() => {
     (async () => {
       const templates = await getTemplates();
-      setTemplates([
-        {
-          id: '',
-          name: 'None',
-        },
-        ...(await templates.json()),
-      ]);
+      setTemplates(await templates.json());
       const tournaments = await getTournaments();
       setTournaments(await tournaments.json());
     })();

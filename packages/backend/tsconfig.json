@@ -13,6 +13,7 @@
   "references": [
     {"path": "../types"},
     {"path": "../models"},
-    {"path": "../config"}
+    {"path": "../config"},
+    {"path": "../test-data"}
   ]
 }

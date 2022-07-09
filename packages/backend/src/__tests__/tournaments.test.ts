@@ -7,8 +7,8 @@ import {
   invalidTournament,
   incompleteTournament,
   validTournamentWithoutEvents,
-} from '../mock_data/tournaments';
-import createMockApp, {MockApp} from '../mock_data/app';
+} from 'scioly-bot-test-data';
+import createMockApp, {MockApp} from '../mock-app/app';
 
 describe('tournament endpoint', () => {
   let server: request.SuperTest<request.Test>;

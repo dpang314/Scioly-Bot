@@ -7,8 +7,8 @@ import {
   invalidTemplate,
   incompleteTemplate,
   validTemplateWithoutEvents,
-} from '../mock_data/templates';
-import createMockApp, {MockApp} from '../mock_data/app';
+} from 'scioly-bot-test-data';
+import createMockApp, {MockApp} from '../mock-app/app';
 
 describe('template endpoint', () => {
   let server: request.SuperTest<request.Test>;

@@ -10,5 +10,5 @@ const port = process.env.PORT || 5001;
 
 app.listen(port, async () => {
   await database.sync();
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`App listening at http://localhost:${port}`);
 });

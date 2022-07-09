@@ -24,13 +24,5 @@
     "composite": true
   },
   "include": ["./**/*", "./**/.eslintrc.js"],
-  "exclude": ["node_modules", "**/__tests__/**"],
-  "references": [
-    {"path": "./packages/backend"},
-    {"path": "./packages/models"},
-    {"path": "./packages/types"},
-    {"path": "./packages/frontend"},
-    {"path": "./packages/bot"},
-    {"path": "./packages/config"}
-  ]
+  "exclude": ["node_modules", "**/__tests__/**"]
 }

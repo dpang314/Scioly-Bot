@@ -13,12 +13,19 @@ const Navbar: FunctionComponent = () => {
     <Box>
       <AppBar position="static">
         <Toolbar>
-          <Button href="/tournaments" color="inherit">
-            Tournaments
-          </Button>
-          <Button href="/templates" color="inherit">
-            Templates
-          </Button>
+          {user ? (
+            <>
+              <Button href="/tournaments" color="inherit">
+                Tournaments
+              </Button>
+              <Button href="/templates" color="inherit">
+                Templates
+              </Button>
+            </>
+          ) : (
+            <></>
+          )}
+
           <div style={{flex: 1}} />
           {user ? (
             <Button color="error" variant="contained" onClick={logout}>

@@ -25,7 +25,7 @@ passport.use(
     {
       clientID: CLIENT_ID,
       clientSecret: DISCORD_SECRET,
-      callbackURL: '/auth/discord/callback',
+      callbackURL: '/api/auth/discord/callback',
       scope: ['identify'],
     },
     async (accessToken, refreshToken, profile, done) => {

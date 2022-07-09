@@ -44,9 +44,15 @@ const createApp = (
 
   middleware?.forEach((handler) => app.use(handler));
 
-  app.use(express.static(path.resolve(__dirname, '../frontend/build')));
+  app.use('/api', router);
 
-  app.use('/', router);
+  app.use(express.static(path.resolve(__dirname, '../../frontend/build')));
+
+  app.get('*', async (req, res) => {
+    res.sendFile(
+      path.join(path.resolve(__dirname, '../../frontend/build'), 'index.html'),
+    );
+  });
 
   return app;
 };

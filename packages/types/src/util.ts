@@ -7,7 +7,7 @@ const nameSchema = Yup.string()
 const urlSchema = Yup.string()
   .typeError('Must be a string')
   .matches(
-    /^((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*$/,
+    /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_+.~#?&//=]*)/,
     'Must be a valid URL',
   );
 

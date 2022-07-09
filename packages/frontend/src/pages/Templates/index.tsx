@@ -1,10 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import axios from 'axios';
-import Navbar from '../../components/Navbar';
 import TemplateTable from './TemplateTable';
 import Loading from '../../components/Loading';
 import {getTemplates} from '../../api/templates';
-import Unauthorized from '../Unauthorized';
 import {TemplateAttributes} from 'scioly-bot-types';
 
 const Templates = () => {

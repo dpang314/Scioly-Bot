@@ -1,6 +1,6 @@
 import {FormControl, Box, TextField, Button, MenuItem} from '@mui/material';
 import {Formik, FieldArray} from 'formik';
-import {FunctionComponent, useEffect, useState} from 'react';
+import {FunctionComponent} from 'react';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ErrorMessage from '../../components/ErrorMessage';
@@ -9,10 +9,8 @@ import {
   TournamentAttributes,
   tournamentCreationSchema,
 } from 'scioly-bot-types';
-import {createTemplate, updateTemplate} from '../../api/templates';
 import * as Yup from 'yup';
 import {createTournament, updateTournament} from '../../api/tournmanent';
-import TemplateForm from '../Templates/TemplateForm';
 
 type FormProps = {
   tournament?: TournamentAttributes;

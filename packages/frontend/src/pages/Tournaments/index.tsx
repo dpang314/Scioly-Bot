@@ -1,9 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import Navbar from '../../components/Navbar';
+import {useEffect, useState} from 'react';
 import {TemplateAttributes, TournamentAttributes} from 'scioly-bot-types';
 import TournamentTable from './TournamentTable';
 import Loading from '../../components/Loading';
-import axios from 'axios';
 import {getTemplates} from '../../api/templates';
 import {getTournaments} from '../../api/tournmanent';
 

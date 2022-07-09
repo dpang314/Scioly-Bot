@@ -1,15 +1,10 @@
 import {FormControl, Box, TextField, Button} from '@mui/material';
 import {Formik, FieldArray} from 'formik';
-import {FunctionComponent, useEffect, useState} from 'react';
+import {FunctionComponent} from 'react';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ErrorMessage from '../../components/ErrorMessage';
-import {
-  TemplateAttributes,
-  templateCreationSchema,
-  TemplateEventAttributes,
-  TemplateEventCreationAttributes,
-} from 'scioly-bot-types';
+import {TemplateAttributes, templateCreationSchema} from 'scioly-bot-types';
 import {createTemplate, updateTemplate} from '../../api/templates';
 
 type FormProps = {

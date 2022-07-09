@@ -1,10 +1,4 @@
-import {
-  FormControl,
-  Box,
-  TextField,
-  Button,
-  MenuItem,
-} from '@mui/material';
+import {FormControl, Box, TextField, Button, MenuItem} from '@mui/material';
 import {Formik, FieldArray} from 'formik';
 import {FunctionComponent} from 'react';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
@@ -183,6 +177,7 @@ const TournamentForm: FunctionComponent<FormProps> = ({
                             `tournamentEvents[${index}].minutes`,
                           )}
                           label="Minutes"
+                          type="number"
                           fullWidth
                         />
                         <ErrorMessage
@@ -202,12 +197,14 @@ const TournamentForm: FunctionComponent<FormProps> = ({
                         />
                       </div>
                       <Button
+                        className="remove-event"
                         onClick={() => {
                           arrayHelpers.remove(index);
                         }}>
                         <RemoveCircleOutlineIcon />
                       </Button>
                       <Button
+                        className="add-event"
                         onClick={() =>
                           arrayHelpers.insert(index + 1, {
                             name: '',
@@ -221,9 +218,12 @@ const TournamentForm: FunctionComponent<FormProps> = ({
                   ))
                 ) : (
                   <Button
+                    className="add-event"
                     variant="outlined"
                     fullWidth
-                    onClick={() => arrayHelpers.push({name: '', minutes: ''})}>
+                    onClick={() =>
+                      arrayHelpers.push({name: '', minutes: '', link: ''})
+                    }>
                     Add event
                   </Button>
                 )}

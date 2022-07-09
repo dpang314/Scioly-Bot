@@ -1,7 +1,11 @@
 import {Button, Modal, Box} from '@mui/material';
 import React, {FunctionComponent} from 'react';
 import AddIcon from '@mui/icons-material/Add';
-import {TemplateAttributes, TournamentAttributes, TournamentCreationAttributes} from 'scioly-bot-types';
+import {
+  TemplateAttributes,
+  TournamentAttributes,
+  TournamentCreationAttributes,
+} from 'scioly-bot-types';
 import TournamentForm from './TournamentForm';
 
 type TournamentModalButtonProps = {

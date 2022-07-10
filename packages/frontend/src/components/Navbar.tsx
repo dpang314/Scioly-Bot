@@ -27,13 +27,13 @@ const Navbar: FunctionComponent = () => {
           )}
 
           <div style={{flex: 1}} />
-          {user ? (
-            <Button color="error" variant="contained" onClick={logout}>
-              Log Out
-            </Button>
-          ) : (
+          {user === null ? (
             <Button color="success" variant="contained" onClick={login}>
               Log In
+            </Button>
+          ) : user === undefined ? null : (
+            <Button color="error" variant="contained" onClick={logout}>
+              Log Out
             </Button>
           )}
         </Toolbar>

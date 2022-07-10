@@ -114,6 +114,10 @@ tournamentsRouter.put('/:id', async (req, res) => {
             (newEvent) => newEvent.id === event.id,
           ) === -1
         ) {
+          const tests = await event.getTests();
+          for (const test of tests) {
+            await test.destroy();
+          }
           await event.destroy();
         }
       }
@@ -159,6 +163,10 @@ tournamentsRouter.delete('/:id', async (req, res) => {
   });
   if (tournament && tournament[0]) {
     tournament[0].tournamentEvents?.forEach(async (tournamentEvent) => {
+      const tests = await tournamentEvent.getTests();
+      for (const test of tests) {
+        await test.destroy();
+      }
       await tournamentEvent.destroy();
     });
     await tournament[0].destroy();

@@ -1,12 +1,13 @@
 import request from 'supertest';
 
-import {Tournament, TournamentEvent} from 'scioly-bot-models';
+import {Test, Tournament, TournamentEvent} from 'scioly-bot-models';
 import {
   validTournament,
   validOtherTournament,
   invalidTournament,
   incompleteTournament,
   validTournamentWithoutEvents,
+  validTournamentEvent,
 } from 'scioly-bot-fixtures';
 import createMockApp, {MockApp} from '../mock-app/app';
 
@@ -163,6 +164,20 @@ describe('tournament endpoint', () => {
         userId: tournament.userId,
       });
     });
+    test('valid tournament removing event deletes associated tests', async () => {
+      const event = await tournament.createTournamentEvent(
+        validTournamentEvent,
+      );
+      await event.createTest({
+        userId: 'user id',
+        timeStarted: new Date(),
+        finished: false,
+      });
+      await server
+        .put(`/api/tournaments/${tournament.id}`)
+        .send(validTournamentWithoutEvents);
+      expect(await Test.count()).toBe(0);
+    });
     test('tournament with invalid field returns 400', async () => {
       const response = await server
         .put(`/api/tournaments/${tournament.id}`)
@@ -257,6 +272,19 @@ describe('tournament endpoint', () => {
         '/api/tournaments/this-is-not-a-real-id',
       );
       expect(response.statusCode).toBe(404);
+    });
+
+    test('deleting a tournament deletes all tests', async () => {
+      const event = await tournament.createTournamentEvent(
+        validTournamentEvent,
+      );
+      await event.createTest({
+        userId: 'user id',
+        timeStarted: new Date(),
+        finished: false,
+      });
+      await server.delete(`/api/tournaments/${tournament.id}`);
+      expect(await Test.count()).toBe(0);
     });
   });
 });

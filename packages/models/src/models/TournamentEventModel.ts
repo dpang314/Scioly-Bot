@@ -2,6 +2,7 @@ import {
   Association,
   DataTypes,
   HasManyCreateAssociationMixin,
+  HasManyGetAssociationsMixin,
   Model,
   Sequelize,
 } from 'sequelize';
@@ -32,6 +33,7 @@ class TournamentEvent
     tests: Association<TournamentEvent, Test>;
   };
 
+  declare getTests: HasManyGetAssociationsMixin<Test>;
   declare createTest: HasManyCreateAssociationMixin<Test>;
 
   public static initialize(sequelize: Sequelize) {

@@ -12,7 +12,7 @@ const AppRoutes = () => {
   const user = useContext(UserContext);
   // loading
   if (user === undefined) {
-    <Loading />;
+    return <Loading />;
   } else if (user === null) {
     return (
       <Router>

@@ -9,14 +9,14 @@ import {
   TableBody,
 } from '@mui/material';
 import {FunctionComponent} from 'react';
-import {TemplateAttributes} from 'scioly-bot-types';
+import {TemplateAttributes, TemplateCreationAttributes} from 'scioly-bot-types';
 
 import TemplateCreationButton from './TemplateCreationButton';
 import TemplateRow from './TemplateRow';
 
 type TemplateTableProps = {
   templates: Array<TemplateAttributes>;
-  addStateTemplate: (template: TemplateAttributes) => void;
+  addStateTemplate: (template: TemplateCreationAttributes) => void;
   updateStateTemplate: (template: TemplateAttributes) => void;
   deleteStateTemplate: (id: string) => void;
 };

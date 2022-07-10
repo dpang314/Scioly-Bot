@@ -4,13 +4,16 @@ import {FunctionComponent} from 'react';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import ErrorMessage from '../../components/ErrorMessage';
-import {TemplateAttributes, templateCreationSchema} from 'scioly-bot-types';
-import {createTemplate, updateTemplate} from '../../api/templates';
+import {
+  TemplateAttributes,
+  TemplateCreationAttributes,
+  templateCreationSchema,
+} from 'scioly-bot-types';
 
-type FormProps = {
+export type FormProps = {
   template?: TemplateAttributes;
   setOpen: (open: boolean) => void;
-  addStateTemplate: (template: TemplateAttributes) => void;
+  addStateTemplate: (template: TemplateCreationAttributes) => void;
   updateStateTemplate: (template: TemplateAttributes) => void;
 };
 
@@ -29,17 +32,12 @@ const TemplateForm: FunctionComponent<FormProps> = ({
     validationSchema={templateCreationSchema}
     onSubmit={async (values, {setSubmitting}) => {
       if (template) {
-        const response = await updateTemplate(template.id, {
+        await updateStateTemplate({
           id: template.id,
           ...values,
         });
-        updateStateTemplate(await response.json());
       } else {
-        const newTemplate = await createTemplate({
-          name: values.name,
-          templateEvents: values.templateEvents,
-        });
-        addStateTemplate(await newTemplate.json());
+        await addStateTemplate(values);
       }
       setSubmitting(false);
       setOpen(false);
@@ -89,18 +87,21 @@ const TemplateForm: FunctionComponent<FormProps> = ({
                             `templateEvents[${index}].minutes`,
                           )}
                           label="Minutes"
+                          type="number"
                         />
                         <ErrorMessage
                           name={`templateEvents[${index}].minutes`}
                         />
                       </div>
                       <Button
+                        className="remove-event"
                         onClick={() => {
                           arrayHelpers.remove(index);
                         }}>
                         <RemoveCircleOutlineIcon />
                       </Button>
                       <Button
+                        className="add-event"
                         onClick={() =>
                           arrayHelpers.insert(index + 1, {
                             name: '',
@@ -113,6 +114,7 @@ const TemplateForm: FunctionComponent<FormProps> = ({
                   ))
                 ) : (
                   <Button
+                    className="add-event"
                     variant="outlined"
                     fullWidth
                     onClick={() => arrayHelpers.push({name: '', minutes: ''})}>

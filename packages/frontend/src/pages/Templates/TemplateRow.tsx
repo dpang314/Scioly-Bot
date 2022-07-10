@@ -1,12 +1,12 @@
 import {Modal, TableRow, TableCell, Button, Box} from '@mui/material';
 import React, {FunctionComponent} from 'react';
-import {TemplateAttributes} from 'scioly-bot-types';
+import {TemplateAttributes, TemplateCreationAttributes} from 'scioly-bot-types';
 import {deleteTemplate} from '../../api/templates';
 import TemplateForm from './TemplateForm';
 
 type TemplateRowProps = {
   template: TemplateAttributes;
-  addStateTemplate: (template: TemplateAttributes) => void;
+  addStateTemplate: (template: TemplateCreationAttributes) => void;
   updateStateTemplate: (template: TemplateAttributes) => void;
   deleteStateTemplate: (id: string) => void;
 };

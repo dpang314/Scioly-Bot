@@ -6,6 +6,8 @@ import Button from '@mui/material/Button';
 import {FunctionComponent} from 'react';
 import {login, logout} from '../api/auth';
 import UserContext from '../providers/UserContext';
+import {Avatar, Link} from '@mui/material';
+import logo from '../assets/logo.png';
 
 const Navbar: FunctionComponent = () => {
   const user = React.useContext(UserContext);
@@ -13,6 +15,9 @@ const Navbar: FunctionComponent = () => {
     <Box>
       <AppBar position="static">
         <Toolbar>
+          <Link href="/">
+            <Avatar src={logo} alt="logo" sx={{marginRight: '10px'}} />
+          </Link>
           {user ? (
             <>
               <Button href="/tournaments" color="inherit">

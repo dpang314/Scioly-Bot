@@ -17,6 +17,7 @@
     "jsx": "react-jsx",
     "composite": true
   },
+  "files": ["src/index.d.ts"],
   "include": ["src"],
   "references": [
     {"path": "../types"},

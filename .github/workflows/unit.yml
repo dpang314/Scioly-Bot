@@ -8,6 +8,7 @@ jobs:
       DISCORD_SECRET: ${{ SECRETS.DISCORD_SECRET }}
       DATABASE_CONNECTION: ${{ SECRETS.DATABASE_CONNECTION }}
       SESSION_SECRET: ${{ SECRETS.SESSION_SECRET }}
+      GUILD_ID: ${{ SECRETS.GUILD_ID }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

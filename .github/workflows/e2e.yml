@@ -13,11 +13,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      # Install NPM dependencies, cache them correctly
-      # and run all Cypress tests
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          build: npm run build
-          start: npm run start
-          wait-on: http://localhost:5001
+          start: npm run e2e:headless
+      - name: Cypress run mock app
+        uses: cypress-io/github-action@v2
+        with:
+          start: npm run e2e:mock-app:headless

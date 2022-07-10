@@ -98,7 +98,7 @@ const getEvent = async (
         .addOptions(eventOptions),
     );
     const message = (await interaction.editReply({
-      content: 'Select test from the dropdown',
+      content: 'Select event from the dropdown',
       components: [row],
     })) as Message;
 

@@ -131,7 +131,7 @@ const createTournament = async (
   }
 };
 
-describe('tournament creation form', () => {
+describe('tournament form', () => {
   const user = userEvent.setup();
   describe('creating new tournament', () => {
     let props: FormProps;

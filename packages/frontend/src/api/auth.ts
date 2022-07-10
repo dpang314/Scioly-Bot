@@ -5,10 +5,12 @@ const login = () => {
       : '/api/auth/discord';
 };
 
-const logout = () => {
-  fetch('/api/auth/logout', {
+const logout = async () => {
+  await fetch('/api/auth/logout', {
     method: 'POST',
   });
+  window.location.href =
+    process.env.NODE_ENV == 'development' ? 'http://localhost:3000/' : '/';
 };
 
 const getUser = async () => {

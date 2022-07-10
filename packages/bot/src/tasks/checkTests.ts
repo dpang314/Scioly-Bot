@@ -16,7 +16,7 @@ const checkTests = async () => {
           .setTitle('TIME IS UP! SUBMIT NOW!')
           .setURL(tournament.submission)
           .addFields(
-            {name: 'Test', value: event.name},
+            {name: 'Event', value: event.name},
             {name: 'Private test ID', value: `${test.id}`},
             {
               name: 'Submission link',

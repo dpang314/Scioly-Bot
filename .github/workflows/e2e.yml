@@ -2,6 +2,13 @@ name: End-to-end tests
 on: [push]
 jobs:
   cypress-run:
+    env:
+      DISCORD_TOKEN: ${{ SECRETS.DISCORD_TOKEN }}
+      CLIENT_ID: ${{ SECRETS.CLIENT_ID }}
+      DISCORD_SECRET: ${{ SECRETS.DISCORD_SECRET }}
+      DATABASE_CONNECTION: ${{ SECRETS.DATABASE_CONNECTION }}
+      SESSION_SECRET: ${{ SECRETS.SESSION_SECRET }}
+      GUILD_ID: ${{ SECRETS.GUILD_ID }}
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout

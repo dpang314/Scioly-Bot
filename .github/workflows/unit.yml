@@ -1,7 +1,13 @@
 name: Unit tests
 on: push
 jobs:
-  build:
+  jest:
+    env:
+      DISCORD_TOKEN: ${{ SECRETS.DISCORD_TOKEN }}
+      CLIENT_ID: ${{ SECRETS.CLIENT_ID }}
+      DISCORD_SECRET: ${{ SECRETS.DISCORD_SECRET }}
+      DATABASE_CONNECTION: ${{ SECRETS.DATABASE_CONNECTION }}
+      SESSION_SECRET: ${{ SECRETS.SESSION_SECRET }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

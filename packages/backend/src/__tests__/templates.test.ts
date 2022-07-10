@@ -7,7 +7,7 @@ import {
   invalidTemplate,
   incompleteTemplate,
   validTemplateWithoutEvents,
-} from 'scioly-bot-test-data';
+} from 'scioly-bot-fixtures';
 import createMockApp, {MockApp} from '../mock-app/app';
 
 describe('template endpoint', () => {

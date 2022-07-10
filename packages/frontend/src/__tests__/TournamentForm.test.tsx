@@ -9,7 +9,7 @@ import {
   validTournament,
   validTournamentEvent,
   validTournamentWithoutEvents,
-} from 'scioly-bot-test-data';
+} from 'scioly-bot-fixtures';
 import {UserEvent} from '@testing-library/user-event/dist/types/setup';
 import {
   TournamentCreationAttributes,

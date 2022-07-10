@@ -2,10 +2,10 @@ import {Button, Modal, Box} from '@mui/material';
 import React, {FunctionComponent} from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import TemplateForm from './TemplateForm';
-import {TemplateAttributes} from 'scioly-bot-types';
+import {TemplateAttributes, TemplateCreationAttributes} from 'scioly-bot-types';
 
 interface FormProps {
-  addStateTemplate: (template: TemplateAttributes) => void;
+  addStateTemplate: (template: TemplateCreationAttributes) => void;
   updateStateTemplate: (template: TemplateAttributes) => void;
 }
 

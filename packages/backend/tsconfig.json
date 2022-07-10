@@ -14,6 +14,6 @@
     {"path": "../types"},
     {"path": "../models"},
     {"path": "../config"},
-    {"path": "../test-data"}
+    {"path": "../fixtures"}
   ]
 }

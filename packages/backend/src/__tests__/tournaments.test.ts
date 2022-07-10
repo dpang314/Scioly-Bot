@@ -7,7 +7,7 @@ import {
   invalidTournament,
   incompleteTournament,
   validTournamentWithoutEvents,
-} from 'scioly-bot-test-data';
+} from 'scioly-bot-fixtures';
 import createMockApp, {MockApp} from '../mock-app/app';
 
 describe('tournament endpoint', () => {

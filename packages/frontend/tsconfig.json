@@ -18,5 +18,9 @@
     "composite": true
   },
   "include": ["src"],
-  "references": [{"path": "../types"}, {"path": "../models"}]
+  "references": [
+    {"path": "../types"},
+    {"path": "../models"},
+    {"path": "../fixtures"}
+  ]
 }

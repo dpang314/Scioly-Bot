@@ -224,7 +224,7 @@ const confirm = async (
     ) {
       validUser = true;
       if (buttonInteraction.customId === 'confirm') {
-        buttonInteraction.reply({content: 'Confirmed!', ephemeral: true});
+        await buttonInteraction.reply({content: 'Confirmed!', ephemeral: true});
         if (buttonInteraction.user.id === interaction.user.id)
           userConfirmed = true;
         if (partner1 && buttonInteraction.user.id === partner1.id)

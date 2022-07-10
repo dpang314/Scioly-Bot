@@ -14,7 +14,7 @@
     "start:mock-app": "npm run start:mock-app --workspace=packages/backend",
     "test": "npm run test --workspaces --if-present",
     "e2e": "start-server-and-test http://localhost:5001 'cypress open'",
-    "e2e:headless": "start-server-and-test http://localhost:5001 'cypress run",
+    "e2e:headless": "start-server-and-test http://localhost:5001 'cypress run'",
     "e2e:mock-app": "cross-env CYPRESS_MOCK_APP=true start-server-and-test start:mock-app http://localhost:5001 'cypress open'",
     "e2e:mock-app:headless": "cross-env CYPRESS_MOCK_APP=true start-server-and-test start:mock-app http://localhost:5001 'cypress run'"
   },

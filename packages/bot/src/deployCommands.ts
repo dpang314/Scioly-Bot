@@ -39,7 +39,7 @@ rest
   .catch(console.error);
 
 rest
-  .put(Routes.applicationGuildCommands(CLIENT_ID, '518650826760257536'), {
+  .put(Routes.applicationGuildCommands(CLIENT_ID, '971499326868168774'), {
     body: commands,
   })
   .then(() =>

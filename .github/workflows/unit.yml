@@ -10,5 +10,7 @@ jobs:
         with:
           cache: 'npm'
       - run: npm ci
+      - name: Build
+        run: npm run build
       - name: Jest run
         run: npm run test

@@ -10,7 +10,7 @@ const logout = async () => {
     method: 'POST',
   });
   window.location.href =
-    process.env.NODE_ENV == 'development' ? 'http://localhost:3000/' : '/';
+    process.env.NODE_ENV === 'development' ? 'http://localhost:3000/' : '/';
 };
 
 const getUser = async () => {

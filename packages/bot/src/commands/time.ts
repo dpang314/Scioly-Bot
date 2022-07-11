@@ -37,9 +37,13 @@ module.exports = {
         secondDifference -= minuteDifference * 60;
         testsEmbed.addField(
           test.tournamentEvent.name,
-          `${
-            test.tournamentEvent.minutes - minuteDifference - 1
-          } minutes ${Math.floor(60 - secondDifference)} seconds`,
+          `${test.tournamentEvent.minutes - minuteDifference - 1} ${
+            test.tournamentEvent.minutes - minuteDifference - 1 === 1
+              ? 'minute'
+              : 'minutes'
+          }. ${Math.floor(60 - secondDifference)} ${
+            Math.floor(60 - secondDifference) === 1 ? 'second' : 'seconds'
+          }`,
         );
       }
     }

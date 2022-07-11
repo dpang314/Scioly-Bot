@@ -259,7 +259,9 @@ const confirm = async (
             .setTitle(event.name)
             .setURL(event.link)
             .setDescription(
-              `Only one partner should submit the test\nYou have ${event.minutes} minutes. Good luck!`,
+              `Only one partner should submit the test\nYou have ${
+                event.minutes
+              } ${event.minutes === 1 ? 'minute' : 'minutes'}. Good luck!`,
             )
             .addFields(
               {name: 'Test link', value: `[${event.link}](${event.link})`},

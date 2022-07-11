@@ -48,7 +48,7 @@ const Home = () => {
         <Video>
           <iframe
             src="https://www.youtube.com/embed/BB-ImTWsbiY"
-            title=""
+            title="Scioly Bot User Demo"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
@@ -89,7 +89,7 @@ const Home = () => {
         <Video>
           <iframe
             src="https://www.youtube.com/embed/RceIIW7aDdk"
-            title=""
+            title="Scioly Bot Administrator Demo"
             frameBorder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen

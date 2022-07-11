@@ -4,6 +4,7 @@ import {FunctionComponent} from 'react';
 
 const errorStyle = {
   color: 'red',
+  marginTop: '5px',
 };
 
 type ErrorMessageProp = {name: string};

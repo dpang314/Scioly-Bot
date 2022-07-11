@@ -3,11 +3,12 @@ import AppRoutes from './AppRoutes';
 import Navbar from './components/Navbar';
 import UserProvider from './providers/UserProvider';
 import './reset.css';
-import './common.css';
 
 const darkTheme = createTheme({
   palette: {
-    mode: 'dark',
+    primary: {
+      main: '#333333',
+    },
   },
 });
 

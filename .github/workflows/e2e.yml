@@ -16,8 +16,10 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
+          build: npm run build
           start: npm run e2e:headless
       - name: Cypress run mock app
         uses: cypress-io/github-action@v2
         with:
+          build: npm run build
           start: npm run e2e:mock-app:headless

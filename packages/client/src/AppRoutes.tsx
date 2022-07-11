@@ -29,8 +29,6 @@ const AppRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/templates" element={<Templates />} />
         <Route path="/tournaments" element={<Tournaments />} />
-        <Route path="/templates/:templateId" />
-        <Route path="/tournaments/:tournamentId" />
         <Route path="/*" element={<NotFound />} />
       </Routes>
     </Router>

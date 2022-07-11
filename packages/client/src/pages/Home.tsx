@@ -46,19 +46,20 @@ const Home = () => {
           </ListItem>
         </List>
         <Video>
-          <iframe
-            src="https://www.youtube.com/embed/BB-ImTWsbiY"
-            title="Scioly Bot User Demo"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
+          <video
+            controls
             style={{
               position: 'absolute',
               top: '0',
               left: '0',
               width: '100%',
               height: '100%',
-            }}></iframe>
+            }}>
+            <source
+              src="https://user-images.githubusercontent.com/19295389/178362745-b0541282-6c85-40b5-a7dc-377f1be42ca6.mp4"
+              type="video/mp4"
+            />
+          </video>
         </Video>
       </Box>
       <Box hidden={tab !== 1} bgcolor="lightgray" padding="15px">
@@ -87,19 +88,20 @@ const Home = () => {
           </ListItem>
         </List>
         <Video>
-          <iframe
-            src="https://www.youtube.com/embed/RceIIW7aDdk"
-            title="Scioly Bot Administrator Demo"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
+          <video
+            controls
             style={{
               position: 'absolute',
               top: '0',
               left: '0',
               width: '100%',
               height: '100%',
-            }}></iframe>
+            }}>
+            <source
+              src="https://user-images.githubusercontent.com/19295389/178367453-f1e9625c-27bc-4be3-9dbc-a99c4faf811e.mp4"
+              type="video/mp4"
+            />
+          </video>
         </Video>
       </Box>
     </Container>

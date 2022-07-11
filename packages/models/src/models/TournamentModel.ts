@@ -1,7 +1,6 @@
 import {
   Association,
   DataTypes,
-  HasManyAddAssociationMixin,
   HasManyCreateAssociationMixin,
   HasManyGetAssociationsMixin,
   Model,
@@ -11,7 +10,6 @@ import {
   TournamentAttributes,
   TournamentCreationAttributes,
 } from 'scioly-bot-types';
-import Test from './TestModel';
 import TournamentEvent from './TournamentEventModel';
 
 class Tournament
@@ -30,19 +28,13 @@ class Tournament
 
   declare readonly tournamentEvents?: TournamentEvent[];
 
-  declare readonly tests?: Test[];
-
   declare static associations: {
     // eslint-disable-next-line no-use-before-define
     tournamentEvents: Association<Tournament, TournamentEvent>;
-    // eslint-disable-next-line no-use-before-define
-    tests: Association<Tournament, Test>;
   };
 
   declare createTournamentEvent: HasManyCreateAssociationMixin<TournamentEvent>;
   declare getTournamentEvents: HasManyGetAssociationsMixin<TournamentEvent>;
-
-  declare addTest: HasManyAddAssociationMixin<Test, number>;
 
   public static initialize(sequelize: Sequelize) {
     this.init(

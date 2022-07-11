@@ -41,12 +41,6 @@ const createDatabase = (DATABASE_CONNECTION: string) => {
     as: 'tests',
   });
 
-  Tournament.hasMany(Test, {
-    sourceKey: 'id',
-    foreignKey: 'tournamentId',
-    as: 'tests',
-  });
-
   Tournament.hasMany(TournamentEvent, {
     sourceKey: 'id',
     foreignKey: 'tournamentId',

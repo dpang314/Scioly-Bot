@@ -1,46 +1,138 @@
-# Getting Started with Create React App
+<div id="top"></div>
+<!--
+*** Thanks for checking out the Best-README-Template. If you have a suggestion
+*** that would make this better, please fork the repo and create a pull request
+*** or simply open an issue with the tag "enhancement".
+*** Don't forget to give the project a star!
+*** Thanks again! Now go create something AMAZING! :D
+-->
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/dpang314/Scioly-Bot">
+    <img src="images/logo.png" alt="Logo" width="80" height="80">
+  </a>
 
-## Available Scripts
+<h3 align="center">Scioly Bot</h3>
 
-In the project directory, you can run:
+  <p align="center">
+    Automate Science Olympiad tournaments through Discord
+    <br />
+    <a href="#demo">View Demo</a>
+    ·
+    <a href="https://scioly-bot.herokuapp.com/">Live Site</a>
+  </p>
+</div>
 
-### `npm start`
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+    </li>
+    <li><a href="#demo">Demo</a></li>
+    <li><a href="#routes">Routes</a></li>
+    <li><a href="#database">Database</a></li>
+    <li><a href="#acknowledgments">Acknowledgments</a></li>
+  </ol>
+</details>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+<!-- ABOUT THE PROJECT -->
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## About The Project
 
-### `npm test`
+![Scioly Bot Screen Shot](./images/scioly-bot.png)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Built With
 
-### `npm run build`
+- [Express](https://expressjs.com/)
+- [React.js](https://reactjs.org/)
+- [Discord.js](https://discord.js.org/)
+- [PostgreSQL](https://www.postgresql.org/)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Demo
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-### `npm run eject`
+### Project Structure
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Monorepo using npm workspaces.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- [packages](./packages)
+  - [server](./packages/server/)
+    - Express server
+  - [client](./packages/client/)
+    - React app
+  - [bot](./packages/bot/)
+    - Discord.js bot
+  - [models](./packages/models/)
+    - Sequelize database models
+    - referenced by backend and bot
+  - [types](./packages/types/)
+    - TypeScript types and Yup validation schemas
+    - referenced by backend, frontend, models, bot, and fixtures
+  - [config](./packages/config/)
+    - loads environment variables
+    - referenced by backend and bot
+  - [fixtures](./packages/fixtures/)
+    - test data
+    - referenced by backend and frontend
+- [cypress](./cypress/)
+  - End-to-end tests
+  - Work-in-progress
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+<p align="right">(<a href="#top">back to top</a>)</p>
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Routes
 
-## Learn More
+### Client
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- /
+  - basic usage instructions and examples
+- /templates
+  - client page for managing templates
+- /tournaments
+  - client page for managing tournaments
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### OAuth Authentication
+
+- /auth/discord
+  - redirects to Discord OAuth page
+- /auth/discord/callback
+  - redirected to here after authenticating in Discord
+- /auth/discord/user
+  - retrieves user if signed in
+- /auth/discord/logout
+  - POST logs user out
+
+### REST API
+
+- /api/templates
+  - supports GET and POST
+- /api/templates/:id
+  - supports GET, PUT, PATCH, and DELETE
+- /api/tournaments
+  - supports GET and POST
+- /api/tournaments/:id
+  - supports GET, PUT, PATCH, and DELETE
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+## Database
+
+![Scioly Bot Screen Shot](./images/database.png)
+
+- `users` refer to administrators who sign into the web application
+- the `user ids` in `tests` are the Discord ids of users running commands through the bot
+
+<p align="right">(<a href="#top">back to top</a>)</p>
+
+## Acknowledgments
+
+- [README Template](https://github.com/othneildrew/Best-README-Template)
+
+<p align="right">(<a href="#top">back to top</a>)</p>

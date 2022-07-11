@@ -1,5 +1,4 @@
 import {Modal, TableRow, TableCell, Switch, Button} from '@mui/material';
-import Box from '@mui/material/Box';
 import React, {FunctionComponent} from 'react';
 import {
   TemplateAttributes,
@@ -7,6 +6,7 @@ import {
   TournamentCreationAttributes,
 } from 'scioly-bot-types';
 import {deleteTournament, updateTournament} from '../../api/tournmanent';
+import ModalBox from '../../components/ModalBox';
 import TournamentForm from './TournamentForm';
 
 type Props = {
@@ -42,22 +42,10 @@ const TournamentRow: FunctionComponent<Props> = ({
     deleteStateTournament(tournament.id);
   };
 
-  const style = {
-    position: 'absolute' as const,
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 800,
-    bgcolor: 'background.paper',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: 2,
-  };
-
   return (
     <>
       <Modal open={open} onClose={handleClose}>
-        <Box sx={style}>
+        <ModalBox>
           <TournamentForm
             tournament={tournament}
             templates={templates}
@@ -65,7 +53,7 @@ const TournamentRow: FunctionComponent<Props> = ({
             addStateTournament={addStateTournament}
             updateStateTournament={updateStateTournament}
           />
-        </Box>
+        </ModalBox>
       </Modal>
       <TableRow
         key={tournament.id}

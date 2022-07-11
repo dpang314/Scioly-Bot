@@ -1,4 +1,4 @@
-import {Button, Modal, Box} from '@mui/material';
+import {Button, Modal} from '@mui/material';
 import React, {FunctionComponent} from 'react';
 import AddIcon from '@mui/icons-material/Add';
 import {
@@ -7,6 +7,7 @@ import {
   TournamentCreationAttributes,
 } from 'scioly-bot-types';
 import TournamentForm from './TournamentForm';
+import ModalBox from '../../components/ModalBox';
 
 type TournamentModalButtonProps = {
   templates: Array<TemplateAttributes>;
@@ -23,32 +24,20 @@ const TournamentModalButton: FunctionComponent<TournamentModalButtonProps> = ({
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const style = {
-    position: 'absolute' as const,
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 800,
-    bgcolor: 'background.paper',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: 2,
-  };
-
   return (
     <>
       <Button fullWidth onClick={handleOpen}>
         <AddIcon />
       </Button>
       <Modal open={open} onClose={handleClose}>
-        <Box sx={style}>
+        <ModalBox>
           <TournamentForm
             templates={templates}
             setOpen={setOpen}
             addStateTournament={addStateTournament}
             updateStateTournament={updateStateTournament}
           />
-        </Box>
+        </ModalBox>
       </Modal>
     </>
   );

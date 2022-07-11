@@ -1,7 +1,8 @@
-import {Modal, TableRow, TableCell, Button, Box} from '@mui/material';
+import {Modal, TableRow, TableCell, Button} from '@mui/material';
 import React, {FunctionComponent} from 'react';
 import {TemplateAttributes, TemplateCreationAttributes} from 'scioly-bot-types';
 import {deleteTemplate} from '../../api/templates';
+import ModalBox from '../../components/ModalBox';
 import TemplateForm from './TemplateForm';
 
 type TemplateRowProps = {
@@ -26,31 +27,17 @@ const TemplateRow: FunctionComponent<TemplateRowProps> = ({
     deleteStateTemplate(template.id);
   };
 
-  const style = {
-    position: 'absolute' as const,
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 800,
-    bgcolor: 'background.paper',
-    boxShadow: 24,
-    p: 4,
-    borderRadius: 2,
-    overflowY: 'scroll',
-    maxHeight: '90vh',
-  };
-
   return (
     <>
       <Modal open={open} onClose={handleClose}>
-        <Box sx={style}>
+        <ModalBox>
           <TemplateForm
             setOpen={setOpen}
             template={template}
             addStateTemplate={addStateTemplate}
             updateStateTemplate={updateStateTemplate}
           />
-        </Box>
+        </ModalBox>
       </Modal>
       <TableRow
         key={template.id}

@@ -1,5 +1,5 @@
 {
-  "name": "scioly-bot-backend",
+  "name": "scioly-bot-server",
   "version": "1.0.0",
   "main": "build/index",
   "description": "",

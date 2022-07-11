@@ -50,6 +50,7 @@ class User
       {
         sequelize,
         tableName: 'users',
+        timestamps: false,
       },
     );
   }

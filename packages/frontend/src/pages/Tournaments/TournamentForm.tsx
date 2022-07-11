@@ -231,16 +231,33 @@ const TournamentForm: FunctionComponent<FormProps> = ({
             )}
           />
           {typeof formik.errors.tournamentEvents === 'string' ? (
-            <div style={{color: 'red', marginBottom: '10px'}}>
+            <div style={{color: 'red', marginBottom: '20px'}}>
               {formik.errors.tournamentEvents}
             </div>
           ) : (
-            <div style={{color: 'red', marginBottom: '10px'}} />
+            <div style={{color: 'red', marginBottom: '20px'}} />
           )}
 
-          <Button type="submit" variant="contained">
-            Save
-          </Button>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'row-reverse',
+              width: '100%',
+            }}>
+            <Button
+              variant="contained"
+              sx={{backgroundColor: 'lightgray'}}
+              onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              color="success"
+              sx={{marginRight: '8px'}}>
+              Save
+            </Button>
+          </div>
         </FormControl>
       </form>
     )}

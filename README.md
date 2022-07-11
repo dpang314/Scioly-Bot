@@ -124,7 +124,7 @@ Monorepo using npm workspaces.
 
 ## Database
 
-![Scioly Bot Screen Shot](./images/database.png)
+![Scioly Bot Screen Shot](./images/database.PNG)
 
 - `users` refer to administrators who sign into the web application
 - the `user ids` in `tests` are the Discord ids of users running commands through the bot

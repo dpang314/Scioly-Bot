@@ -47,11 +47,11 @@ const createApp = (
 
   app.use('/api', router);
 
-  app.use(express.static(path.resolve(__dirname, '../../frontend/build')));
+  app.use(express.static(path.resolve(__dirname, '../../client/build')));
 
   app.get('*', async (req, res) => {
     res.sendFile(
-      path.join(path.resolve(__dirname, '../../frontend/build'), 'index.html'),
+      path.join(path.resolve(__dirname, '../../client/build'), 'index.html'),
     );
   });
 

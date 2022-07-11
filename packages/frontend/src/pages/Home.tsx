@@ -4,6 +4,7 @@ import Container from '@mui/material/Container';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import React, {useState} from 'react';
+import Video from '../components/Video';
 
 const Home = () => {
   const [tab, setTab] = useState(0);
@@ -44,6 +45,21 @@ const Home = () => {
             </Typography>
           </ListItem>
         </List>
+        <Video>
+          <iframe
+            src="https://www.youtube.com/embed/mDrEWx6qzvs"
+            title="Scioly Bot User Demo"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            style={{
+              position: 'absolute',
+              top: '0',
+              left: '0',
+              width: '100%',
+              height: '100%',
+            }}></iframe>
+        </Video>
       </Box>
       <Box hidden={tab !== 1} bgcolor="lightgray" padding="15px">
         <Typography variant="body1">

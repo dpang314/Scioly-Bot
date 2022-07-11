@@ -9,6 +9,7 @@ jobs:
       DATABASE_CONNECTION: ${{ SECRETS.DATABASE_CONNECTION }}
       SESSION_SECRET: ${{ SECRETS.SESSION_SECRET }}
       GUILD_ID: ${{ SECRETS.GUILD_ID }}
+
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout
@@ -18,7 +19,22 @@ jobs:
         with:
           build: npm run build
           start: npm run e2e:headless
-      - name: Cypress run mock app
+
+  cypress-run-no-auth:
+    env:
+      DISCORD_TOKEN: ${{ SECRETS.DISCORD_TOKEN }}
+      CLIENT_ID: ${{ SECRETS.CLIENT_ID }}
+      DISCORD_SECRET: ${{ SECRETS.DISCORD_SECRET }}
+      DATABASE_CONNECTION: ${{ SECRETS.DATABASE_CONNECTION }}
+      SESSION_SECRET: ${{ SECRETS.SESSION_SECRET }}
+      GUILD_ID: ${{ SECRETS.GUILD_ID }}
+      CYPRESS_MOCK_APP: true
+
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Cypress run modified app without authentication
         uses: cypress-io/github-action@v2
         with:
           build: npm run build
